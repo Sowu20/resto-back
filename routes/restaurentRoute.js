@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const restaurentController = require('../controllers/restaurentController');
+const auth = require('../middlewares/authmiddleware');
 
-router.post('/reastaurent');
-router.get('/restaurent');
-router.get('restaurent/:id');
-router.put('/restaurent/:id');
-router.delete('/restaurent/:id');
+router.post('/reastaurent', auth, restaurentController.createResto);
+router.get('/restaurent', auth, restaurentController.listResto);
+router.get('restaurent/:id', auth, restaurentController.detailResto);
+router.put('/restaurent/:id', auth, restaurentController.updateResto);
+router.delete('/restaurent/:id', auth, restaurentController.deleteResto);
 
 module.exports = router;

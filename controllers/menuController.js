@@ -1,11 +1,11 @@
-const Repas = require('../models/Repas');
+const Menu = require('../models/Menu');
 
-exports.createRepas = async(req, res) => {
+exports.createMenu = async(req, res) => {
     try {
-        const repas = Repas.create(req.body);
+        const menu = Menu.create(req.bdy);
         return res.status(201).json({
-            message: 'Repas enregistré avec succès !',
-            repas
+            message: 'Menu enregistré avec succès !',
+            menu
         });
     } catch (error) {
         return res.status(400).json({
@@ -14,17 +14,17 @@ exports.createRepas = async(req, res) => {
     }
 };
 
-exports.listRepas = async(req, res) => {
-    const repas = await Repas.find();
-    res.json(repas);
+exports.listMenu = async(req, res) => {
+    const menu = await Menu.find();
+    res.json(menu);
 };
 
-exports.detailRepas = async(req, res) => {
+exports.detailMenu = async(req, res) => {
     try {
-        const repas = await Repas.findById(req.params.id).populate('restaurent', 'menu');
-        if (!repas) {
+        const menu = await Menu.findById(req.params.id).populate('restaurent');
+        if (!menu) {
             return res.status(404).json({
-                message: 'Repas introuvable'
+                message: 'Menu introuvable'
             });
         }
         res.json(menu);
@@ -35,20 +35,20 @@ exports.detailRepas = async(req, res) => {
     }
 };
 
-exports.updateRepas = async(req, res) => {
+exports.updateMenu = async(req, res) => {
     try {
-        const repas = await Repas.findByIdAndDelete(
+        const menu = await Menu.findByIdAndDelete(
             req.params.id,
             req.body,
             { new: true }
         );
-        if (!repas) {
+        if (!menu) {
             return res.status(404).json({
-                message: 'Repas introuvable !'
+                message: 'Menu introuvable !'
             });
         };
         return res.status(201).json({
-            message: 'Repas modifié avec succès',
+            message: 'Menu modifié avec succès',
             menu
         });
     } catch (error) {
@@ -60,9 +60,9 @@ exports.updateRepas = async(req, res) => {
 
 exports.deleteMenu = async(req, res) => {
     try {
-        await Repas.findByIdAndDelete(req.params.id);
+        await Menu.findByIdAndDelete(req.params.id);
         return res.status(202).json({
-            message: 'Repas supprimé avec succès !'
+            message: 'Menu supprimé avec succès !'
         });
     } catch (error) {
         return res.status(400).json({

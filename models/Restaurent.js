@@ -6,7 +6,7 @@ const restaurentSchema = new mongoose.Schema({
         required: true
     },
     adresse: {
-        type: String,
+        type: String, 
         required: true
     },
     telephone: {
