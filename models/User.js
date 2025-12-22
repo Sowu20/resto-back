@@ -19,11 +19,6 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    role: {
-        type: String,
-        enume: ['admin', 'restaurateur', 'client'],
-        required: true
-    },
     username: {
         type: String,
         required: true,

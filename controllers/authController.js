@@ -6,7 +6,7 @@ const secret_key = process.env.SECRET_KEY;
 
 exports.register = async(req, res) => {
     try {
-        const { nom, prenom, adresse, telephone, role, username, email, password } = req.body;
+        const { nom, prenom, adresse, telephone, username, email, password } = req.body;
 
         // Vérifier si l'utilisateur existe
         const exist = await User.findOne({ email });
@@ -24,14 +24,14 @@ exports.register = async(req, res) => {
             prenom,
             adresse,
             telephone,
-            role,
             username,
             email,
             password: hashedPass
         });
 
-        return res.status(202).json({
-            message: `Utilisateur ${user} a été créé avec succès`
+        return res.status(201).json({
+            message: 'Utilisateur créé avec succès',
+            user
         });
     } catch (error) {
         return res.status(500).json({

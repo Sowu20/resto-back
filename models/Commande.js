@@ -6,7 +6,7 @@ const cmdeSchema = new mongoose.Schema({
     },
     statut: {
         type: String,
-        enum: ['en_attenten', 'en_cours', 'terminé']
+        enum: ['en_attente', 'en_cours', 'termine']
     },
     total_commande: {
         type: Number,

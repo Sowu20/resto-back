@@ -26,6 +26,6 @@ const repasSchema = new mongoose.Schema({
     }
 });
 
-const Repas = mongoose('repsSchema', repasSchema);
+const Repas = mongoose.model('repsSchema', repasSchema);
 
 module.exports = Repas;
