@@ -1,32 +1,40 @@
 const mongoose = require('mongoose');
 
 const cmdeSchema = new mongoose.Schema({
-    quantite: {
-        type: Number
+    order_number: {
+        type: String,
+        unique: true
     },
-    statut: {
+    customer_name: {
+        type: String
+    },
+    customer_phone: {
+        type: String
+    },
+    status: {
         type: String,
         enum: ['en_attente', 'en_cours', 'termine']
     },
-    total_commande: {
-        type: Number,
+    payment_staus: {
+        type: String,
+        enum: ['en_attente', 'en_traitement', 'paye', 'non_paye']
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+    payment_method: {
+        type: String,
+        enum: ['espece', 'virement']
+    },
+    source: {
+        type: String
+    },
+    total_amount: {
+        type: Number,
     },
     restaurent: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Restaurent',
         required: true
     },
-    repas: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Repas',
-        required: true
-    }
-});
+}, { timestamps: true });
 
 const Commande = mongoose.model('Commande', cmdeSchema);
 

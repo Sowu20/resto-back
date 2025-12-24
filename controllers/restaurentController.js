@@ -2,7 +2,7 @@ const Restaurent = require('../models/Restaurent');
 
 exports.createResto = async(req, res) => {
     try {
-        const resto = Restaurent.create({
+        const resto = await Restaurent.create({
             ...req.body,
             user: req.userId
         });

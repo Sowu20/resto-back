@@ -11,25 +11,18 @@
  *     User:
  *       type: object
  *       properties:
- *         nom:
+ *         name:
  *           type: string
- *         prenom:
+ *         adress:
  *           type: string
- *         role:
- *           type: string
- *           enum: [ADMIN, RESTAURATEUR, CLIENT]
- *         adresse:
- *            type: string
- *         telephone:
- *            type: number
- *         username:
- *            type: string
+ *         phone:
+ *           type: number
  *         email:
- *            type: string
+ *           type: string
  *         password:
- *            type: string 
+ *           type: string
  *
- *     Restaurant:
+ *     Restaurent:
  *       type: object
  *       properties:
  *         nom:
@@ -37,31 +30,31 @@
  *         adresse:
  *           type: string
  *         telephone:
- *            type: number
+ *           type: number
  *         email:
- *            type: string
+ *           type: string
  *         disponibilite:
- *             type: string
- *             enum: [OUVERT, FERME]
+ *           type: string
+ *           enum: [ouvert, ferme]
  *         user:
- *             type: string
- *             description: Id de l'utilisateur
+ *           type: string
+ *           description: ID de l'utilisateur
  *
- *     Menu: 
+ *     Menu:
  *       type: object
  *       properties:
- *         non:
+ *         nom:
  *           type: string
  *         categorie:
  *           type: string
  *           enum: [ENTREE, PLAT, DESSERT]
  *         description:
  *           type: string
- *        restaurent:
+ *         restaurent:
  *           type: string
- *           descrption: ID du restaurent
- * 
- *     Repas: 
+ *           description: ID du restaurent
+ *
+ *     Repas:
  *       type: object
  *       properties:
  *         nom:
@@ -70,24 +63,22 @@
  *           type: number
  *         disponibilite:
  *           type: string
- *           enum: [DISPONIBLE, NON DISPONIBLE]
- *         total_commande:
- *           type: number
+ *           enum: [disponible, non_disponible]
  *         menu:
  *           type: string
  *           description: ID du menu
  *         restaurent:
  *           type: string
- *           descrption: ID du restaurent
- * 
- *     Commande: 
+ *           description: ID du restaurent
+ *
+ *     Commande:
  *       type: object
  *       properties:
  *         quantite:
  *           type: number
  *         statut:
  *           type: string
- *           enum: [EN_ATTENTE, EN_COURS, TERMINE]
+ *           enum: [en_attente, en_cours, termine]
  *         total_commande:
  *           type: number
  *         user:
@@ -95,7 +86,7 @@
  *           description: ID de l'utilisateur
  *         restaurent:
  *           type: string
- *           descrption: ID du restaurent
+ *           description: ID du restaurent
  *         repas:
  *           type: string
  *           description: ID du repas

@@ -2,11 +2,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const secret_key = process.env.SECRET_KEY;
+const secret_key ='0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03ed05';
 
 exports.register = async(req, res) => {
     try {
-        const { nom, prenom, adresse, telephone, username, email, password } = req.body;
+        const { name, adress, phone, email, password } = req.body;
 
         // Vérifier si l'utilisateur existe
         const exist = await User.findOne({ email });
@@ -14,17 +14,15 @@ exports.register = async(req, res) => {
             return res.status(400).json({
                 message: 'Email déjà utilisé'
             });
-        }
+        }   
 
         // Chiffré le mot de passe
         const hashedPass = await bcrypt.hash(password, 10);
 
         const user = await User.create({
-            nom,
-            prenom,
-            adresse,
-            telephone,
-            username,
+            name,
+            adress,
+            phone,
             email,
             password: hashedPass
         });
@@ -34,11 +32,14 @@ exports.register = async(req, res) => {
             user
         });
     } catch (error) {
+        console.error(error);
+
         return res.status(500).json({
-            message: "Erreur Serveur !"
+            message: "Erreur Serveur !",
+            error: error.message
         });
     }
-}
+};
 
 exports.login = async(req, res) => {
     try {
@@ -70,8 +71,10 @@ exports.login = async(req, res) => {
             message: 'Connexion réussie !', token
         });
     } catch (error) {
+        console.log(error);
+
         return res.status(500).json({
             message: 'Erreur serveur'
         });
     }
-}
+};

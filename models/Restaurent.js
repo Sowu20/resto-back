@@ -4,9 +4,9 @@ const restaurentSchema = new mongoose.Schema({
     nom: {
         type: String,
         required: true
-    },
+    }, 
     adresse: {
-        type: String, 
+        type: String,  
         required: true
     },
     telephone: {

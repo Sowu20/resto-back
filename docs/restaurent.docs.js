@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   name: Restaurant
+ *   - name: Restaurent
  */
 
 /**
@@ -17,7 +17,7 @@
  *         application/json:
  *           schema:
  *             type: object
- *             required: [nom, adresse, email, user]
+ *             required: [nom, adresse, email, disponibilite]
  *             properties:
  *               nom:
  *                 type: string
@@ -30,9 +30,6 @@
  *               disponibilite:
  *                 type: string
  *                 enum: [ouvert, ferme]
- *               user:
- *                 type: string
- *                 description: ID du propriétaire (User)
  *     responses:
  *       201:
  *         description: Restaurant créé avec succès
@@ -86,7 +83,6 @@
  *         description: ID du restaurant
  *     responses:
  *       200:
- *         description: Restaurant trouvé
  *         content:
  *           application/json:
  *             schema:
@@ -124,7 +120,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID du restaurant
  *     requestBody:
  *       required: true
  *       content:
@@ -146,8 +141,6 @@
  *     responses:
  *       200:
  *         description: Restaurant modifié avec succès
- *       400:
- *         description: Données invalides
  *       404:
  *         description: Restaurant non trouvé
  */
@@ -165,7 +158,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID du restaurant
  *     responses:
  *       200:
  *         description: Restaurant supprimé avec succès

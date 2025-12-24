@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 
 const repasSchema = new mongoose.Schema({
-    nom: {
+    name: {
         type: String,
         required: true
     },
-    prix: {
+    description: {
+        type: String
+    },
+    price: {
         type: Number,
         required: true
     },
-    disponibilite: {
-        type: String,
-        enum: ['disponible', 'non disponible'],
+    isAvaible: {
+        type: Boolean,
         required: true
     },
     menu: {
@@ -23,9 +25,14 @@ const repasSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Restaurent',
         required: true
+    },
+    categorie: {
+        type: mongoose.Schema.types.ObjectId,
+        ref: 'CategorieRepas',
+        required: true
     }
 });
 
-const Repas = mongoose.model('repsSchema', repasSchema);
+const Repas = mongoose.model('repasSchema', repasSchema);
 
 module.exports = Repas;

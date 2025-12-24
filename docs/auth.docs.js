@@ -15,18 +15,14 @@
  *         application/json:
  *           schema:
  *             type: object
- *             required: [nom, prenom, adresse, telephone, username, email]
+ *             required: [name, adress, phone, email, password]
  *             properties:
- *               nom:
+ *               name:
  *                 type: string
- *               prenom:
+ *               adress:
  *                 type: string
- *               adresse:
- *                 type: string
- *               telephone:
+ *               phone:
  *                 type: number
- *               username:
- *                 type: string
  *               email:
  *                 type: string
  *               password:
@@ -79,23 +75,7 @@
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   nom:
- *                     type: string
- *                   prenom:
- *                     type: string
- *                   adresse:
- *                     type: string
- *                   telephone:
- *                     type: number
- *                   role:
- *                     type: string
- *                     enum: [ADMIN, RESTAURATEUR, CLIENT]
- *                   username:
- *                     type: string
- *                   email:
- *                     type: string
+ *                 $ref: '#/components/schemas/User'
  */
 
 /**
@@ -109,32 +89,13 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de l'utilisateur
  *     responses:
  *       200:
  *         description: Utilisateur trouvé
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 nom:
- *                   type: string
- *                 prenom:
- *                   type: string
- *                 adresse:
- *                   type: string
- *                 telephone:
- *                   type: number
- *                 role:
- *                   type: string
- *                   enum: [ADMIN, RESTAURATEUR, CLIENT]
- *                 username:
- *                   type: string
- *                 email:
- *                   type: string
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: Utilisateur non trouvé
  */
@@ -150,36 +111,15 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de l'utilisateur
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
- *               nom:
- *                 type: string
- *               prenom:
- *                 type: string
- *               adresse:
- *                 type: string
- *               telephone:
- *                 type: number
- *               role:
- *                 type: string
- *                 enum: [ADMIN, RESTAURATEUR, CLIENT]
- *               username:
- *                 type: string
- *               email:
- *                 type: string
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: Utilisateur modifié avec succès
- *       400:
- *         description: Données invalides
  *       404:
  *         description: Utilisateur non trouvé
  */
@@ -195,7 +135,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de l'utilisateur
  *     responses:
  *       200:
  *         description: Utilisateur supprimé avec succès

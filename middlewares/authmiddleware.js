@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 require('dotenv').config();
 
-const secret_key = process.env.SECRET_KEY;
+const secret_key ='0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03ed05';
 
 module.exports = async (req, res, next) => {
   try {

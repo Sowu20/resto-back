@@ -1,17 +1,29 @@
 const mongoose = require('mongoose');
 
 const menuSchema = new mongoose.Schema({
-    nom: {
+    name: {
         type: String,
-        required: true
-    },
-    categorie: {
-        type: String,
-        enum: ['entrée', 'plats', 'déssert'],
         required: true
     },
     description: {
         type: String
+    },
+    isActive: {
+        type: Boolean
+    },
+    isDefault: {
+        type: Boolean
+    },
+    startTime: {
+        type: Date,
+        required: true
+    },
+    endTime: {
+        type: Date,
+        required: true
+    },
+    validDays: {
+
     },
     restaurent: {
         type: mongoose.Schema.Types.ObjectId,
