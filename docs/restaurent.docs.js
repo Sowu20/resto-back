@@ -16,20 +16,7 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [nom, adresse, email, disponibilite]
- *             properties:
- *               nom:
- *                 type: string
- *               adresse:
- *                 type: string
- *               telephone:
- *                 type: number
- *               email:
- *                 type: string
- *               disponibilite:
- *                 type: string
- *                 enum: [ouvert, ferme]
+ *             $ref: '#/components/schemas/Restaurent'
  *     responses:
  *       201:
  *         description: Restaurant créé avec succès
@@ -44,29 +31,12 @@
  *     tags: [Restaurent]
  *     responses:
  *       200:
- *         description: Liste des restaurants
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nom:
- *                     type: string
- *                   adresse:
- *                     type: string
- *                   telephone:
- *                     type: number
- *                   email:
- *                     type: string
- *                   disponibilite:
- *                     type: string
- *                     enum: [ouvert, ferme]
- *                   user:
- *                     type: string
+ *                 $ref: '#/components/schemas/Restaurent'
  */
 
 /**
@@ -86,23 +56,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 nom:
- *                   type: string
- *                 adresse:
- *                   type: string
- *                 telephone:
- *                   type: number
- *                 email:
- *                   type: string
- *                 disponibilite:
- *                   type: string
- *                   enum: [ouvert, ferme]
- *                 user:
- *                   type: string
+ *               $ref: '#/components/schemas/Restaurent'
  *       404:
  *         description: Restaurant non trouvé
  */
@@ -125,19 +79,7 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               nom:
- *                 type: string
- *               adresse:
- *                 type: string
- *               telephone:
- *                 type: number
- *               email:
- *                 type: string
- *               disponibilite:
- *                 type: string
- *                 enum: [ouvert, ferme]
+ *             $ref: '#/components/schemas/Restaurent'
  *     responses:
  *       200:
  *         description: Restaurant modifié avec succès

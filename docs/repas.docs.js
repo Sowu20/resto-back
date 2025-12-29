@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   name: Repas
+ *   - name: Repas
  */
 
 /**
@@ -16,22 +16,7 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [nom, prix, disponibilite, menu, restaurent]
- *             properties:
- *               nom:
- *                 type: string
- *               prix:
- *                 type: number
- *               disponibilite:
- *                 type: string
- *                 enum: [disponible, non disponible]
- *               menu:
- *                 type: string
- *                 description: ID du menu
- *               restaurent:
- *                 type: string
- *                 description: ID du restaurant
+ *             $ref: '#/components/schemas/Repas'
  *     responses:
  *       201:
  *         description: Repas créé avec succès
@@ -52,21 +37,7 @@
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   nom:
- *                     type: string
- *                   prix:
- *                     type: number
- *                   disponibilite:
- *                     type: string
- *                     enum: [disponible, non disponible]
- *                   menu:
- *                     type: string
- *                   restaurent:
- *                     type: string
+ *                 $ref: '#/components/schemas/Repas'
  */
 
 /**
@@ -87,21 +58,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 nom:
- *                   type: string
- *                 prix:
- *                   type: number
- *                 disponibilite:
- *                   type: string
- *                   enum: [disponible, non disponible]
- *                 menu:
- *                   type: string
- *                 restaurent:
- *                   type: string
+ *               $ref: '#/components/schemas/Repas'
  *       404:
  *         description: Repas non trouvé
  */
@@ -125,24 +82,10 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               nom:
- *                 type: string
- *               prix:
- *                 type: number
- *               disponibilite:
- *                 type: string
- *                 enum: [disponible, non disponible]
- *               menu:
- *                 type: string
- *               restaurent:
- *                 type: string
+ *             $ref: '#/components/schemas/Repas'
  *     responses:
  *       200:
  *         description: Repas modifié avec succès
- *       400:
- *         description: Données invalides
  *       404:
  *         description: Repas non trouvé
  */

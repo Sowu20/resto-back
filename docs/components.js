@@ -53,41 +53,78 @@
  *         restaurent:
  *           type: string
  *           description: ID du restaurent
+ * 
+ *     CategorieRepas:
+ *        type: object
+ *        properties:
+ *          name:
+ *            type: string
+ *          description:
+ *            type: string
+ *          isActive:
+ *            type: boolean
+ *          restaurent:
+ *            type: string
+ *            description: ID de Restaurent
+ *          menu:
+ *            type: string
+ *            description: ID de Menu
+ *          commande:
+ *            type: string
+ *            description: ID de commande
  *
  *     Repas:
  *       type: object
  *       properties:
- *         nom:
+ *         name:
  *           type: string
- *         prix:
+ *         descrition:
+ *           type: string
+ *         price:
  *           type: number
- *         disponibilite:
- *           type: string
- *           enum: [disponible, non_disponible]
+ *         isAvaible:
+ *           type: boolean
  *         menu:
  *           type: string
  *           description: ID du menu
  *         restaurent:
  *           type: string
  *           description: ID du restaurent
+ *         categorie:
+ *           type: string
+ *           description: ID de catégorie
  *
  *     Commande:
  *       type: object
  *       properties:
- *         quantite:
- *           type: number
- *         statut:
+ *         _id:
+ *           type: string
+ *         order_number:
+ *           type: string
+ *         customer_name:
+ *           type: string
+ *         customer_phone:
+ *           type: string
+ *         status:
  *           type: string
  *           enum: [en_attente, en_cours, termine]
- *         total_commande:
- *           type: number
- *         user:
+ *         payment_staus:
  *           type: string
- *           description: ID de l'utilisateur
+ *           enum: [en_attente, en_traitement, paye, non_paye]
+ *         payment_method:
+ *           type: string
+ *           enum: [espece, virement]
+ *         source:
+ *           type: string
+ *         total_amount:
+ *           type: number
  *         restaurent:
  *           type: string
- *           description: ID du restaurent
- *         repas:
+ *           description: ID du restaurant
+ *         createdAt:
  *           type: string
- *           description: ID du repas
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
  */

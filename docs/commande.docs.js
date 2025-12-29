@@ -17,24 +17,8 @@
  *         application/json:
  *           schema:
  *             type: object
- *             required: [quantite, statut, total_commande, user, restaurent, repas]
- *             properties:
- *               quantite:
- *                 type: number
- *               statut:
- *                 type: string
- *                 enum: [en_attente, en_cours, termine]
- *               total_commande:
- *                 type: number
- *               user:
- *                 type: string
- *                 description: ID de l'utilisateur
- *               restaurent:
- *                 type: string
- *                 description: ID du restaurant
- *               repas:
- *                 type: string
- *                 description: ID du repas
+ *             items:
+ *                $ref: '#/components/schemas/Commande'
  *     responses:
  *       201:
  *         description: Commande créée avec succès
@@ -57,23 +41,7 @@
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   quantite:
- *                     type: number
- *                   statut:
- *                     type: string
- *                     enum: [en_attente, en_cours, termine]
- *                   total_commande:
- *                     type: number
- *                   user:
- *                     type: string
- *                   restaurent:
- *                     type: string
- *                   repas:
- *                     type: string
+ *                 $ref: '#/components/schemas/Commande'
  */
 
 /**
@@ -96,23 +64,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 quantite:
- *                   type: number
- *                 statut:
- *                   type: string
- *                   enum: [en_attente, en_cours, termine]
- *                 total_commande:
- *                   type: number
- *                 user:
- *                   type: string
- *                 restaurent:
- *                   type: string
- *                 repas:
- *                   type: string
+ *               $ref: '#/components/schemas/Commande'
  *       404:
  *         description: Commande non trouvée
  */
@@ -129,22 +81,7 @@
  *         name: id
  *         required: true
  *         schema:
- *           type: string
- *         description: ID de la commande
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               quantite:
- *                 type: number
- *               statut:
- *                 type: string
- *                 enum: [en_attente, en_cours, termine]
- *               total_commande:
- *                 type: number
+ *           $ref: '#/components/schemas/Commande'
  *     responses:
  *       200:
  *         description: Commande modifiée avec succès
