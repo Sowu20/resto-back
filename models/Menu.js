@@ -23,7 +23,9 @@ const menuSchema = new mongoose.Schema({
         required: true
     },
     validDays: {
-
+        type: String,
+        enum: ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"],
+        required: true
     },
     restaurent: {
         type: mongoose.Schema.Types.ObjectId,

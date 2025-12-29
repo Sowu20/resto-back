@@ -27,7 +27,7 @@ const repasSchema = new mongoose.Schema({
         required: true
     },
     categorie: {
-        type: mongoose.Schema.types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'CategorieRepas',
         required: true
     }
