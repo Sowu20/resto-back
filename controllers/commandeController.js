@@ -6,7 +6,7 @@ exports.createCommande = async(req, res) => {
             ...req.body,
             user: req.userId
         });
-        return res.status.json({
+        return res.status(201).json({
             message: 'Commande enregistré avec succès',
             commande
         });
@@ -24,7 +24,7 @@ exports.listCommande = async(req, res) => {
 
 exports.detailCommande = async(req, res) => {
     try {
-        const commande = await Commande.findById(req.params.id).populate('user');
+        const commande = await Commande.findById(req.params.id).populate('restaurent');
         if (!commande) {
             return res.status(404).json({
                 message: 'Commande introuvable'
