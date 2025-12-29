@@ -2,7 +2,7 @@ const Menu = require('../models/Menu');
 
 exports.createMenu = async(req, res) => {
     try {
-        const menu = Menu.create(req.bdy);
+        const menu = await Menu.create(req.body);
         return res.status(201).json({
             message: 'Menu enregistré avec succès !',
             menu
