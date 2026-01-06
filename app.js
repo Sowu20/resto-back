@@ -25,12 +25,16 @@ const restoRoute = require('./routes/restaurentRoute');
 const menuRoute = require('./routes/menuRoute');
 const repasRoute = require('./routes/repasRoute');
 const cmdeRoute = require('./routes/commandeRoute');
+const categorieRoute = require('./routes/categorieRoute');
+const tableRoute = require('./routes/tableRoute');
 
 app.use('/api', userRoute);
 app.use('/api', restoRoute);
 app.use('/api', menuRoute);
 app.use('/api', repasRoute);
 app.use('/api', cmdeRoute);
+app.use('/api', categorieRoute);
+app.use('/api', tableRoute);
 
 app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
