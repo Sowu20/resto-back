@@ -72,4 +72,4 @@ exports.deleteResto = async(req, res) => {
             message: "ID de l'utilisateur invalide !"
         });
     }
-};
+}

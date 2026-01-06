@@ -15,21 +15,27 @@ exports.createRepas = async(req, res) => {
 };
 
 exports.listRepas = async(req, res) => {
-    const repas = await Repas.find();
+    const repas = await Repas.find()
+        .populate('menu', 'name')
+        .populate('restaurent', 'nom')
+        .populate('categorie', 'name');
     res.json(repas);
 };
 
 exports.detailRepas = async(req, res) => {
     try {
-        const repas = await Repas.findById(req.params.id).populate('restaurent', 'menu');
+        const repas = await Repas.findById(req.params.id)
+            .populate('menu', 'name')
+            .populate('restaurent', 'nom')
+            .populate('categorie', 'name');
         if (!repas) {
             return res.status(404).json({
                 message: 'Repas introuvable'
             });
         }
-        res.json(menu);
+        res.json(repas);
     } catch (error) {
-        return res.sttus(400).json({
+        return res.status(400).json({
             message: 'ID invalide !'
         });
     }
