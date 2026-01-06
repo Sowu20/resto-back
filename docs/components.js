@@ -127,4 +127,24 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
+ * 
+ *    Table:
+ *       type: object
+ *       properties:
+ *          _id:
+ *            type: string
+ *          qrCode:
+ *            type: string
+ *          statut:
+ *            type: string
+ *            enum: [libre, occupe]
+ *          restaurent:
+ *            type: string
+ *            description: ID du restaurent
+ *          createdAt:
+ *            type: string
+ *            format: date-time
+ *          updatedAt:
+ *            type: string
+ *            format: date-time
  */
