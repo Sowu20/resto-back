@@ -28,6 +28,6 @@ const catSchema = new mongoose.Schema({
     }
 });
 
-const categorieRepas = mongoose.model('catSchema', catSchema);
+const categorieRepas = mongoose.model('Categorie', catSchema);
 
 module.exports = categorieRepas;

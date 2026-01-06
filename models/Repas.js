@@ -28,11 +28,11 @@ const repasSchema = new mongoose.Schema({
     },
     categorie: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'CategorieRepas',
+        ref: 'Categorie',
         required: true
     }
 });
 
-const Repas = mongoose.model('repasSchema', repasSchema);
+const Repas = mongoose.model('Repas', repasSchema);
 
 module.exports = Repas;

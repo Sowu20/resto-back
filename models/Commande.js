@@ -11,6 +11,19 @@ const cmdeSchema = new mongoose.Schema({
     customer_phone: {
         type: String
     },
+    items: [
+        {
+            repas: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Repas',
+                required: true
+            },
+            quantite: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
     status: {
         type: String,
         enum: ['en_attente', 'en_cours', 'termine']
@@ -34,6 +47,11 @@ const cmdeSchema = new mongoose.Schema({
         ref: 'Restaurent',
         required: true
     },
+    table: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Table',
+        required: true
+    }
 }, { timestamps: true });
 
 const Commande = mongoose.model('Commande', cmdeSchema);
