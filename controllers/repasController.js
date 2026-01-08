@@ -41,25 +41,26 @@ exports.detailRepas = async(req, res) => {
     }
 };
 
-exports.updateRepas = async(req, res) => {
+exports.updateRepas = async (req, res) => {
     try {
-        const repas = await Repas.findByIdAndDelete(
+        const repas = await Repas.findByIdAndUpdate(
             req.params.id,
             req.body,
-            { new: true }
         );
+        
         if (!repas) {
             return res.status(404).json({
-                message: 'Repas introuvable !'
+                message: 'Repas introuvable'
             });
-        };
-        return res.status(201).json({
+        }
+        return res.status(200).json({
             message: 'Repas modifié avec succès',
-            menu
+            repas
         });
+
     } catch (error) {
-        return res.status(404).json({
-            message: 'ID invalide'
+        return res.status(400).json({
+            message: 'ID invalide ou données incorrectes'
         });
     }
 };
