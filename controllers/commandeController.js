@@ -73,3 +73,38 @@ exports.deleteCommande = async(req, res) => {
         });
     }
 };
+
+exports.faireCommande = async(req, res) => {
+    try {
+        const {
+            customer_name,
+            customer_phone,
+            items,
+            payment_method,
+            tableId,
+            restaurentId
+        } = req.body;
+
+        const commande = new Commande ({
+            customer_name,
+            customer_phone,
+            items,
+            payment_method,
+            status: 'en_attente',
+            sourec: 'qr_code',
+            payment_status: 'en_attente',
+            table: tableId,
+            resturent: restaurentId
+        });
+
+        await commande.save();
+
+        return res.status(201).json({
+            message: 'Commande passée avec succès'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
