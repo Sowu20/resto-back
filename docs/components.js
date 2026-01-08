@@ -53,25 +53,25 @@
  *         restaurent:
  *           type: string
  *           description: ID du restaurent
- * 
+ *
  *     CategorieRepas:
- *        type: object
- *        properties:
- *          name:
- *            type: string
- *          description:
- *            type: string
- *          isActive:
- *            type: boolean
- *          restaurent:
- *            type: string
- *            description: ID de Restaurent
- *          menu:
- *            type: string
- *            description: ID de Menu
- *          commande:
- *            type: string
- *            description: ID de commande
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         isActive:
+ *           type: boolean
+ *         restaurent:
+ *           type: string
+ *           description: ID de Restaurent
+ *         menu:
+ *           type: string
+ *           description: ID de Menu
+ *         commande:
+ *           type: string
+ *           description: ID de commande
  *
  *     Repas:
  *       type: object
@@ -127,24 +127,24 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
- * 
- *    Table:
+ *
+ *     Table:
  *       type: object
  *       properties:
- *          _id:
- *            type: string
- *          qrCode:
- *            type: string
- *          statut:
- *            type: string
- *            enum: [libre, occupe]
- *          restaurent:
- *            type: string
- *            description: ID du restaurent
- *          createdAt:
- *            type: string
- *            format: date-time
- *          updatedAt:
- *            type: string
- *            format: date-time
+ *         _id:
+ *           type: string
+ *         qrCode:
+ *           type: string
+ *         statut:
+ *           type: string
+ *           enum: [libre, occupe]
+ *         restaurent:
+ *           type: string
+ *           description: ID du restaurent
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
  */
