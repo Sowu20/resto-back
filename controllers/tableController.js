@@ -1,5 +1,4 @@
 const Table = require('../models/Table');
-const Commande = require('../models/Commande');
 const Menu = require('../models/Menu');
 const Repas = require('../models/Repas');
 const crypto = require('crypto');
@@ -94,7 +93,7 @@ exports.scanQrCode = async (req, res) => {
         res.json({
             // tableId: table._id,
             numero_table: table.numero_table,
-            // restaurentId: table.restaurent._id,
+            restaurentId: table.restaurent._id,
             restaurent: table.restaurent.nom,
             statut: table.statut
         })
@@ -107,7 +106,49 @@ exports.scanQrCode = async (req, res) => {
 
 exports.getMenuandMeal = async(req, res) => {
     try {
+        const { qrCode, restaurentId } = req.params;
 
+        const table = await Table.findOne({ qrCode })
+        if(!table) {
+            return res.status(404).json({
+                message: 'QR Code invalide'
+            });
+        }
+
+        if (table.restaurent.toString() !== restaurentId) {
+            return res.status(403).json({
+                message: 'Cette table ne correspond pas à ce restaurent'
+            });
+        }
+
+        const menus = await Menu.find({
+            restaurent: table.restaurent,
+            isActive: true
+        })
+        .select('_id name description validDays');
+
+        const menusWithRepas = await Promise.all(
+            menus.map(async (menu) => {
+                const repas = await Repas.find({
+                    menu: menu._id,
+                    isAvaible: true
+                })
+                .select('_id name description price categorie')
+                .populate('categorie', 'name');
+
+                return {
+                    menu,
+                    repas
+                };
+            })
+        );
+
+        res.json({
+            tableId: table._id,
+            numero_table: table.numero_table,
+            // restaurentId,
+            menus: menusWithRepas
+        });
     } catch (error) {
         return res.status(500).json({
             message: error.message
