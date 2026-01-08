@@ -20,12 +20,26 @@ const restaurentSchema = new mongoose.Schema({
         type: String,
         enum: ['ouvert', 'ferme']
     },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true,
+            default: 'Point'
+        },
+        coordonnes: {
+            type: [Number],
+            resuired: true
+        }
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     }
 }, { timestamps: true });
+
+restaurentSchema.index({ location: '2dsphere' });
 
 const Restaurent = mongoose.model('Restaurent', restaurentSchema);
 
