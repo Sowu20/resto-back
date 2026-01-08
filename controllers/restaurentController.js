@@ -2,8 +2,32 @@ const Restaurent = require('../models/Restaurent');
 
 exports.createResto = async(req, res) => {
     try {
+        const {
+            nom,
+            adresse,
+            telephone,
+            email,
+            disponibilite,
+            latitude,
+            longitude
+        } = req.body;
+
+        if (!latitude || !longitude) {
+            return res.status(400).json({
+                message: 'Les champs latitude et longitude sont obligatoires !'
+            });
+        }
+
         const resto = await Restaurent.create({
-            ...req.body,
+            nom,
+            adresse,
+            telephone,
+            email,
+            disponibilite,
+            location: {
+                type: 'Point',
+                coordonnes: [longitude, latitude]
+            },
             user: req.userId
         });
         return res.status(201).json({
