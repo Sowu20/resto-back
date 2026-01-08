@@ -21,7 +21,7 @@ const cmdeSchema = new mongoose.Schema({
             quantite: {
                 type: Number,
                 required: true
-            }
+            } 
         }
     ],
     status: {
