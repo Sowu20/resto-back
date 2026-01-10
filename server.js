@@ -47,5 +47,5 @@ server.on('listening', () => {
 });
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`Serverur lancé sur le http://localhost:${port}`);
+  console.log(`Serverur lancé sur le https://resto-back-xnxb.onrender.com`);
 });
