@@ -2,13 +2,15 @@
  * @swagger
  * tags:
  *   name: Categorie
+ *   description: Gestion des catégories de repas
  */
 
 /**
  * @swagger
- * /categorie:
+ * /api/categorie:
  *   post:
  *     tags: [Categorie]
+ *     summary: Créer une catégorie
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -16,97 +18,98 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             items:
- *                $ref: '#/components/schemas/CategorieRepas'
+ *             $ref: '#/components/schemas/Categorie'
  *     responses:
  *       201:
  *         description: Catégorie créée avec succès
  *       400:
- *         description: Données invalides
+ *         description: Erreur de validation
  */
 
 /**
  * @swagger
- * /categorie:
+ * /api/categorie:
  *   get:
  *     tags: [Categorie]
+ *     summary: Lister toutes les catégories
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
+ *         description: Liste des catégories
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/CategorieRepas'
+ *                 $ref: '#/components/schemas/Categorie'
  */
 
 /**
  * @swagger
- * /categorie/{id}:
+ * /api/categorie/{id}:
  *   get:
  *     tags: [Categorie]
+ *     summary: Détails d’une catégorie
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la catégorie
  *     responses:
  *       200:
  *         description: Catégorie trouvée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/CategorieRepas'
  *       404:
- *         description: Catégorie non trouvée
+ *         description: Catégorie introuvable
  */
 
 /**
  * @swagger
- * /categorie/{id}:
+ * /api/categorie/{id}:
  *   put:
  *     tags: [Categorie]
+ *     summary: Modifier une catégorie
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           $ref: '#/components/schemas/CategorieRepas'
- *     responses:
- *       200:
- *         description: Catégorie modifiée avec succès
- *       400:
- *         description: Données invalides
- *       404:
- *         description: Catégorie non trouvée
- */
-
-/**
- * @swagger
- * /categorie/{id}:
- *   delete:
- *     tags: [Categorie]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la catégorie
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Categorie'
  *     responses:
- *       200:
- *         description: Catégorie supprimée avec succès
+ *       201:
+ *         description: Catégorie modifiée avec succès
  *       404:
- *         description: Catégorie non trouvée
+ *         description: Catégorie introuvable
+ */
+
+/**
+ * @swagger
+ * /api/categorie/{id}:
+ *   delete:
+ *     tags: [Categorie]
+ *     summary: Supprimer une catégorie
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       202:
+ *         description: Catégorie supprimée avec succès
+ *       400:
+ *         description: ID invalide
  */

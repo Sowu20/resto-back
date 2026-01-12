@@ -2,12 +2,14 @@
  * @swagger
  * tags:
  *   name: Table
+ *   description: Gestion des tables
  */
 
 /**
  * @swagger
- * /table:
+ * /api/table:
  *   post:
+ *     summary: Créer une table
  *     tags: [Table]
  *     security:
  *       - bearerAuth: []
@@ -17,24 +19,32 @@
  *         application/json:
  *           schema:
  *             type: object
- *             items:
- *                $ref: '#/components/schemas/Table'
+ *             required:
+ *               - numero_table
+ *               - restaurent
+ *             properties:
+ *               numero_table:
+ *                 type: number
+ *               restaurent:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Table créée avec succès
  *       400:
- *         description: Données invalides
+ *         description: Erreur de validation
  */
 
 /**
  * @swagger
- * /table:
+ * /api/table:
  *   get:
+ *     summary: Lister toutes les tables
  *     tags: [Table]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
+ *         description: Liste des tables
  *         content:
  *           application/json:
  *             schema:
@@ -45,8 +55,9 @@
 
 /**
  * @swagger
- * /table/{id}:
+ * /api/table/{id}:
  *   get:
+ *     summary: Détail d'une table
  *     tags: [Table]
  *     security:
  *       - bearerAuth: []
@@ -56,66 +67,18 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la table
  *     responses:
  *       200:
  *         description: Table trouvée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Table'
  *       404:
- *         description: Table non trouvée
+ *         description: Table introuvable
  */
 
 /**
  * @swagger
- * /table/scan/{qrCode}:
- *    get:
- *      tags: [Table]
- *      parameters:
- *          - in: path
- *            name: qrCode
- *            required: true
- *            schema:
- *              type: string
- *            description: QR Code de la table
- *      responses:
- *        200:
- *          content:
- *              application/json:
- *                schema:
- *                  $ref: '#/components/schemas/Table'
- *        404:
- *          description: QR Code invalide
- */
-
-/**
- * @swagger
- * /Table/{id}:
+ * /api/table/{id}:
  *   put:
- *     tags: [Table]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           $ref: '#/components/schemas/Table'
- *     responses:
- *       200:
- *         description: Table modifiée avec succès
- *       400:
- *         description: Données invalides
- *       404:
- *         description: Table non trouvée
- */
-
-/**
- * @swagger
- * /table/{id}:
- *   delete:
+ *     summary: Modifier une table
  *     tags: [Table]
  *     security:
  *       - bearerAuth: []
@@ -125,10 +88,79 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la table
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Table'
+ *     responses:
+ *       201:
+ *         description: Table modifiée avec succès
+ *       404:
+ *         description: Table introuvable
+ */
+
+/**
+ * @swagger
+ * /api/table/{id}:
+ *   delete:
+ *     summary: Supprimer une table
+ *     tags: [Table]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: Table supprimée
+ */
+
+/**
+ * @swagger
+ * /api/table/scan/{qrCode}:
+ *   get:
+ *     summary: Scanner le QR Code d'une table
+ *     tags: [Table]
+ *     parameters:
+ *       - in: path
+ *         name: qrCode
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Table supprimée avec succès
+ *         description: Informations de la table
  *       404:
- *         description: Table non trouvée
+ *         description: QR Code invalide
+ */
+
+/**
+ * @swagger
+ * /api/table/menu/{qrCode}/restaurent/{restaurentId}:
+ *   get:
+ *     summary: Récupérer les menus et repas d'une table via QR Code
+ *     tags: [Table]
+ *     parameters:
+ *       - in: path
+ *         name: qrCode
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: restaurentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Menus et repas disponibles
+ *       403:
+ *         description: Table ne correspond pas au restaurent
+ *       404:
+ *         description: QR Code invalide
  */

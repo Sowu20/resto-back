@@ -2,12 +2,14 @@
  * @swagger
  * tags:
  *   name: Commande
+ *   description: Gestion des commandes
  */
 
 /**
  * @swagger
- * /commande:
+ * /api/commande:
  *   post:
+ *     summary: Créer une commande
  *     tags: [Commande]
  *     security:
  *       - bearerAuth: []
@@ -16,20 +18,19 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             items:
- *                $ref: '#/components/schemas/Commande'
+ *             $ref: '#/components/schemas/Commande'
  *     responses:
  *       201:
  *         description: Commande créée avec succès
  *       400:
- *         description: Données invalides
+ *         description: Erreur de validation
  */
 
 /**
  * @swagger
- * /commande:
+ * /api/commande:
  *   get:
+ *     summary: Lister toutes les commandes
  *     tags: [Commande]
  *     security:
  *       - bearerAuth: []
@@ -46,8 +47,9 @@
 
 /**
  * @swagger
- * /commande/{id}:
+ * /api/commande/{id}:
  *   get:
+ *     summary: Détail d'une commande
  *     tags: [Commande]
  *     security:
  *       - bearerAuth: []
@@ -57,44 +59,18 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la commande
  *     responses:
  *       200:
  *         description: Commande trouvée
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Commande'
  *       404:
- *         description: Commande non trouvée
+ *         description: Commande introuvable
  */
 
 /**
  * @swagger
- * /commande/{id}:
+ * /api/commande/{id}:
  *   put:
- *     tags: [Commande]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           $ref: '#/components/schemas/Commande'
- *     responses:
- *       200:
- *         description: Commande modifiée avec succès
- *       400:
- *         description: Données invalides
- *       404:
- *         description: Commande non trouvée
- */
-
-/**
- * @swagger
- * /commande/{id}:
- *   delete:
+ *     summary: Modifier une commande
  *     tags: [Commande]
  *     security:
  *       - bearerAuth: []
@@ -104,10 +80,76 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la commande
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Commande'
  *     responses:
- *       200:
- *         description: Commande supprimée avec succès
+ *       202:
+ *         description: Commande modifiée
  *       404:
- *         description: Commande non trouvée
+ *         description: Commande introuvable
+ */
+
+/**
+ * @swagger
+ * /api/commande/{id}:
+ *   delete:
+ *     summary: Supprimer une commande
+ *     tags: [Commande]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: Commande supprimée
+ */
+
+/**
+ * @swagger
+ * /api/commande:
+ *   post:
+ *     summary: Passer une commande via QR Code
+ *     tags: [Commande]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - customer_name
+ *               - customer_phone
+ *               - items
+ *               - payment_method
+ *               - tableId
+ *               - restaurentId
+ *             properties:
+ *               customer_name:
+ *                 type: string
+ *               customer_phone:
+ *                 type: string
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/CommandeItem'
+ *               payment_method:
+ *                 type: string
+ *                 enum: [espece, virement]
+ *               tableId:
+ *                 type: string
+ *               restaurentId:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Commande passée avec succès
+ *       500:
+ *         description: Erreur serveur
  */

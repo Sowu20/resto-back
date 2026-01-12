@@ -10,6 +10,12 @@
  *   schemas:
  *     User:
  *       type: object
+ *       required:
+ *         - name
+ *         - adress
+ *         - phone
+ *         - email
+ *         - password
  *       properties:
  *         name:
  *           type: string
@@ -24,38 +30,28 @@
  *
  *     Restaurent:
  *       type: object
+ *       required:
+ *         - nom
+ *         - adresse
+ *         - telephone
  *       properties:
  *         nom:
  *           type: string
  *         adresse:
  *           type: string
  *         telephone:
- *           type: number
+ *           type: string
  *         email:
  *           type: string
- *         disponibilite:
- *           type: string
- *           enum: [ouvert, ferme]
- *         user:
- *           type: string
- *           description: ID de l'utilisateur
  *
  *     Menu:
  *       type: object
- *       properties:
- *         nom:
- *           type: string
- *         categorie:
- *           type: string
- *           enum: [ENTREE, PLAT, DESSERT]
- *         description:
- *           type: string
- *         restaurent:
- *           type: string
- *           description: ID du restaurent
- *
- *     CategorieRepas:
- *       type: object
+ *       required:
+ *         - name
+ *         - startTime
+ *         - endTime
+ *         - validDays
+ *         - restaurent
  *       properties:
  *         name:
  *           type: string
@@ -63,22 +59,54 @@
  *           type: string
  *         isActive:
  *           type: boolean
+ *         isDefault:
+ *           type: boolean
+ *         startTime:
+ *           type: string
+ *           format: date-time
+ *         endTime:
+ *           type: string
+ *           format: date-time
+ *         validDays:
+ *           type: string
+ *           enum: [lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche]
  *         restaurent:
  *           type: string
- *           description: ID de Restaurent
- *         menu:
- *           type: string
- *           description: ID de Menu
- *         commande:
- *           type: string
- *           description: ID de commande
  *
- *     Repas:
+ *     Categorie:
  *       type: object
+ *       required:
+ *         - name
+ *         - resturent
+ *         - menu
+ *         - commande
  *       properties:
  *         name:
  *           type: string
- *         descrition:
+ *         description:
+ *           type: string
+ *         isActive:
+ *           type: boolean
+ *         resturent:
+ *           type: string
+ *         menu:
+ *           type: string
+ *         commande:
+ *           type: string
+ *
+ *     Repas:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - isAvaible
+ *         - menu
+ *         - restaurent
+ *         - categorie
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
  *           type: string
  *         price:
  *           type: number
@@ -86,29 +114,59 @@
  *           type: boolean
  *         menu:
  *           type: string
- *           description: ID du menu
  *         restaurent:
  *           type: string
- *           description: ID du restaurent
  *         categorie:
  *           type: string
- *           description: ID de catégorie
+ *
+ *     Table:
+ *       type: object
+ *       required:
+ *         - numero_table
+ *         - restaurent
+ *       properties:
+ *         numero_table:
+ *           type: number
+ *         qrCode:
+ *           type: string
+ *         statut:
+ *           type: string
+ *           enum: [libre, occupe]
+ *         restaurent:
+ *           type: string
+ *
+ *     CommandeItem:
+ *       type: object
+ *       required:
+ *         - repas
+ *         - quantite
+ *       properties:
+ *         repas:
+ *           type: string
+ *         quantite:
+ *           type: number
  *
  *     Commande:
  *       type: object
+ *       required:
+ *         - items
+ *         - restaurent
+ *         - table
  *       properties:
- *         _id:
- *           type: string
  *         order_number:
  *           type: string
  *         customer_name:
  *           type: string
  *         customer_phone:
  *           type: string
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/CommandeItem'
  *         status:
  *           type: string
  *           enum: [en_attente, en_cours, termine]
- *         payment_staus:
+ *         payment_status:
  *           type: string
  *           enum: [en_attente, en_traitement, paye, non_paye]
  *         payment_method:
@@ -120,31 +178,6 @@
  *           type: number
  *         restaurent:
  *           type: string
- *           description: ID du restaurant
- *         createdAt:
+ *         table:
  *           type: string
- *           format: date-time
- *         updatedAt:
- *           type: string
- *           format: date-time
- *
- *     Table:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *         qrCode:
- *           type: string
- *         statut:
- *           type: string
- *           enum: [libre, occupe]
- *         restaurent:
- *           type: string
- *           description: ID du restaurent
- *         createdAt:
- *           type: string
- *           format: date-time
- *         updatedAt:
- *           type: string
- *           format: date-time
- */
+*/

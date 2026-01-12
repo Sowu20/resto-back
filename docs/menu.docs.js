@@ -1,16 +1,16 @@
 /**
  * @swagger
  * tags:
- *   name: Restaurent
- *   description: Gestion des restaurents
+ *   name: Menu
+ *   description: Gestion des menus
  */
 
 /**
  * @swagger
- * /api/restaurent:
+ * /api/menu:
  *   post:
- *     tags: [Restaurent]
- *     summary: Créer un restaurent
+ *     tags: [Menu]
+ *     summary: Créer un menu
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -18,39 +18,39 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Restaurent'
+ *             $ref: '#/components/schemas/Menu'
  *     responses:
  *       201:
- *         description: Restaurent créé avec succès
+ *         description: Menu créé avec succès
  *       400:
  *         description: Erreur de validation
  */
 
 /**
  * @swagger
- * /api/restaurent:
+ * /api/menu:
  *   get:
- *     tags: [Restaurent]
- *     summary: Lister tous les restaurents
+ *     tags: [Menu]
+ *     summary: Lister tous les menus
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des restaurents
+ *         description: Liste des menus
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Restaurent'
+ *                 $ref: '#/components/schemas/Menu'
  */
 
 /**
  * @swagger
- * /api/restaurent/{id}:
+ * /api/menu/{id}:
  *   get:
- *     tags: [Restaurent]
- *     summary: Détails d’un restaurent
+ *     tags: [Menu]
+ *     summary: Détails d’un menu
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -61,17 +61,17 @@
  *           type: string
  *     responses:
  *       200:
- *         description: Restaurent trouvé
+ *         description: Menu trouvé
  *       404:
- *         description: Restaurent introuvable
+ *         description: Menu introuvable
  */
 
 /**
  * @swagger
- * /api/restaurent/{id}:
+ * /api/menu/{id}:
  *   put:
- *     tags: [Restaurent]
- *     summary: Modifier un restaurent
+ *     tags: [Menu]
+ *     summary: Modifier un menu
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -85,20 +85,20 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Restaurent'
+ *             $ref: '#/components/schemas/Menu'
  *     responses:
- *       202:
- *         description: Restaurent modifié avec succès
+ *       201:
+ *         description: Menu modifié avec succès
  *       404:
- *         description: Restaurent introuvable
+ *         description: Menu introuvable
  */
 
 /**
  * @swagger
- * /api/restaurent/{id}:
+ * /api/menu/{id}:
  *   delete:
- *     tags: [Restaurent]
- *     summary: Supprimer un restaurent
+ *     tags: [Menu]
+ *     summary: Supprimer un menu
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -108,8 +108,8 @@
  *         schema:
  *           type: string
  *     responses:
- *       201:
- *         description: Restaurent supprimé avec succès
- *       404:
- *         description: Restaurent introuvable
+ *       202:
+ *         description: Menu supprimé avec succès
+ *       400:
+ *         description: ID invalide
  */

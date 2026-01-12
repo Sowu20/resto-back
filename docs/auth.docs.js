@@ -2,48 +2,43 @@
  * @swagger
  * tags:
  *   name: Authentification
+ *   description: Gestion de l’authentification
  */
 
 /**
  * @swagger
- * /register:
+ * /api/register:
  *   post:
  *     tags: [Authentification]
+ *     summary: Création d’un compte utilisateur
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [name, adress, phone, email, password]
- *             properties:
- *               name:
- *                 type: string
- *               adress:
- *                 type: string
- *               phone:
- *                 type: number
- *               email:
- *                 type: string
- *               password:
- *                 type: string
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
- *         description: Utilisateur créé
+ *         description: Utilisateur créé avec succès
+ *       400:
+ *         description: Erreur de validation
  */
 
 /**
  * @swagger
- * /login:
+ * /api/login:
  *   post:
  *     tags: [Authentification]
+ *     summary: Connexion utilisateur
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required: [email, password]
+ *             required:
+ *               - email
+ *               - password
  *             properties:
  *               email:
  *                 type: string
@@ -51,7 +46,7 @@
  *                 type: string
  *     responses:
  *       200:
- *         description: Utilisateur connecté avec succès
+ *         description: Connexion réussie (JWT)
  *       400:
  *         description: Email ou mot de passe incorrect
  */
@@ -60,13 +55,17 @@
  * @swagger
  * tags:
  *   name: User
+ *   description: Gestion des utilisateurs
  */
 
 /**
  * @swagger
- * /user:
+ * /api/user:
  *   get:
  *     tags: [User]
+ *     summary: Liste des utilisateurs
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Liste des utilisateurs
@@ -80,9 +79,12 @@
 
 /**
  * @swagger
- * /user/{id}:
+ * /api/user/{id}:
  *   get:
  *     tags: [User]
+ *     summary: Détails d’un utilisateur
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -92,19 +94,18 @@
  *     responses:
  *       200:
  *         description: Utilisateur trouvé
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
  *       404:
- *         description: Utilisateur non trouvé
+ *         description: Utilisateur introuvable
  */
 
 /**
  * @swagger
- * /user/{id}:
+ * /api/user/{id}:
  *   put:
  *     tags: [User]
+ *     summary: Modifier un utilisateur
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -121,14 +122,17 @@
  *       200:
  *         description: Utilisateur modifié avec succès
  *       404:
- *         description: Utilisateur non trouvé
+ *         description: Utilisateur introuvable
  */
 
 /**
  * @swagger
- * /user/{id}:
+ * /api/user/{id}:
  *   delete:
  *     tags: [User]
+ *     summary: Supprimer un utilisateur
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -139,5 +143,5 @@
  *       200:
  *         description: Utilisateur supprimé avec succès
  *       404:
- *         description: Utilisateur non trouvé
+ *         description: Utilisateur introuvable
  */

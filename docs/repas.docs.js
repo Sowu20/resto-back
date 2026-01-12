@@ -1,14 +1,16 @@
 /**
  * @swagger
  * tags:
- *   - name: Repas
+ *   name: Repas
+ *   description: Gestion des repas
  */
 
 /**
  * @swagger
- * /repas:
+ * /api/repas:
  *   post:
  *     tags: [Repas]
+ *     summary: Créer un repas
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -21,14 +23,17 @@
  *       201:
  *         description: Repas créé avec succès
  *       400:
- *         description: Données invalides
+ *         description: Erreur de validation
  */
 
 /**
  * @swagger
- * /repas:
+ * /api/repas:
  *   get:
  *     tags: [Repas]
+ *     summary: Lister tous les repas
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Liste des repas
@@ -42,41 +47,39 @@
 
 /**
  * @swagger
- * /repas/{id}:
+ * /api/repas/{id}:
  *   get:
  *     tags: [Repas]
+ *     summary: Détails d’un repas
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
- *         description: ID du repas
  *     responses:
  *       200:
  *         description: Repas trouvé
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Repas'
  *       404:
- *         description: Repas non trouvé
+ *         description: Repas introuvable
  */
 
 /**
  * @swagger
- * /repas/{id}:
+ * /api/repas/{id}:
  *   put:
  *     tags: [Repas]
+ *     summary: Modifier un repas
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
- *         description: ID du repas
  *     requestBody:
  *       required: true
  *       content:
@@ -87,26 +90,26 @@
  *       200:
  *         description: Repas modifié avec succès
  *       404:
- *         description: Repas non trouvé
+ *         description: Repas introuvable
  */
 
 /**
  * @swagger
- * /repas/{id}:
+ * /api/repas/{id}:
  *   delete:
  *     tags: [Repas]
+ *     summary: Supprimer un repas
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
- *         description: ID du repas
  *     responses:
- *       200:
+ *       202:
  *         description: Repas supprimé avec succès
- *       404:
- *         description: Repas non trouvé
+ *       400:
+ *         description: ID invalide
  */
