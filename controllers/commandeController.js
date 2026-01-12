@@ -63,7 +63,7 @@ exports.updateCommande = async(req, res) => {
 
 exports.deleteCommande = async(req, res) => {
     try {
-        await Commande.findById(req.params.id);
+        await Commande.findByIdAndDelete(req.params.id);
         return res.status(201).json({
             message: 'Commande supprimée avec succès'
         });

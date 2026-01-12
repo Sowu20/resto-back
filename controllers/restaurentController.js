@@ -64,7 +64,7 @@ exports.detailResto = async(req, res) => {
 
 exports.updateResto = async(req, res) => {
     try {
-        const resto = await Restaurent.findByIdAndDelete(
+        const resto = await Restaurent.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true }

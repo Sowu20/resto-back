@@ -37,7 +37,7 @@ exports.detailOffre = async(req, res) => {
 
 exports.updateOffre = async(req, res) => {
     try {
-        const offre = await Offre.findById(
+        const offre = await Offre.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true }

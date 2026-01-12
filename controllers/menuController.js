@@ -37,7 +37,7 @@ exports.detailMenu = async(req, res) => {
 
 exports.updateMenu = async(req, res) => {
     try {
-        const menu = await Menu.findByIdAndDelete(
+        const menu = await Menu.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true }
