@@ -1,4 +1,5 @@
 const Restaurent = require('../models/Restaurent');
+const User = require('../models/User');
 
 exports.createResto = async(req, res) => {
     try {
@@ -11,6 +12,20 @@ exports.createResto = async(req, res) => {
             latitude,
             longitude
         } = req.body;
+
+        // Eviter qu'un utilisateur crée un restaurent
+        if (req.user.role !== 'Restaurateur') {
+            return res.status(403).json({
+                message: 'Seul un restaurateur peut créer un restaurent'
+            });
+        }
+
+        // Eviter la création de plusieurs restaurents
+        if (req.user.restaurentId) {
+            return res.status(400).json({
+                message: 'Vous avez déjà créé un restaurent !'
+            });
+        }
 
         if (!latitude || !longitude) {
             return res.status(400).json({
@@ -30,6 +45,11 @@ exports.createResto = async(req, res) => {
             },
             user: req.userId
         });
+        // Attribuer le restaurent au restaurateur
+        await User.findByIdAndUpdate(req.user.id, {
+            restaurentId: resto._id
+        });
+
         return res.status(201).json({
             message: 'Restaurent enregistré avec succès',
             resto
