@@ -63,13 +63,24 @@ exports.login = async(req, res) => {
 
         // Générer un token
         const token = jwt.sign(
-            { id: user._id },
+            { 
+                id: user._id, 
+                role: user.role,
+                restaurentId: user.restaurent || null
+            },
             secret_key || 'default_secret',
             { expiresIn: "2d" }  
         );
 
         return res.status(200).json({
-            message: 'Connexion réussie !', token
+            message: 'Connexion réussie !', 
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
         });
     } catch (error) {
         console.log(error);
