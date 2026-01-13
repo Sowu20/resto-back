@@ -4,6 +4,16 @@ module.exports = (roles = []) => {
       return res.status(403).json({ message: "Rôle non défini" });
     }
 
+    if (req.user.role === 'Admin') {
+      return next(); 
+    }
+
+    if (req.user.role !== 'Admin') {
+      return res.status(403).json({
+        message: 'Accès interdit'
+      });
+    }
+
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         message: `Accès interdit : rôle ${req.user.role}`
