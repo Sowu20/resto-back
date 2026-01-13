@@ -1,20 +1,12 @@
-module.exports = (roles = []) => {
+module.exports = (allowedRoles = []) => {
   return (req, res, next) => {
     if (!req.user || !req.user.role) {
+      console.log("Accès refusé : rôle non défini dans req.user");
       return res.status(403).json({ message: "Rôle non défini" });
     }
 
-    if (req.user.role === 'Admin') {
-      return next(); 
-    }
-
-    if (req.user.role !== 'Admin') {
-      return res.status(403).json({
-        message: 'Accès interdit'
-      });
-    }
-
-    if (!roles.includes(req.user.role)) {
+    if (!allowedRoles.includes(req.user.role)) {
+      console.log(`Accès interdit : rôle de l'utilisateur = ${req.user.role}, rôles autorisés = ${allowedRoles}`);
       return res.status(403).json({
         message: `Accès interdit : rôle ${req.user.role}`
       });
