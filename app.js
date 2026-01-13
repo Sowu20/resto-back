@@ -11,7 +11,8 @@ app.use(express.json());
 app.use(cors({
     origin: [
       'https://resto-back-xazy.onrender.com',
-      'https://zamora-app.netlify.app'
+      'https://zamora-app.netlify.app',
+      'http://localhost:5173/'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
