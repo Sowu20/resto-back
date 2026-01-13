@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: Restaurent
- *   description: Gestion des restaurents
+ *   description: Gestion des restaurants
  */
 
 /**
@@ -10,7 +10,7 @@
  * /api/restaurent:
  *   post:
  *     tags: [Restaurent]
- *     summary: Créer un restaurent
+ *     summary: Créer un restaurant
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -18,12 +18,37 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Restaurent'
+ *             type: object
+ *             required:
+ *               - nom
+ *               - adresse
+ *               - telephone
+ *               - latitude
+ *               - longitude
+ *             properties:
+ *               nom:
+ *                 type: string
+ *               adresse:
+ *                 type: string
+ *               telephone:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               disponibilite:
+ *                 type: boolean
+ *               latitude:
+ *                 type: number
+ *               longitude:
+ *                 type: number
  *     responses:
  *       201:
- *         description: Restaurent créé avec succès
+ *         description: Restaurant créé avec succès
  *       400:
- *         description: Erreur de validation
+ *         description: Données invalides ou restaurant déjà existant
+ *       403:
+ *         description: Accès réservé aux restaurateurs
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
@@ -31,12 +56,10 @@
  * /api/restaurent:
  *   get:
  *     tags: [Restaurent]
- *     summary: Lister tous les restaurents
- *     security:
- *       - bearerAuth: []
+ *     summary: Liste des restaurants
  *     responses:
  *       200:
- *         description: Liste des restaurents
+ *         description: Liste des restaurants
  *         content:
  *           application/json:
  *             schema:
@@ -50,20 +73,24 @@
  * /api/restaurent/{id}:
  *   get:
  *     tags: [Restaurent]
- *     summary: Détails d’un restaurent
- *     security:
- *       - bearerAuth: []
+ *     summary: Détails d’un restaurant
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Restaurent trouvé
+ *         description: Restaurant trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Restaurent'
  *       404:
- *         description: Restaurent introuvable
+ *         description: Restaurant introuvable
+ *       400:
+ *         description: ID invalide
  */
 
 /**
@@ -71,12 +98,12 @@
  * /api/restaurent/{id}:
  *   put:
  *     tags: [Restaurent]
- *     summary: Modifier un restaurent
+ *     summary: Modifier un restaurant
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -88,9 +115,13 @@
  *             $ref: '#/components/schemas/Restaurent'
  *     responses:
  *       202:
- *         description: Restaurent modifié avec succès
+ *         description: Restaurant modifié avec succès
+ *       403:
+ *         description: Accès interdit (non propriétaire)
  *       404:
- *         description: Restaurent introuvable
+ *         description: Restaurant introuvable
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
@@ -98,18 +129,22 @@
  * /api/restaurent/{id}:
  *   delete:
  *     tags: [Restaurent]
- *     summary: Supprimer un restaurent
+ *     summary: Supprimer un restaurant
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
  *     responses:
- *       201:
- *         description: Restaurent supprimé avec succès
+ *       200:
+ *         description: Restaurant supprimé avec succès
+ *       403:
+ *         description: Accès réservé aux administrateurs
  *       404:
- *         description: Restaurent introuvable
+ *         description: Restaurant introuvable
+ *       401:
+ *         description: Non authentifié
  */

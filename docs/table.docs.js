@@ -2,15 +2,15 @@
  * @swagger
  * tags:
  *   name: Table
- *   description: Gestion des tables
+ *   description: Gestion des tables et QR Codes
  */
 
 /**
  * @swagger
  * /api/table:
  *   post:
- *     summary: Créer une table
  *     tags: [Table]
+ *     summary: Créer une table
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -30,16 +30,20 @@
  *     responses:
  *       201:
  *         description: Table créée avec succès
+ *       403:
+ *         description: Accès réservé aux restaurateurs
  *       400:
- *         description: Erreur de validation
+ *         description: Données invalides
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
  * @swagger
  * /api/table:
  *   get:
- *     summary: Lister toutes les tables
  *     tags: [Table]
+ *     summary: Lister les tables du restaurateur
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -51,14 +55,18 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Table'
+ *       403:
+ *         description: Accès interdit
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
  * @swagger
  * /api/table/{id}:
  *   get:
- *     summary: Détail d'une table
  *     tags: [Table]
+ *     summary: Détails d’une table
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -70,16 +78,22 @@
  *     responses:
  *       200:
  *         description: Table trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Table'
  *       404:
  *         description: Table introuvable
+ *       400:
+ *         description: ID invalide
  */
 
 /**
  * @swagger
  * /api/table/{id}:
  *   put:
- *     summary: Modifier une table
  *     tags: [Table]
+ *     summary: Modifier une table
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -97,16 +111,20 @@
  *     responses:
  *       201:
  *         description: Table modifiée avec succès
+ *       403:
+ *         description: Accès interdit
  *       404:
  *         description: Table introuvable
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
  * @swagger
  * /api/table/{id}:
  *   delete:
- *     summary: Supprimer une table
  *     tags: [Table]
+ *     summary: Supprimer une table
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -117,15 +135,19 @@
  *           type: string
  *     responses:
  *       201:
- *         description: Table supprimée
+ *         description: Table supprimée avec succès
+ *       403:
+ *         description: Accès interdit
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
  * @swagger
  * /api/table/scan/{qrCode}:
  *   get:
- *     summary: Scanner le QR Code d'une table
  *     tags: [Table]
+ *     summary: Scanner le QR Code d’une table
  *     parameters:
  *       - in: path
  *         name: qrCode
@@ -135,32 +157,27 @@
  *     responses:
  *       200:
  *         description: Informations de la table
+ *       403:
+ *         description: Table occupée
  *       404:
  *         description: QR Code invalide
  */
 
 /**
  * @swagger
- * /api/table/menu/{qrCode}/restaurent/{restaurentId}:
+ * /api/table/menu/{qrCode}:
  *   get:
- *     summary: Récupérer les menus et repas d'une table via QR Code
  *     tags: [Table]
+ *     summary: Récupérer les menus et repas via QR Code
  *     parameters:
  *       - in: path
  *         name: qrCode
  *         required: true
  *         schema:
  *           type: string
- *       - in: path
- *         name: restaurentId
- *         required: true
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *         description: Menus et repas disponibles
- *       403:
- *         description: Table ne correspond pas au restaurent
  *       404:
  *         description: QR Code invalide
  */

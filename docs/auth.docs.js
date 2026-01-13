@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: Authentification
- *   description: Gestion de l’authentification
+ *   description: Gestion de l’authentification des utilisateurs
  */
 
 /**
@@ -21,7 +21,9 @@
  *       201:
  *         description: Utilisateur créé avec succès
  *       400:
- *         description: Erreur de validation
+ *         description: Email déjà utilisé ou erreur de validation
+ *       500:
+ *         description: Erreur serveur
  */
 
 /**
@@ -46,9 +48,13 @@
  *                 type: string
  *     responses:
  *       200:
- *         description: Connexion réussie (JWT)
+ *         description: Connexion réussie (JWT retourné)
  *       400:
- *         description: Email ou mot de passe incorrect
+ *         description: Mot de passe incorrect
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
  */
 
 /**
@@ -63,7 +69,7 @@
  * /api/user:
  *   get:
  *     tags: [User]
- *     summary: Liste des utilisateurs
+ *     summary: Liste de tous les utilisateurs
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -75,6 +81,10 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Accès refusé
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
@@ -94,8 +104,16 @@
  *     responses:
  *       200:
  *         description: Utilisateur trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Accès interdit
  *       404:
  *         description: Utilisateur introuvable
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
@@ -121,8 +139,12 @@
  *     responses:
  *       200:
  *         description: Utilisateur modifié avec succès
+ *       403:
+ *         description: Accès interdit
  *       404:
  *         description: Utilisateur introuvable
+ *       401:
+ *         description: Non authentifié
  */
 
 /**
@@ -142,6 +164,10 @@
  *     responses:
  *       200:
  *         description: Utilisateur supprimé avec succès
+ *       403:
+ *         description: Accès refusé
  *       404:
  *         description: Utilisateur introuvable
+ *       401:
+ *         description: Non authentifié
  */
