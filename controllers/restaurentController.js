@@ -43,7 +43,7 @@ exports.createResto = async(req, res) => {
                 type: 'Point',
                 coordonnes: [longitude, latitude]
             },
-            user: req.userId
+            user: req.user.id
         });
         // Attribuer le restaurent au restaurateur
         await User.findByIdAndUpdate(req.user.id, {
