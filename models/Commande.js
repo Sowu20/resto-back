@@ -18,7 +18,19 @@ const cmdeSchema = new mongoose.Schema({
                 ref: 'Repas',
                 required: true
             },
+            nom_repas: {
+                type: String,
+                required: true
+            },
+            prix_unitaire: {
+                type: Number,
+                required: true
+            },
             quantite: {
+                type: Number,
+                required: true
+            },
+            total: {
                 type: Number,
                 required: true
             } 

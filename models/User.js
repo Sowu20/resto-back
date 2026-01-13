@@ -18,11 +18,16 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    role: {
+        type: String,
+        enum: ['Restaurateur', 'Admin'],
+        required: true
+    },
     password: {
         type: String,
         required: true
     }
-}, { timestamps: true });
+}, { timestamps: true }); 
 
 const User = mongoose.model('User', userSchema);
 
