@@ -40,6 +40,6 @@ app.use('/api', cmdeRoute);
 app.use('/api', categorieRoute);
 app.use('/api', tableRoute);
 
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+app.use('/doc-swagger', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 module.exports = app;
