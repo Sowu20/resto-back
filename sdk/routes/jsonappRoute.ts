@@ -1,6 +1,10 @@
-import { router } from "../../app";
+import express from 'express'; 
 import { getForm, getMenu, getReader } from "../controllers/jsonappController";
 
-router.get('/menu', getMenu);
-router.get('/form', getForm);
-router.get('/reader', getReader);
+const router = express.Router();
+
+router.get('/actions/:viewId', getMenu);
+router.get('/forms/:formId', getForm);
+router.get('/readers/:readerId', getReader);
+
+export default router;
