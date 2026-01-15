@@ -1,4 +1,4 @@
-import express from 'express'; 
+const express = require('express'); 
 import { getForm, getMenu, getReader } from "../controllers/jsonappController";
 
 const router = express.Router();
