@@ -31,7 +31,7 @@ const repasRoute = require('./routes/repasRoute');
 const cmdeRoute = require('./routes/commandeRoute');
 const categorieRoute = require('./routes/categorieRoute');
 const tableRoute = require('./routes/tableRoute');
-import jsonappRoute from './sdk/routes/jsonappRoute';
+const jsonappRoute = require('./sdk/routes/jsonappRoute').default;
 
 app.use('/api', userRoute);
 app.use('/api', restoRoute);
