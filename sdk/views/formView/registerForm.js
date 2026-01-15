@@ -1,6 +1,6 @@
-import { FormView } from "@numerum-tech/cmsdk";
+const { FormView } = require('@numerum-tech/cmsdk');
 
-export const registerForm = new FormView('register-form', "Formulaire d'inscription")
+const registerForm = new FormView('register-form', "Formulaire d'inscription")
     .setIntro("Veuillez remplir tous les champs s'il vous plaît")
     .addTextField('name', 'Nom Complet', true)
     .addTextField('adress', 'Adresse', true)
@@ -12,3 +12,5 @@ export const registerForm = new FormView('register-form', "Formulaire d'inscript
     ])
     .addPasswordField('password', 'Mot de passe', 8)
     .submitButton('Inscrivez-vous', 'POST');
+
+module.exports = { registerForm };

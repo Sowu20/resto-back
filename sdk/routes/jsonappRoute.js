@@ -1,5 +1,5 @@
 const express = require('express'); 
-import { getForm, getMenu, getReader } from "../controllers/jsonappController";
+const { getForm, getMenu, getReader } = require('../controllers/jsonappController');
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
-import { ReaderView } from "@numerum-tech/cmsdk";
+const { ReaderView } = require('@numerum-tech/cmsdk');
 
-export const userReader = new ReaderView('user-reader', "Détail d'un utilisateur")
+const userReader = new ReaderView('user-reader', "Détail d'un utilisateur")
     .setIntro('Détail du compte')
     .addListField([
         'Name: Amad',
@@ -11,3 +11,5 @@ export const userReader = new ReaderView('user-reader', "Détail d'un utilisateu
     ])
     .addSeparator()
     .addParagraph('Compte actif et validé');
+
+module.exports = { userReader };
