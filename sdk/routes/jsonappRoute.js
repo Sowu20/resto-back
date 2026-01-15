@@ -7,4 +7,4 @@ router.get('/action', getMenu);
 router.get('/forms', getForm);
 router.get('/readers', getReader);
 
-export default router;
+module.exports = router;
