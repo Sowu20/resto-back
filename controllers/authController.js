@@ -6,7 +6,7 @@ const secret_key ='0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03e
 
 exports.register = async(req, res) => {
     try {
-        const { name, adress, phone, email, role, password } = req.body;
+        const { name, address, phone, email, role, password } = req.body;
 
         // Vérifier si l'utilisateur existe
         const exist = await User.findOne({ email });
@@ -21,7 +21,7 @@ exports.register = async(req, res) => {
 
         const user = await User.create({
             name,
-            adress,
+            address,
             phone,
             email,
             role,
