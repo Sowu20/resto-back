@@ -12,19 +12,23 @@
  *       type: object
  *       required:
  *         - name
- *         - adress
+ *         - address
  *         - phone
  *         - email
+ *         - role
  *         - password
  *       properties:
  *         name:
  *           type: string
- *         adress:
+ *         address:
  *           type: string
  *         phone:
  *           type: number
  *         email:
  *           type: string
+ *         role:
+ *           type: string
+ *           enum: [Admin, Restaurateur]
  *         password:
  *           type: string
  *
