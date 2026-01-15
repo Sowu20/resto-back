@@ -9,6 +9,7 @@ const check = require('../middlewares/checkrestaurentmiddleware');
 router.post('/restaurent', auth, role(['Restaurateur']), restaurentController.createResto);
 router.get('/restaurent', restaurentController.listResto);
 router.get('/restaurent/:id', restaurentController.detailResto);
+router.get('/restaurent/localisation', restaurentController.getRestaurentsLoc);
 router.put('/restaurent/:id', auth, check, restaurentController.updateResto);
 router.delete('/restaurent/:id', auth, role(['Admin']), restaurentController.deleteResto);
 
