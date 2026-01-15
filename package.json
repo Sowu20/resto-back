@@ -12,13 +12,15 @@
     "start": "node server.js"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "express": "^5.2.1",
-    "jest": "^30.2.0",
     "mongoose": "^9.0.1",
     "multer": "^2.0.2",
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@numerum-tech/cmsdk": "^1.0.2",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
