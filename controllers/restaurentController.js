@@ -117,3 +117,36 @@ exports.deleteResto = async(req, res) => {
         });
     }
 }
+
+exports.getRestaurentsLoc = async(req, res) => {
+    try {
+        const { latitude, longitude, distance = 3000 } = req.query;
+
+        if (!latitude || !longitude) {
+            return res.status(400).json({
+                message: 'La latitude et la longitude sont requises'
+            });
+        }
+
+        const restaurents = await Restaurent.find({
+            location: {
+                $near: {
+                    $geometry: {
+                        type: 'Point',
+                        coordonnes: [parseFloat(longitude), parseFloat(latitude)]
+                    },
+                    $maxDistance: parseInt(distance)
+                }
+            }
+        });
+
+        return res.json({
+            total: restaurents.length,
+            restaurents
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
