@@ -24,13 +24,14 @@ const restaurentSchema = new mongoose.Schema({
         type: {
             type: String,
             enum: ['Point'],
-            required: true,
             default: 'Point'
         },
         coordonnes: {
-            type: [Number],
-            resuired: true
+            type: [Number]
         }
+    },
+    password: {
+        type: String
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
