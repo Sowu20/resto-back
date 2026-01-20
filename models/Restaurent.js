@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const restaurentSchema = new mongoose.Schema({
-    nom: {
+    name: {
         type: String,
         required: true
     }, 
-    adresse: {
+    address: {
         type: String,  
         required: true
     },
-    telephone: {
+    phone: {
         type: Number
     },
     email: {
@@ -18,7 +18,8 @@ const restaurentSchema = new mongoose.Schema({
     },
     disponibilite: {
         type: String,
-        enum: ['ouvert', 'ferme']
+        enum: ['ouvert', 'ferme'],
+        default: 'ouvert'
     },
     location: {
         type: {
@@ -31,7 +32,8 @@ const restaurentSchema = new mongoose.Schema({
         }
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
