@@ -14,6 +14,7 @@ app.use(cors({
       'https://zamora-app.netlify.app',
       'http://localhost:5173',
       'http://localhost:3000',
+      'http://192.168.1.112:3000'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -41,7 +42,7 @@ app.use('/api', repasRoute);
 app.use('/api', cmdeRoute);
 app.use('/api', categorieRoute);
 app.use('/api', tableRoute);
-app.use('/api', jsonappRoute);
+app.use(jsonappRoute);
 
 app.use('/doc-swagger', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
