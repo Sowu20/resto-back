@@ -12,7 +12,8 @@ app.use(cors({
     origin: [
       'https://resto-back-xazy.onrender.com',
       'https://zamora-app.netlify.app',
-      'http://localhost:5173'
+      'http://localhost:5173',
+      'http://localhost:3000',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
