@@ -1,7 +1,6 @@
 const { ActionListView } = require('@numerum-tech/cmsdk');
 
-const mainMenu = new ActionListView('main-menu', 'Menu principale')
-    .addAction('register-form', "Faire l'inscription", 'Créer un compte')
-    .addAction('user-reader', 'Voir mon profil', 'Consulter mes informations');
+const mainMenu = new ActionListView('main-menu', 'Acceuil')
+    .addAction('restaurents', 'Restaurents', 'Consulter la liste des restaurents disponible', { href: '/mobile/listrestaurent' });
 
-module.exports = { mainMenu }
+module.exports = { mainMenu };
