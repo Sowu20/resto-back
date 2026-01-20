@@ -1,8 +1,6 @@
 const { CardView } = require('@numerum-tech/cmsdk');
 
-const listrestaurentReader = new CardView('restaurent-list', 'Liste des restaurets')
-    .setSubtitle('Restaurent traditionnel')
-    .setDescription('Cuisine togolaise')
-    .addAction('Voir le restaurent', 'GET', '/1');
+const listrestaurentReader = new CardView('restaurent-list', 'Liste des restaurants')
+    .addAction('resto-1', 'ChezNana', 'Spécialités togolaises', '/1');
 
 module.exports = { listrestaurentReader }
