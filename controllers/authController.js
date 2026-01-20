@@ -5,43 +5,43 @@ const Restaurent = require('../models/Restaurent');
 
 const secret_key ='0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03ed05';
 
-exports.register = async(req, res) => {
-    try {
-        const { name, address, phone, email, role, password } = req.body;
+// exports.register = async(req, res) => {
+//     try {
+//         const { name, address, phone, email, role, password } = req.body;
 
-        // Vérifier si l'utilisateur existe
-        const exist = await User.findOne({ email });
-        if (exist) {
-            return res.status(400).json({
-                message: 'Email déjà utilisé'
-            });
-        }   
+//         // Vérifier si l'utilisateur existe
+//         const exist = await User.findOne({ email });
+//         if (exist) {
+//             return res.status(400).json({
+//                 message: 'Email déjà utilisé'
+//             });
+//         }   
 
-        // Chiffré le mot de passe
-        const hashedPass = await bcrypt.hash(password, 10);
+//         // Chiffré le mot de passe
+//         const hashedPass = await bcrypt.hash(password, 10);
 
-        const user = await User.create({
-            name,
-            address,
-            phone,
-            email,
-            role,
-            password: hashedPass
-        });
+//         const user = await User.create({
+//             name,
+//             address,
+//             phone,
+//             email,
+//             role,
+//             password: hashedPass
+//         });
 
-        return res.status(201).json({
-            message: 'Utilisateur créé avec succès',
-            user
-        });
-    } catch (error) {
-        console.error(error);
+//         return res.status(201).json({
+//             message: 'Utilisateur créé avec succès',
+//             user
+//         });
+//     } catch (error) {
+//         console.error(error);
 
-        return res.status(500).json({
-            message: "Erreur Serveur !",
-            error: error.message
-        });
-    }
-};
+//         return res.status(500).json({
+//             message: "Erreur Serveur !",
+//             error: error.message
+//         });
+//     }
+// };
 
 exports.registerRestaurent = async(req, res) => {
     try {
@@ -58,7 +58,7 @@ exports.registerRestaurent = async(req, res) => {
 
         const user = await User.create({
             name,
-            address: address,
+            address,
             phone,
             email,
             role: 'Restaurateur',
@@ -66,10 +66,11 @@ exports.registerRestaurent = async(req, res) => {
         });
 
         const restaurent = await Restaurent.create({
-            name: name,
+            name,
             address,
             phone,
             email,
+            password:hashedPass,
             user: user._id
         });
 
@@ -83,8 +84,10 @@ exports.registerRestaurent = async(req, res) => {
             }
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
-            message: "Erreur serveur"
+            message: "Erreur serveur",
+            error: error.message
         });
     }
 };
