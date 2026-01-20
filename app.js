@@ -14,7 +14,8 @@ app.use(cors({
       'https://zamora-app.netlify.app',
       'http://localhost:5173',
       'http://localhost:3000',
-      'http://192.168.1.112:3000'
+      'http://192.168.1.112:3000',
+      'http://192.168.1.112:3000/user/dashboard'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
