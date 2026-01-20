@@ -5,7 +5,10 @@ const restaurentReader = new ReaderView('restaurent-A', 'ChezNana')
     .addParagraph('Adresse: Lomé-Togo')
     .addParagraph('Numéro de téléphone: 9034569890')
     .addParagraph("Heure d'ouvertur: 8h")
-    .addLink('Voir les menus', '/mobile/restaurents/1/menus')
-    .addLink('Voir les repas', '/mobile/restaurents/1/repas');
+    .addLink('Voir les menus', '/menus')
+    .addLink('Voir les repas', '/repas');
+
+
+    console.log(restaurentReader)
 
 module.exports = { restaurentReader };

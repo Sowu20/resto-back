@@ -2,8 +2,8 @@ const { mainMenu } = require('../views/menuView/mainMenu');
 const { registerForm } = require('../views/formView/registerForm');
 const { userReader } = require('../views/readerView/reader');
 const { listrestaurentReader } = require('../views/readerView/listrestaurentReader');
-const { restaurentDetail } = require('../views/readerView/restaurentDetailReader');
-const { menuReader } = require('../views/readerView/menusReader');
+const { restaurentReader } = require('../views/readerView/restaurentDetailReader');
+const { menusReader } = require('../views/readerView/menusReader');
 const { repasReader } = require('../views/readerView/repasReader');
 
 const HomeScreen = (req, res) => {
@@ -23,11 +23,11 @@ const Restaurents = (req, res) => {
 };
 
 const RestaurentDetail = (req, res) => {
-    res.json(restaurentDetail.toJSON());
+    res.json(restaurentReader.toJSON());
 };
 
 const Menu = (req, res) => {
-    res.json(menuReader.toJSON());
+    res.json(menusReader.toJSON());
 };
 
 const Repas = (req, res) => {

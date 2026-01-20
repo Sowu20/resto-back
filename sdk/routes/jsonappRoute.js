@@ -7,8 +7,8 @@ router.get('/mobile', HomeScreen);
 router.get('/mobile/forms', RegisterForm);
 router.get('/mobile/readers', getReader);
 router.get('/mobile/restaurents', Restaurents);
-router.get('/mobile/restaurent/:id', RestaurentDetail);
-router.get('/mobile/restaurent/:id/menu', Menu);
-router.get('/mobile/restaurent/:id/repas', Repas);
+router.get('/mobile/restaurents/:id', RestaurentDetail);
+router.get('/mobile/restaurents/:id/menu', Menu);
+router.get('/mobile/restaurents/:id/repas', Repas);
 
 module.exports = router;
