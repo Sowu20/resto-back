@@ -61,7 +61,7 @@ exports.registerRestaurent = async(req, res) => {
             address,
             phone,
             email,
-            role: 'Restaurateur',
+            role: 'restaurant',
             password: hashedPass
         });
 
