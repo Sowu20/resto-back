@@ -3,7 +3,7 @@ const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu
 
 const router = express.Router();
 
-router.get('/mobile/menu', HomeScreen);
+router.get('/mobile', HomeScreen);
 router.get('/mobile/forms', RegisterForm);
 router.get('/mobile/readers', getReader);
 router.get('/mobile/restaurents', Restaurents);
