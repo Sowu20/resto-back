@@ -10,6 +10,6 @@ const menusReader = new ReaderView(
     'Menu Déjeuner - 3500 FCFA',
     'Menu Dîner - 5000 FCFA'
   ])
-  .setPrev('/mobile/restaurents/1');
+  .setPrev('https://resto-back-xazy.onrender.com/mobile/restaurents/1');
 
 module.exports = { menusReader };

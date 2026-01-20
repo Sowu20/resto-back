@@ -11,6 +11,6 @@ const repasReader = new ReaderView(
     'Pâte + sauce tomate',
     'Poulet braisé'
   ])
-  .setPrev('/mobile/restaurents/1');
+  .setPrev('https://resto-back-xazy.onrender.com/mobile/restaurents/1');
 
 module.exports = { repasReader };
