@@ -1,10 +1,10 @@
 const { mainMenu } = require('../views/menuView/mainMenu');
 const { registerForm } = require('../views/formView/registerForm');
 const { userReader } = require('../views/readerView/reader');
-const { listrestaurentReader } = require('../views/readerView/listrestaurentReader');
-const { restaurentReader } = require('../views/readerView/restaurentDetailReader');
-const { menusReader } = require('../views/readerView/menusReader');
-const { repasReader } = require('../views/readerView/repasReader');
+const { listrestaurentMenu } = require('../views/readerView/listrestaurentReader');
+const { createRestaurantDetailReader } = require('../views/readerView/restaurentDetailReader');
+const { createMenusReader } = require('../views/readerView/menusReader');
+const { createRepasReader } = require('../views/readerView/repasReader');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -19,19 +19,43 @@ const getReader = (req, res) => {
 };
 
 const Restaurents = (req, res) => {
-    res.json(listrestaurentReader.toJSON());
+    res.json(listrestaurentMenu.toJSON());
 };
 
 const RestaurentDetail = (req, res) => {
-    res.json(restaurentReader.toJSON());
+    const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
+
+    const reader = createRestaurantDetailReader(restaurantId);
+
+    if (!reader) {
+        return res.status(404).json({ error: 'Restaurant non trouvé' });
+    }
+
+    res.json(reader.toJSON());
 };
 
 const Menu = (req, res) => {
-    res.json(menusReader.toJSON());
+    const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
+
+    const reader = createMenusReader(restaurantId);
+
+    if (!reader) {
+        return res.status(404).json({ error: 'Restaurant non trouvé' });
+    }
+
+    res.json(reader.toJSON());
 };
 
 const Repas = (req, res) => {
-    res.json(repasReader.toJSON());
+    const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
+
+    const reader = createRepasReader(restaurantId);
+
+    if (!reader) {
+        return res.status(404).json({ error: 'Restaurant non trouvé' });
+    }
+
+    res.json(reader.toJSON());
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas };

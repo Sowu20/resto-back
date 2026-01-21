@@ -1,14 +1,48 @@
 const { ReaderView } = require('@numerum-tech/cmsdk');
 
-const restaurentReader = new ReaderView('restaurent-A', 'ChezNana')
-    .setIntro('Resturent africain traditionnel')
-    .addParagraph('Adresse: Lomé-Togo')
-    .addParagraph('Numéro de téléphone: 9034569890')
-    .addParagraph("Heure d'ouvertur: 8h")
-    .addLink('Voir les menus', '/menus')
-    .addLink('Voir les repas', '/repas');
+// Données statiques des 3 restaurants
+const restaurantsData = {
+    '1': {
+        id: 'restaurent-1',
+        nom: 'Chez Nana',
+        intro: 'Restaurant africain traditionnel',
+        adresse: 'Lomé-Togo',
+        telephone: '9034569890',
+        horaire: '8h'
+    },
+    '2': {
+        id: 'restaurent-2',
+        nom: 'Chez Bordille',
+        intro: 'Spécialités locales et grillades',
+        adresse: 'Abidjan-Plateau',
+        telephone: '9034569891',
+        horaire: '9h'
+    },
+    '3': {
+        id: 'restaurent-3',
+        nom: 'Chez Manon',
+        intro: 'Cuisine raffinée et poissons frais',
+        adresse: 'Abidjan-Marcory',
+        telephone: '9034569892',
+        horaire: '10h'
+    }
+};
 
+// Fonction pour créer la vue selon l'ID
+const createRestaurantDetailReader = (restaurantId) => {
+    const data = restaurantsData[restaurantId];
 
-    console.log(restaurentReader)
+    if (!data) {
+        return null;  // Restaurant non trouvé
+    }
 
-module.exports = { restaurentReader };
+    return new ReaderView(data.id, data.nom)
+        .setIntro(data.intro)
+        .addParagraph(`Adresse: ${data.adresse}`)
+        .addParagraph(`Numéro de téléphone: ${data.telephone}`)
+        .addParagraph(`Heure d'ouverture: ${data.horaire}`)
+        .addLink(`/menu`, 'Voir les menus')
+        .addLink(`/repas`, 'Voir les repas');
+};
+
+module.exports = { createRestaurantDetailReader };

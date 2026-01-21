@@ -14,7 +14,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT ||'3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const errorHandler = error => {
@@ -47,5 +47,8 @@ server.on('listening', () => {
 });
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`Serverur lancé sur le https://resto-back-xazy.onrender.com`);
+  console.log(`Serveur lancé avec succès !`);
+  console.log(`Local: http://localhost:${port}`);
+  console.log(`Réseau: http://127.0.0.1:${port}`);
+  console.log(`Production: https://resto-back-xazy.onrender.com`);
 });
