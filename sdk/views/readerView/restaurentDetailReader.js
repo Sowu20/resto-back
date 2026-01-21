@@ -41,8 +41,8 @@ const createRestaurantDetailReader = (restaurantId) => {
         .addParagraph(`Adresse: ${data.adresse}`)
         .addParagraph(`Numéro de téléphone: ${data.telephone}`)
         .addParagraph(`Heure d'ouverture: ${data.horaire}`)
-        .addLink(`/menu`, 'Voir les menus')
-        .addLink(`/repas`, 'Voir les repas');
+        .addLink(`https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`, 'Voir les menus')
+        .addLink(`https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`, 'Voir les repas');
 };
 
 module.exports = { createRestaurantDetailReader };
