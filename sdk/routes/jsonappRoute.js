@@ -1,4 +1,4 @@
-const express = require('express'); 
+const express = require('express');
 const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas } = require('../controllers/jsonappController');
 
 const router = express.Router();
