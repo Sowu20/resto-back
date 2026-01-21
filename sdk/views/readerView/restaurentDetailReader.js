@@ -1,4 +1,4 @@
-const { ReaderView } = require('@numerum-tech/cmsdk');
+const { CardView } = require('@numerum-tech/cmsdk');
 
 // Données statiques des 3 restaurants
 const restaurantsData = {
@@ -36,13 +36,18 @@ const createRestaurantDetailReader = (restaurantId) => {
         return null;  // Restaurant non trouvé
     }
 
-    return new ReaderView(data.id, data.nom)
-        .setIntro(data.intro)
-        .addParagraph(`Adresse: ${data.adresse}`)
-        .addParagraph(`Numéro de téléphone: ${data.telephone}`)
-        .addParagraph(`Heure d'ouverture: ${data.horaire}`)
-        .addLink(`https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`, 'Voir les menus')
-        .addLink(`https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`, 'Voir les repas');
+    return new CardView(data.id, data.nom)
+        .setSubtitle(data.intro)
+        .setDescription('Découvrez notre cuisine authentique et savoureuse dans une ambiance chaleureuse.')
+        .addStat('📍 Adresse', data.adresse)
+        .addStat('📞 Téléphone', data.telephone)
+        .addStat('⏰ Horaires', `Ouvert à ${data.horaire}`)
+        .addAction('Voir les menus', 'GET', {
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
+        })
+        .addAction('Voir les repas', 'GET', {
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
+        });
 };
 
 module.exports = { createRestaurantDetailReader };
