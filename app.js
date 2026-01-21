@@ -16,7 +16,7 @@ app.use(cors({
       'http://localhost:3000',
       'http://192.168.1.112:3000',
       'http://192.168.1.112:3000/user/dashboard',
-      'https://demo.city-mate.com/services'
+      'https://demo.city-mate.com'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
