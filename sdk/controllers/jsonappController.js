@@ -4,6 +4,7 @@ const { userReader } = require('../views/readerView/reader');
 const { listrestaurentMenu } = require('../views/readerView/listrestaurentReader');
 const { createRestaurantDetailReader } = require('../views/readerView/restaurentDetailReader');
 const { createMenusReader } = require('../views/readerView/menusReader');
+const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader } = require('../views/readerView/repasReader');
 
 const HomeScreen = (req, res) => {
@@ -46,6 +47,30 @@ const Menu = (req, res) => {
     res.json(reader.toJSON());
 };
 
+//fonction pour les détails d'un menu
+const getMenuDetails = (req, res) => {
+    const { restaurantId, menuId } = req.params;
+    const menuDetail = createMenuDetailView(menuId);
+
+    if (!menuDetail) {
+        return res.status(404).json({
+            viewId: 'menu-not-found',
+            viewTitle: 'Menu non trouvé',
+            viewType: 'message',
+            intro: 'Erreur',
+            body: 'Le menu demandé n\'existe pas.',
+            severity: 'error',
+            primaryAction: {
+                label: 'Retour aux menus',
+                type: 'GET',
+                href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menus`
+            }
+        });
+    }
+
+    res.json(menuDetail);
+};
+
 const Repas = (req, res) => {
     const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
 
@@ -58,4 +83,4 @@ const Repas = (req, res) => {
     res.json(reader.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas };
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails };
