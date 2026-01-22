@@ -8,7 +8,8 @@ const restaurantsData = {
         intro: 'Restaurant africain traditionnel',
         adresse: 'Lomé-Togo',
         telephone: '9034569890',
-        horaire: '8h'
+        horaire: '8h',
+        image: 'https://resto-back-xazy.onrender.com/assets/resto1.jpg'
     },
     '2': {
         id: 'restaurent-2',
@@ -16,7 +17,8 @@ const restaurantsData = {
         intro: 'Spécialités locales et grillades',
         adresse: 'Abidjan-Plateau',
         telephone: '9034569891',
-        horaire: '9h'
+        horaire: '9h',
+        image: 'https://resto-back-xazy.onrender.com/assets/resto2.jpg'
     },
     '3': {
         id: 'restaurent-3',
@@ -24,7 +26,8 @@ const restaurantsData = {
         intro: 'Cuisine raffinée et poissons frais',
         adresse: 'Abidjan-Marcory',
         telephone: '9034569892',
-        horaire: '10h'
+        horaire: '10h',
+        image: 'https://resto-back-xazy.onrender.com/assets/resto3.jpg'
     }
 };
 
