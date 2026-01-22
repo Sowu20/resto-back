@@ -56,11 +56,7 @@ const createMenusGrid = (restaurantId) => {
       {
         type: 'GET',
         // Ici tu peux mettre l'URL pour voir les détails du menu spécifique
-<<<<<<< HEAD
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menus/${menu.id}/details`  // À adapter selon tes routes
-=======
         href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menus/${menu.id}`  // À adapter selon tes routes
->>>>>>> 1a76434 (correction des routes)
       }
     );
   });
