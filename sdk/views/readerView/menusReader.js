@@ -4,7 +4,7 @@ const { ActionGridView } = require('@numerum-tech/cmsdk');
 const menusData = {
   '1': {
     nom: 'Chez Nana',
-    menus: [
+    menu: [
       { id: 'petit-dej-1', nom: 'Menu Petit-déjeuner', prix: '2000 FCFA', description: 'Café, jus, croissants, fruits' },
       { id: 'dej-1', nom: 'Menu Déjeuner', prix: '3500 FCFA', description: 'Plat du jour, dessert, boisson' },
       { id: 'diner-1', nom: 'Menu Dîner', prix: '5000 FCFA', description: 'Entrée, plat, dessert, vin' }
@@ -12,7 +12,7 @@ const menusData = {
   },
   '2': {
     nom: 'Chez Bordille',
-    menus: [
+    menu: [
       { id: 'brunch-2', nom: 'Menu Brunch', prix: '2500 FCFA', description: 'Oeufs, bacon, pancakes, café' },
       { id: 'midi-2', nom: 'Menu Midi', prix: '4000 FCFA', description: 'Salade, plat chaud, boisson' },
       { id: 'soir-2', nom: 'Menu Soir', prix: '6000 FCFA', description: 'Menu complet gastronomique' },
@@ -21,7 +21,7 @@ const menusData = {
   },
   '3': {
     nom: 'Chez Manon',
-    menus: [
+    menu: [
       { id: 'express-3', nom: 'Menu Express', prix: '1500 FCFA', description: 'Sandwich ou salade + boisson' },
       { id: 'dej-3', nom: 'Menu Déjeuner', prix: '3000 FCFA', description: 'Plat traditionnel + dessert' },
       { id: 'gastro-3', nom: 'Menu Gastronomique', prix: '8000 FCFA', description: 'Menu 3 services avec vin' }
@@ -38,15 +38,15 @@ const createMenusGrid = (restaurantId) => {
   }
 
   const grid = new ActionGridView(
-    `menus-grid-${restaurantId}`,
-    `Menus - ${data.nom}`
+    `menu-grid-${restaurantId}`,
+    `Menu - ${data.nom}`
   )
     .setIntro('Sélectionnez un menu pour voir les détails')
     .setColumns(3)
     .setSpacing(16);
 
   // Ajouter chaque menu comme une action
-  data.menus.forEach(menu => {
+  data.menu.forEach(menu => {
     const description = `${menu.prix}\n${menu.description}`;
     grid.addAction(
       menu.id,
