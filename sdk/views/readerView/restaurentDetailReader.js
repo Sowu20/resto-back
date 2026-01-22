@@ -45,6 +45,7 @@ const createRestaurantDetailReader = (restaurantId) => {
         .addStat('📍 Adresse', data.adresse)
         .addStat('📞 Téléphone', data.telephone)
         .addStat('⏰ Horaires', `Ouvert à ${data.horaire}`)
+        .setImage(data.image)
         .addAction('Voir les menus', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
         })
