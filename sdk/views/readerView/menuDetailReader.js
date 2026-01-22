@@ -69,86 +69,86 @@ const menuDetailsData = {
     // ... Ajoute les autres menus de la même manière
 };
 
-// Version 1: Utilisation de ReaderView (lecture seule)
-const createMenuDetailReader = (menuId) => {
-    const menuDetail = menuDetailsData[menuId];
+// // Version 1: Utilisation de ReaderView (lecture seule)
+// const createMenuDetailReader = (menuId) => {
+//     const menuDetail = menuDetailsData[menuId];
 
-    if (!menuDetail) {
-        return null;  // Menu non trouvé
-    }
+//     if (!menuDetail) {
+//         return null;  // Menu non trouvé
+//     }
 
-    const reader = new ReaderView(
-        `menu-detail-${menuId}`,
-        `${menuDetail.menuName}`
-    )
-        .setIntro(`${menuDetail.restaurantName} - ${menuDetail.price}`)
-        .addParagraph(menuDetail.description)
-        .addSubTitle('⌚ Horaires')
-        .addParagraph(menuDetail.duration)
-        .addSeparator()
-        .addSubTitle('📋 Composition du menu');
+//     const reader = new ReaderView(
+//         `menu-detail-${menuId}`,
+//         `${menuDetail.menuName}`
+//     )
+//         .setIntro(`${menuDetail.restaurantName} - ${menuDetail.price}`)
+//         .addParagraph(menuDetail.description)
+//         .addSubTitle('⌚ Horaires')
+//         .addParagraph(menuDetail.duration)
+//         .addSeparator()
+//         .addSubTitle('📋 Composition du menu');
 
-    // Ajouter chaque plat dans une liste
-    const dishList = menuDetail.dishes.map(dish =>
-        dish.description
-            ? `${dish.name}: ${dish.description}`
-            : dish.name
-    );
+//     // Ajouter chaque plat dans une liste
+//     const dishList = menuDetail.dishes.map(dish =>
+//         dish.description
+//             ? `${dish.name}: ${dish.description}`
+//             : dish.name
+//     );
 
-    reader.addListField(dishList)
-        .addSeparator()
-        .addSubTitle('🛒 Commander');
+//     reader.addListField(dishList)
+//         .addSeparator()
+//         .addSubTitle('🛒 Commander');
 
-    // Ajouter des actions
-    reader.addAction('add-to-cart', 'Ajouter au panier', 'POST', {
-        href: `/api/cart/add?menuId=${menuId}`,
-        confirmMessage: `Ajouter ce menu (${menuDetail.menuName}) à votre panier ?`
-    });
+//     // Ajouter des actions
+//     reader.addAction('add-to-cart', 'Ajouter au panier', 'POST', {
+//         href: `/api/cart/add?menuId=${menuId}`,
+//         confirmMessage: `Ajouter ce menu (${menuDetail.menuName}) à votre panier ?`
+//     });
 
-    reader.addAction('back-to-menus', 'Retour aux menus', 'GET', {
-        href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`
-    });
+//     reader.addAction('back-to-menus', 'Retour aux menus', 'GET', {
+//         href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`
+//     });
 
-    return reader.toJSON();
-};
+//     return reader.toJSON();
+// };
 
-// Version 2: Utilisation de CardView (plus visuel)
-const createMenuDetailCard = (menuId) => {
-    const menuDetail = menuDetailsData[menuId];
+// // Version 2: Utilisation de CardView (plus visuel)
+// const createMenuDetailCard = (menuId) => {
+//     const menuDetail = menuDetailsData[menuId];
 
-    if (!menuDetail) {
-        return null;
-    }
+//     if (!menuDetail) {
+//         return null;
+//     }
 
-    const card = new CardView(
-        `menu-card-${menuId}`,
-        menuDetail.menuName
-    )
-        .setSubtitle(menuDetail.restaurantName)
-        .setDescription(menuDetail.description)
-        .setImage('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4', menuDetail.menuName)
-        .addStat('💰 Prix', menuDetail.price)
-        .addStat('🕐 Service', menuDetail.duration);
+//     const card = new CardView(
+//         `menu-card-${menuId}`,
+//         menuDetail.menuName
+//     )
+//         .setSubtitle(menuDetail.restaurantName)
+//         .setDescription(menuDetail.description)
+//         .setImage('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4', menuDetail.menuName)
+//         .addStat('💰 Prix', menuDetail.price)
+//         .addStat('🕐 Service', menuDetail.duration);
 
-    // Ajouter une section pour les plats
-    const dishesText = menuDetail.dishes
-        .map(dish => `• ${dish.name}${dish.description ? ` : ${dish.description}` : ''}`)
-        .join('\n');
+//     // Ajouter une section pour les plats
+//     const dishesText = menuDetail.dishes
+//         .map(dish => `• ${dish.name}${dish.description ? ` : ${dish.description}` : ''}`)
+//         .join('\n');
 
-    card.addSection('📋 Inclus dans ce menu', dishesText);
+//     card.addSection('📋 Inclus dans ce menu', dishesText);
 
-    // Ajouter des actions
-    card.addAction('add-to-cart', '🛒 Ajouter au panier', 'POST', {
-        confirmMessage: `Confirmer l'ajout du ${menuDetail.menuName} à votre panier ?`
-    });
+//     // Ajouter des actions
+//     card.addAction('add-to-cart', '🛒 Ajouter au panier', 'POST', {
+//         confirmMessage: `Confirmer l'ajout du ${menuDetail.menuName} à votre panier ?`
+//     });
 
-    card.addAction('back-to-menus', '↩️ Voir tous les menus', 'GET', {
-        href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
-        variant: 'link'
-    });
+//     card.addAction('back-to-menus', '↩️ Voir tous les menus', 'GET', {
+//         href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
+//         variant: 'link'
+//     });
 
-    return card.toJSON();
-};
+//     return card.toJSON();
+// };
 
 // Version 3: Vue mixte avec ReaderView + actions
 const createMenuDetailView = (menuId) => {
@@ -225,7 +225,7 @@ const createMenuDetailView = (menuId) => {
 };
 
 module.exports = {
-    createMenuDetailReader,
-    createMenuDetailCard,
+    // createMenuDetailReader,
+    // createMenuDetailCard,
     createMenuDetailView
 };
