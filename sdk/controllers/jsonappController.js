@@ -54,20 +54,38 @@ const Menu = (req, res) => {
 
 //fonction pour les détails d'un menu
 const getMenuDetails = (req, res) => {
+    // ⭐⭐⭐ LOGS DE DEBUG ⭐⭐⭐
+    console.log('🔍 =========== DEBUG getMenuDetails ===========');
+    console.log('📍 URL complète:', req.originalUrl);
+    console.log('📍 Méthode HTTP:', req.method);
+    console.log('📍 Params reçus:', req.params);
+    console.log('📍 Query params:', req.query);
+    console.log('📍 Headers:', {
+        'user-agent': req.headers['user-agent'],
+        'x-app-version': req.headers['x-app-version'] || 'non spécifié'
+    });
+    console.log('📍 Timestamp:', new Date().toISOString());
+    console.log('🔍 ===========================================');
+
     const { restaurantId, menuId } = req.params;
 
-    console.log('Paramètres reçus:', { restaurantId, menuId });
-    // Affiche: { restaurantId: '2', menuId: 'brunch-2', actionId: 'brunch-2' }
+    // Log supplémentaire pour voir ce qu'on extrait
+    console.log('📋 Paramètres extraits:', { restaurantId, menuId });
 
-    const menuDetail = createMenuDetailView(menuId);
+    // Détermine l'ID à utiliser
+    const actualMenuId = menuId;
+    console.log('🎯 ID du menu à chercher:', actualMenuId);
+
+    const menuDetail = createMenuDetailView(actualMenuId);
 
     if (!menuDetail) {
+        console.log('❌ Menu non trouvé:', actualMenuId);
         return res.status(404).json({
             viewId: 'menu-not-found',
             viewTitle: 'Menu non trouvé',
             viewType: 'message',
             intro: 'Erreur',
-            body: 'Le menu demandé n\'existe pas.',
+            body: `Menu ${actualMenuId} non trouvé.`,
             severity: 'error',
             primaryAction: {
                 label: 'Retour aux menus',
@@ -77,6 +95,7 @@ const getMenuDetails = (req, res) => {
         });
     }
 
+    console.log('✅ Menu trouvé, envoi de la vue');
     res.json(menuDetail);
 };
 
