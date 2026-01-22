@@ -1,63 +1,53 @@
-const { ActionGridView } = require('@numerum-tech/cmsdk');
+const { ReaderView } = require('@numerum-tech/cmsdk');
 
-// Données des plats
+// Données des plats pour chaque restaurant
 const repasData = {
   '1': {
     nom: 'Chez Nana',
     plats: [
-      { id: 'riz-arachide', nom: 'Riz sauce arachide' },
-      { id: 'fufu-graine', nom: 'Fufu sauce graine' },
-      { id: 'pate-tomate', nom: 'Pâte + sauce tomate' },
-      { id: 'poulet-braise', nom: 'Poulet braisé' }
+      'Riz sauce arachide',
+      'Fufu sauce graine',
+      'Pâte + sauce tomate',
+      'Poulet braisé'
     ]
   },
   '2': {
     nom: 'Chez Bordille',
     plats: [
-      { id: 'attieke-poisson', nom: 'Attiéké poisson' },
-      { id: 'garba', nom: 'Garba (attiéké + thon)' },
-      { id: 'alloco', nom: 'Alloco plantain' },
-      { id: 'brochettes', nom: 'Brochettes mixtes' },
-      { id: 'poisson-grille', nom: 'Poisson grillé' }
+      'Attiéké poisson',
+      'Garba (attiéké + thon)',
+      'Alloco plantain',
+      'Brochettes mixtes',
+      'Poisson grillé'
     ]
   },
   '3': {
     nom: 'Chez Manon',
     plats: [
-      { id: 'kedjenou', nom: 'Kedjenou de poulet' },
-      { id: 'poisson-braise', nom: 'Poisson braisé' },
-      { id: 'riz-gras', nom: 'Riz gras' },
-      { id: 'sauce-claire', nom: 'Sauce claire + igname' },
-      { id: 'couscous', nom: 'Couscous de manioc' }
+      'Kedjenou de poulet',
+      'Poisson braisé',
+      'Riz gras',
+      'Sauce claire + igname',
+      'Couscous de manioc'
     ]
   }
 };
 
-// Factory ActionGridView
+// Fonction pour créer la vue des plats selon l'ID du restaurant
 const createRepasReader = (restaurantId) => {
   const data = repasData[restaurantId];
-  if (!data) return null;
 
-  const grid = new ActionGridView(
-    `repas-grid-${restaurantId}`,
+  if (!data) {
+    return null;  // Restaurant non trouvé
+  }
+
+  return new ReaderView(
+    `repas-restaurant-${restaurantId}`,
     `Repas - ${data.nom}`
   )
-    .setColumns(3)
-    .setSpacing(16);
-
-  data.plats.forEach(plat => {
-    grid.addAction(
-      plat.id,
-      plat.nom,
-      'plat-icon.pngg',
-      {
-        type: 'GET',
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/plats/${plat.id}/details` 
-      }
-    );
-  });
-
-  return grid;
+    .setIntro('Plats disponibles')
+    .addListField(data.plats)
+    .setPrev(`https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}`);
 };
 
 module.exports = { createRepasReader };
