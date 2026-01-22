@@ -3,6 +3,7 @@ const swaggerUI = require('swagger-ui-express');
 const mongoose = require('mongoose');
 const swaggerSpec = require('./docs/swagger');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // Connexion à MongoDB via Mongoose
 mongoose.connect("mongodb+srv://sowukelly67:sowukelly@clusterresto.srmvdzb.mongodb.net/ClusterResto?appName=ClusterResto")
