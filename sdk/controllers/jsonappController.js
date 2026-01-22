@@ -54,9 +54,9 @@ const Menu = (req, res) => {
 
 //fonction pour les détails d'un menu
 const getMenuDetails = (req, res) => {
-    const { restaurantId, menuId, actionId } = req.params;
+    const { restaurantId, menuId } = req.params;
 
-    console.log('Paramètres reçus:', { restaurantId, menuId, actionId });
+    console.log('Paramètres reçus:', { restaurantId, menuId });
     // Affiche: { restaurantId: '2', menuId: 'brunch-2', actionId: 'brunch-2' }
 
     const menuDetail = createMenuDetailView(menuId);
