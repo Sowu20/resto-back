@@ -10,7 +10,7 @@ router.get('/mobile/restaurents', Restaurents);
 router.get('/mobile/restaurents/:id', RestaurentDetail);
 router.get('/mobile/restaurents/:id/menu', Menu);
 // NOUVELLE route pour les détails d'un menu
-router.get('/mobile/restaurents/:restaurantId/menus/:menuId/details', getMenuDetails);
+router.get('/mobile/restaurents/:restaurantId/menu/:menuId/details', getMenuDetails);
 router.get('/mobile/restaurents/:id/repas', Repas);
 
 module.exports = router;

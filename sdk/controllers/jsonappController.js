@@ -3,7 +3,7 @@ const { registerForm } = require('../views/formView/registerForm');
 const { userReader } = require('../views/readerView/reader');
 const { listrestaurentMenu } = require('../views/readerView/listrestaurentReader');
 const { createRestaurantDetailReader } = require('../views/readerView/restaurentDetailReader');
-const { createMenusReader } = require('../views/readerView/menusReader');
+const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader } = require('../views/readerView/repasReader');
 
@@ -38,13 +38,18 @@ const RestaurentDetail = (req, res) => {
 const Menu = (req, res) => {
     const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
 
-    const reader = createMenusReader(restaurantId);
+    // Correction: Use createMenusGrid instead of createMenusReader
+    const reader = createMenusGrid(restaurantId);
 
     if (!reader) {
         return res.status(404).json({ error: 'Restaurant non trouvé' });
     }
 
-    res.json(reader.toJSON());
+    // Le reader retourne déjà du JSON via toJSON() dans createMenusGrid
+    // ou s'il retourne l'objet view, on doit appeler .toJSON()
+    // Vérifions menusReader.js : il fait "return grid.toJSON()".
+    // Donc ici on renvoie directement reader.
+    res.json(reader);
 };
 
 //fonction pour les détails d'un menu
@@ -63,7 +68,7 @@ const getMenuDetails = (req, res) => {
             primaryAction: {
                 label: 'Retour aux menus',
                 type: 'GET',
-                href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menus`
+                href: `/mobile/restaurents/${restaurantId}/menu`
             }
         });
     }

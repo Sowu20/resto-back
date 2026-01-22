@@ -106,7 +106,7 @@ const createMenuDetailReader = (menuId) => {
     });
 
     reader.addAction('back-to-menus', 'Retour aux menus', 'GET', {
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}/menus`
+        href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`
     });
 
     return reader.toJSON();
@@ -143,7 +143,7 @@ const createMenuDetailCard = (menuId) => {
     });
 
     card.addAction('back-to-menus', '↩️ Voir tous les menus', 'GET', {
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}/menus`,
+        href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
         variant: 'link'
     });
 
@@ -217,13 +217,13 @@ const createMenuDetailView = (menuId) => {
                 id: 'back-to-menus',
                 label: '↩️ Retour aux menus',
                 type: 'GET',
-                href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}/menus`
+                href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`
             },
             {
                 id: 'back-to-restaurant',
                 label: '🏠 Voir le restaurant',
                 type: 'GET',
-                href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}`,
+                href: `/mobile/restaurents/${menuDetail.restaurantId}`,
                 variant: 'link'
             }
         ]
