@@ -68,7 +68,7 @@ const getMenuDetails = (req, res) => {
             primaryAction: {
                 label: 'Retour aux menus',
                 type: 'GET',
-                href: `/mobile/restaurents/${restaurantId}/menu`
+                href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
             }
         });
     }
