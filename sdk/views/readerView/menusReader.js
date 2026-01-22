@@ -56,10 +56,22 @@ const createMenusGrid = (restaurantId) => {
       {
         type: 'GET',
         // Ici tu peux mettre l'URL pour voir les détails du menu spécifique
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu/${menu.id}/details`  // À adapter selon tes routes
+        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menus/${menu.id}/details`  // À adapter selon tes routes
       }
     );
   });
+
+  // ✅ CORRECTION : Action de retour avec redirection
+  grid.addAction(
+    'retour-restaurant',
+    '↩️ Retour au restaurant',
+    'Retourner aux détails du restaurant',
+    'back-icon.png',
+    {
+      type: 'GET',
+      href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}`
+    }
+  );
 
   return grid.toJSON();
 };
