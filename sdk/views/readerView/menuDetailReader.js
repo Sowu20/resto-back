@@ -214,12 +214,6 @@ const createMenuDetailView = (menuId) => {
                 confirmMessage: `Ajouter "${menuDetail.menuName}" pour ${menuDetail.price} ?`
             },
             {
-                id: 'back-to-menus',
-                label: '↩️ Retour aux menus',
-                type: 'GET',
-                href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`
-            },
-            {
                 id: 'back-to-restaurant',
                 label: '🏠 Voir le restaurant',
                 type: 'GET',
