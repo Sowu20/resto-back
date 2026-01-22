@@ -49,7 +49,7 @@ const createMenusGrid = (restaurantId) => {
   data.menu.forEach(menu => {
     const description = `${menu.prix}\n${menu.description}`;
     grid.addAction(
-      `view-${menu.id}`,
+      menu.id,
       menu.nom,
       description,
       'menu-icon.png',
