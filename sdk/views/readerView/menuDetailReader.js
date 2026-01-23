@@ -1,4 +1,4 @@
-const { ReaderView, CardView } = require('@numerum-tech/cmsdk');
+const { CarouselView } = require('@numerum-tech/cmsdk');
 
 // Données détaillées des plats pour chaque menu
 const menuDetailsData = {
@@ -11,11 +11,11 @@ const menuDetailsData = {
         description: 'Un petit-déjeuner complet pour bien commencer la journée',
         duration: 'Servi de 6h à 11h',
         dishes: [
-            { name: 'Café ou Thé', description: 'Au choix' },
-            { name: 'Jus d\'orange frais', description: 'Pressé du jour' },
-            { name: 'Assortiment de viennoiseries', description: 'Croissant, pain au chocolat' },
-            { name: 'Fruits de saison', description: 'Assortiment frais' },
-            { name: 'Yaourt nature ou aux fruits' }
+            { name: 'Café ou Thé', description: 'Au choix', imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085' },
+            { name: 'Jus d\'orange frais', description: 'Pressé du jour', imageUrl: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b' },
+            { name: 'Assortiment de viennoiseries', description: 'Croissant, pain au chocolat', imageUrl: 'https://images.unsplash.com/photo-1555507036-ab794f27d2e9' },
+            { name: 'Fruits de saison', description: 'Assortiment frais', imageUrl: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf' },
+            { name: 'Yaourt nature ou aux fruits', imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777' }
         ]
     },
     'dej-1': {
@@ -26,10 +26,10 @@ const menuDetailsData = {
         description: 'Le déjeuner traditionnel avec produits frais',
         duration: 'Servi de 12h à 15h',
         dishes: [
-            { name: 'Entrée au choix', description: 'Salade verte ou soupe du jour' },
-            { name: 'Plat principal', description: 'Viande ou poisson avec accompagnement' },
-            { name: 'Dessert maison', description: 'Tarte ou fruit' },
-            { name: 'Boisson', description: 'Eau, soda ou vin (1 verre)' }
+            { name: 'Entrée au choix', description: 'Salade verte ou soupe du jour', imageUrl: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe' },
+            { name: 'Plat principal', description: 'Viande ou poisson avec accompagnement', imageUrl: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8' },
+            { name: 'Dessert maison', description: 'Tarte ou fruit', imageUrl: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e' },
+            { name: 'Boisson', description: 'Eau, soda ou vin (1 verre)', imageUrl: 'https://images.unsplash.com/photo-1437418747212-8d9709afab22' }
         ]
     },
     'diner-1': {
@@ -40,13 +40,13 @@ const menuDetailsData = {
         description: 'Dîner gastronomique dans une ambiance chaleureuse',
         duration: 'Servi de 19h à 23h',
         dishes: [
-            { name: 'Amuse-bouche', description: 'Création du chef' },
-            { name: 'Entrée raffinée', description: 'Terrine ou salade composée' },
-            { name: 'Plat principal', description: 'Spécialité de la maison' },
-            { name: 'Plateau de fromages', description: 'Sélection régionale' },
-            { name: 'Dessert gourmand', description: 'Pâtisserie maison' },
-            { name: 'Vin', description: '1/2 bouteille au choix' },
-            { name: 'Café ou Infusion' }
+            { name: 'Amuse-bouche', description: 'Création du chef', imageUrl: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d' },
+            { name: 'Entrée raffinée', description: 'Terrine ou salade composée', imageUrl: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327' },
+            { name: 'Plat principal', description: 'Spécialité de la maison', imageUrl: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8' },
+            { name: 'Plateau de fromages', description: 'Sélection régionale', imageUrl: 'https://images.unsplash.com/photo-1563245372-f21724e3856d' },
+            { name: 'Dessert gourmand', description: 'Pâtisserie maison', imageUrl: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e' },
+            { name: 'Vin', description: '1/2 bouteille au choix', imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3' },
+            { name: 'Café ou Infusion', imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085' }
         ]
     },
 
@@ -59,98 +59,16 @@ const menuDetailsData = {
         description: 'Brunch dominical copieux et convivial',
         duration: 'Dimanche uniquement, 10h-14h',
         dishes: [
-            { name: 'Oeufs au choix', description: 'Brouillés, au plat ou omelette' },
-            { name: 'Bacon grillé', description: 'Servi croustillant' },
-            { name: 'Pancakes', description: 'Sirop d\'érable inclus' },
-            { name: 'Café ou thé à volonté' },
-            { name: 'Jus de fruits frais' }
+            { name: 'Oeufs au choix', description: 'Brouillés, au plat ou omelette', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8' },
+            { name: 'Bacon grillé', description: 'Servi croustillant', imageUrl: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd' },
+            { name: 'Pancakes', description: 'Sirop d\'érable inclus', imageUrl: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445' },
+            { name: 'Café ou thé à volonté', imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085' },
+            { name: 'Jus de fruits frais', imageUrl: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b' }
         ]
-    },
-    // ... Ajoute les autres menus de la même manière
+    }
 };
 
-// // Version 1: Utilisation de ReaderView (lecture seule)
-// const createMenuDetailReader = (menuId) => {
-//     const menuDetail = menuDetailsData[menuId];
-
-//     if (!menuDetail) {
-//         return null;  // Menu non trouvé
-//     }
-
-//     const reader = new ReaderView(
-//         `menu-detail-${menuId}`,
-//         `${menuDetail.menuName}`
-//     )
-//         .setIntro(`${menuDetail.restaurantName} - ${menuDetail.price}`)
-//         .addParagraph(menuDetail.description)
-//         .addSubTitle('⌚ Horaires')
-//         .addParagraph(menuDetail.duration)
-//         .addSeparator()
-//         .addSubTitle('📋 Composition du menu');
-
-//     // Ajouter chaque plat dans une liste
-//     const dishList = menuDetail.dishes.map(dish =>
-//         dish.description
-//             ? `${dish.name}: ${dish.description}`
-//             : dish.name
-//     );
-
-//     reader.addListField(dishList)
-//         .addSeparator()
-//         .addSubTitle('🛒 Commander');
-
-//     // Ajouter des actions
-//     reader.addAction('add-to-cart', 'Ajouter au panier', 'POST', {
-//         href: `/api/cart/add?menuId=${menuId}`,
-//         confirmMessage: `Ajouter ce menu (${menuDetail.menuName}) à votre panier ?`
-//     });
-
-//     reader.addAction('back-to-menus', 'Retour aux menus', 'GET', {
-//         href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`
-//     });
-
-//     return reader.toJSON();
-// };
-
-// // Version 2: Utilisation de CardView (plus visuel)
-// const createMenuDetailCard = (menuId) => {
-//     const menuDetail = menuDetailsData[menuId];
-
-//     if (!menuDetail) {
-//         return null;
-//     }
-
-//     const card = new CardView(
-//         `menu-card-${menuId}`,
-//         menuDetail.menuName
-//     )
-//         .setSubtitle(menuDetail.restaurantName)
-//         .setDescription(menuDetail.description)
-//         .setImage('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4', menuDetail.menuName)
-//         .addStat('💰 Prix', menuDetail.price)
-//         .addStat('🕐 Service', menuDetail.duration);
-
-//     // Ajouter une section pour les plats
-//     const dishesText = menuDetail.dishes
-//         .map(dish => `• ${dish.name}${dish.description ? ` : ${dish.description}` : ''}`)
-//         .join('\n');
-
-//     card.addSection('📋 Inclus dans ce menu', dishesText);
-
-//     // Ajouter des actions
-//     card.addAction('add-to-cart', '🛒 Ajouter au panier', 'POST', {
-//         confirmMessage: `Confirmer l'ajout du ${menuDetail.menuName} à votre panier ?`
-//     });
-
-//     card.addAction('back-to-menus', '↩️ Voir tous les menus', 'GET', {
-//         href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
-//         variant: 'link'
-//     });
-
-//     return card.toJSON();
-// };
-
-// Version 3: Vue mixte avec ReaderView + actions
+// Fonction pour créer la vue carrousel des détails du menu
 const createMenuDetailView = (menuId) => {
     const menuDetail = menuDetailsData[menuId];
 
@@ -170,62 +88,87 @@ const createMenuDetailView = (menuId) => {
         };
     }
 
-    return {
-        viewId: `menu-full-${menuId}`,
-        viewTitle: menuDetail.menuName,
-        viewType: 'reader',
-        intro: `${menuDetail.restaurantName} • ${menuDetail.price}`,
-        content: [
+    // Crée le carrousel
+    const carousel = new CarouselView(`menu-carousel-${menuId}`, menuDetail.menuName);
+
+    // Crée d'abord un slide pour les informations du menu (slide 0)
+    const menuInfoSlide = carousel.createSlide(
+        `menu-${menuId}-info`,
+        `${menuDetail.restaurantName}`,
+        `${menuDetail.price} • ${menuDetail.duration}\n\n${menuDetail.description}`,
+        {
+            imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'
+        }
+    );
+    carousel.addSlide(menuInfoSlide);
+
+    // Ajoute une action pour commander le menu complet sur le slide 0
+    carousel.addSlideAction(
+        `menu-${menuId}-info`,  // Même ID que le slide
+        '🛒 Commander ce menu',
+        'POST',
+        {
+            href: `/api/cart/add?menuId=${menuId}`,
+            confirmMessage: `Ajouter le "${menuDetail.menuName}" complet pour ${menuDetail.price} ?`
+        }
+    );
+
+    // Ajoute chaque plat comme un slide (à partir du slide 1)
+    menuDetail.dishes.forEach((dish, index) => {
+        const dishSlide = carousel.createSlide(
+            `dish-${menuId}-${index}`,
+            dish.name,
+            dish.description || '',
             {
-                type: 'paragraph',
-                text: menuDetail.description
-            },
-            {
-                type: 'subtitle',
-                text: '⌚ Horaires de service'
-            },
-            {
-                type: 'paragraph',
-                text: menuDetail.duration
-            },
-            {
-                type: 'separator'
-            },
-            {
-                type: 'subtitle',
-                text: '📋 Détails des plats'
-            },
-            {
-                type: 'list',
-                items: menuDetail.dishes.map(dish => ({
-                    text: dish.description ? `${dish.name} - ${dish.description}` : dish.name
-                }))
-            },
-            {
-                type: 'separator'
+                imageUrl: dish.imageUrl || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+                badge: index === 0 ? '⭐ Inclus' : undefined
             }
-        ],
-        actions: [
+        );
+        carousel.addSlide(dishSlide);
+
+        // Ajoute une action pour chaque slide de plat
+        carousel.addSlideAction(
+            `dish-${menuId}-${index}`,  // Même ID que le slide du plat
+            '➕ Ajouter ce plat',
+            'POST',
             {
-                id: 'add-to-cart',
-                label: '🛒 Ajouter au panier',
-                type: 'POST',
-                href: `/api/cart/add?menuId=${menuId}&price=${menuDetail.price.replace(' FCFA', '')}`,
-                confirmMessage: `Ajouter "${menuDetail.menuName}" pour ${menuDetail.price} ?`
-            },
-            {
-                id: 'back-to-restaurant',
-                label: '🏠 Voir le restaurant',
-                type: 'GET',
-                href: `/mobile/restaurents/${menuDetail.restaurantId}`,
-                variant: 'link'
+                href: `/api/cart/add-item?dish=${encodeURIComponent(dish.name)}&menuId=${menuId}`,
+                confirmMessage: `Ajouter "${dish.name}" à votre commande ?`
             }
-        ]
-    };
+        );
+    });
+
+    // Configure les paramètres du carrousel
+    carousel.setSettings({
+        autoplay: false,
+        intervalMs: 4000,
+        loop: true,
+        showIndicators: true,
+        showArrows: true
+    });
+
+    // Convertir en JSON
+    const carouselJson = carousel.toJSON();
+
+    // Ajouter des actions globales (navigation) au JSON
+    carouselJson.actions = [
+        {
+            id: 'back-to-restaurant',
+            label: '🏠 Voir le restaurant',
+            type: 'GET',
+            href: `/mobile/restaurents/${menuDetail.restaurantId}`,
+            variant: 'link'
+        },
+        {
+            id: 'back-to-menus',
+            label: '📋 Voir tous les menus',
+            type: 'GET',
+            href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
+            variant: 'link'
+        }
+    ];
+
+    return carouselJson;
 };
 
-module.exports = {
-    // createMenuDetailReader,
-    // createMenuDetailCard,
-    createMenuDetailView
-};
+module.exports = { createMenuDetailView };
