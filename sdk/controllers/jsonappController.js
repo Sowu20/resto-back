@@ -45,10 +45,6 @@ const Menu = (req, res) => {
         return res.status(404).json({ error: 'Restaurant non trouvé' });
     }
 
-    // Le reader retourne déjà du JSON via toJSON() dans createMenusGrid
-    // ou s'il retourne l'objet view, on doit appeler .toJSON()
-    // Vérifions menusReader.js : il fait "return grid.toJSON()".
-    // Donc ici on renvoie directement reader.
     res.json(reader);
 };
 
