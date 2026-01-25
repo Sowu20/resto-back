@@ -108,7 +108,7 @@ const Repas = (req, res) => {
         return res.status(404).json({ error: 'Restaurant non trouvé' });
     }
 
-    res.json(reader.toJSON());
+    res.json(reader);
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails };
