@@ -51,7 +51,7 @@ const createRepasReader = (restaurantId) => {
       {
         type: 'GET',
         // Utilisation de chemin relatif pour la compatibilité localhost/prod
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/plats/${plats.id}`
+        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${plats.id}`
       }
     );
   });
