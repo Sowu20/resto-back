@@ -7,6 +7,7 @@ const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
 const { createOrderForm } = require('../views/formView/orderForm');
+const { MessageView } = require('@numerum-tech/cmsdk');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -155,20 +156,18 @@ const submitOrder = (req, res) => {
     console.log('📅 Date:', new Date().toLocaleString());
     console.log('📦 ==============================================');
 
-    // On simule une réponse de succès avec une vue de type message (ou équivalent via le SDK)
-    res.json({
-        viewId: `order-success-${Date.now()}`,
-        viewTitle: 'Commande Réussie !',
-        viewType: 'message',
-        intro: 'Succès',
-        body: `Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`,
-        severity: 'success',
-        primaryAction: {
-            label: 'Retour à l\'accueil',
-            type: 'GET',
-            href: 'https://resto-back-xazy.onrender.com/mobile'
-        }
-    });
+    // On utilise MessageView du SDK pour garantir la compatibilité mobile
+    const successMessage = new MessageView(`order-success-${Date.now()}`, 'Commande Réussie !')
+        .setIntro('Succès')
+        .setBody(`Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`)
+        .setSeverity('success')
+        .setPrimaryAction('Retour à l\'accueil', 'GET');
+
+    // On force l'URL de l'action principale car le SDK ne permet pas toujours de la passer en paramètre direct dans setPrimaryAction
+    const jsonResponse = successMessage.toJSON();
+    jsonResponse.primaryAction.href = 'https://resto-back-xazy.onrender.com/mobile';
+
+    res.json(jsonResponse);
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
