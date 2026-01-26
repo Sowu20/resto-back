@@ -17,22 +17,13 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
     const form = new FormView(formId, title)
         .setIntro(`Veuillez compléter vos informations pour commander "${mealName}" (${price}).`)
         // Champs du formulaire
-        .addField('text', 'customer_name', 'Nom complet', {
-            required: true,
-            placeholder: 'Ex: Koffi Mensah'
-        })
-        .addField('tel', 'customer_phone', 'Numéro de téléphone', {
-            required: true,
-            placeholder: 'Ex: 90123456'
-        })
-        .addField('choice', 'payement_method', 'Moyen de paiement', {
-            required: true,
-            options: [
-                { label: 'Tmoney', value: 'tmoney' },
-                { label: 'Flooz', value: 'flooz' },
-                { label: 'Espèces', value: 'espece' }
-            ]
-        })
+        .addTextField('customer_name', 'Nom complet', true)
+        .addPhoneField('customer_phone', 'Numéro de téléphone', true)
+        .addSelectField('payement_method', 'Moyen de paiement', true, [
+            { label: 'Tmoney', value: 'tmoney' },
+            { label: 'Flooz', value: 'flooz' },
+            { label: 'Espèces', value: 'espece' }
+        ])
         // Champ caché pour le statut (peut être géré côté serveur, mais ajouté ici pour l'exemple)
         // Note: FormView ne supporte pas toujours "hidden", on peut le passer en paramètre d'URL ou le gérer au submitController
 
