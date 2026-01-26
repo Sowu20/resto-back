@@ -74,7 +74,7 @@ const createRepasDetailReader = (restaurantId, repasId) => {
     .setDescription(plat.description || 'Succulent plat préparé avec soin.')
     .addStat('Prix', plat.price || 'Prix sur demande')
     .addAction('🛒 Commander', 'GET', {
-      href: `/mobile/restaurents/${restaurantId}/repas/${repasId}/order`,
+      href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${repasId}/order`,
     });
 };
 
