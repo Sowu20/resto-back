@@ -1,5 +1,5 @@
 const express = require('express');
-const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails } = require('../controllers/jsonappController');
+const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails } = require('../controllers/jsonappController');
 
 const router = express.Router();
 
@@ -12,5 +12,6 @@ router.get('/mobile/restaurents/:id/menu', Menu);
 // NOUVELLE route pour les détails d'un menu
 router.get('/mobile/restaurents/:restaurantId/menu/:menuId', getMenuDetails);
 router.get('/mobile/restaurents/:id/repas', Repas);
+router.get('/mobile/restaurents/:restaurantId/repas/plats/:mealId', getRepasDetails);
 
 module.exports = router; 

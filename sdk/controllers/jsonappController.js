@@ -5,7 +5,7 @@ const { listrestaurentMenu } = require('../views/readerView/listrestaurentReader
 const { createRestaurantDetailReader } = require('../views/readerView/restaurentDetailReader');
 const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
-const { createRepasReader } = require('../views/readerView/repasReader');
+const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -107,4 +107,15 @@ const Repas = (req, res) => {
     res.json(reader);
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails };
+const getRepasDetails = (req, res) => {
+    const { restaurantId, mealId } = req.params;
+    const reader = createRepasDetailReader(restaurantId, mealId);
+
+    if (!reader) {
+        return res.status(404).json({ error: 'Repas non trouvé' });
+    }
+
+    res.json(reader.toJSON());
+};
+
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails };
