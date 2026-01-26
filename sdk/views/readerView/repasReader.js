@@ -50,7 +50,7 @@ const createRepasReader = (restaurantId) => {
       plats.image,
       {
         type: 'GET',
-        // Utilisation de chemin relatif pour la compatibilité localhost/prod
+        // Utilisation de chemin relatif pour la compatibilité 
         href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${plats.id}`
       }
     );
@@ -67,16 +67,22 @@ const createRepasDetailReader = (restaurantId, repasId) => {
   const plat = data.plats.find(p => p.id === repasId);
   if (!plat) return null;
 
-  // Créer la CardView (comme pour le détail restaurant)
+  // Créer la CardView
   return new CardView(`repas-detail-${repasId}`, plat.nom)
     .setSubtitle('Détails du repas')
     .setImage(plat.image)
     .setDescription(plat.description || 'Succulent plat préparé avec soin.')
     .addStat('Prix', plat.price || 'Prix sur demande')
-    .addAction('🛒 Commander', 'POST', {
-      href: `/api/cart/add-item?dish=${encodeURIComponent(plat.nom)}&menuId=repas-indiv`,
-      confirmMessage: `Voulez-vous commander "${plat.nom}" pour ${plat.price} ?`
+    .addAction('🛒 Commander', 'GET', {
+      href: `/mobile/restaurents/${restaurantId}/repas/${repasId}/order`,
     });
 };
 
-module.exports = { createRepasReader, createRepasDetailReader };
+//Recuperation des données des plats
+const getMealData = (restaurantId, mealId) => {
+  const data = platsData[restaurantId];
+  if (!data) return null;
+  return data.plats.find(p => p.id === mealId);
+};
+
+module.exports = { createRepasReader, createRepasDetailReader, getMealData };

@@ -6,6 +6,7 @@ const { createRestaurantDetailReader } = require('../views/readerView/restaurent
 const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
+const { createOrderForm } = require('../views/formView/orderForm');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -118,4 +119,29 @@ const getRepasDetails = (req, res) => {
     res.json(reader.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails };
+const getOrderForm = (req, res) => {
+    const { restaurantId, mealId } = req.params;
+
+    // Pour récupérer les infos du plat, on utilise une fonction helper (à ajouter dans repasReader)
+    // ou on pourrait importer les données directement.
+    // Pour simplifier ici, on va supposer qu'on a besoin d'importer platsData ou un helper.
+    // Ajoutons un helper dans repasReader.js d'abord.
+
+    // Temporaire: appelons createRepasDetailReader pour avoir le CardView et extraire le titre/prix?
+    // Un peu bête. Mieux vaut modifier repasReader.js pour exporter une fonction getMealInfo.
+
+    // Approche : On va modifer repasReader.js dans la foulée pour exporter 'getMealInfo'.
+
+    // Supposons que getMealInfo existe (je vais l'ajouter juste après).
+    const { getMealData } = require('../views/readerView/repasReader');
+    const meal = getMealData(restaurantId, mealId);
+
+    if (!meal) {
+        return res.status(404).json({ error: 'Repas non trouvé pour commande' });
+    }
+
+    const form = createOrderForm(meal.nom, meal.price, restaurantId, mealId);
+    res.json(form.toJSON());
+};
+
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm };
