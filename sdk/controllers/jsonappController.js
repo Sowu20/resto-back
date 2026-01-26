@@ -144,4 +144,31 @@ const getOrderForm = (req, res) => {
     res.json(form.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm };
+const submitOrder = (req, res) => {
+    const { restaurantId, mealId } = req.params;
+    const orderData = req.body;
+
+    console.log('📦 =========== NOUVELLE COMMANDE REÇUE ===========');
+    console.log('📍 Restaurant ID:', restaurantId);
+    console.log('📍 Meal ID:', mealId);
+    console.log('📍 Données client:', JSON.stringify(orderData, null, 2));
+    console.log('📅 Date:', new Date().toLocaleString());
+    console.log('📦 ==============================================');
+
+    // On simule une réponse de succès avec une vue de type message (ou équivalent via le SDK)
+    res.json({
+        viewId: `order-success-${Date.now()}`,
+        viewTitle: 'Commande Réussie !',
+        viewType: 'message',
+        intro: 'Succès',
+        body: `Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`,
+        severity: 'success',
+        primaryAction: {
+            label: 'Retour à l\'accueil',
+            type: 'GET',
+            href: 'https://resto-back-xazy.onrender.com/mobile'
+        }
+    });
+};
+
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
