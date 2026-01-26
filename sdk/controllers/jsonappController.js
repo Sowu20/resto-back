@@ -163,9 +163,12 @@ const submitOrder = (req, res) => {
         .setSeverity('success')
         .setPrimaryAction('Retour à l\'accueil', 'GET');
 
-    // On force l'URL de l'action principale car le SDK ne permet pas toujours de la passer en paramètre direct dans setPrimaryAction
     const jsonResponse = successMessage.toJSON();
-    jsonResponse.primaryAction.href = 'https://resto-back-xazy.onrender.com/mobile';
+
+    // Correction de l'accès à l'URL de l'action confirm
+    if (jsonResponse.content && jsonResponse.content.confirm) {
+        jsonResponse.content.confirm.href = 'https://resto-back-xazy.onrender.com/mobile';
+    }
 
     res.json(jsonResponse);
 };
