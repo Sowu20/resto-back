@@ -14,6 +14,9 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
     // Titre affiché en haut du formulaire
     const title = `Commande : ${mealName}`;
 
+    // ✅ URL ABSOLUE (ajoutez votre domaine)
+    const submitUrl = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
+
     const form = new FormView(formId, title)
         .setIntro(`Veuillez compléter vos informations pour commander "${mealName}" (${price}).`)
         // Champs du formulaire
@@ -28,7 +31,7 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
         // Note: FormView ne supporte pas toujours "hidden", on peut le passer en paramètre d'URL ou le gérer au submitController
 
         // Bouton de soumission
-        .submitButton('Confirmer la commande', 'POST', `/mobile/restaurents/${restaurantId}/repas/${mealId}/order`);
+        .submitButton('Confirmer la commande', 'POST', submitUrl);
 
     return form;
 };
