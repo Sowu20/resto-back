@@ -175,30 +175,38 @@ exports.getRevenus = async(req, res) => {
     }
 };
 
-exports.getStatusCommande = async(req, res) => {
+exports.getStatusCommande = async (req, res) => {
     try {
         const { restaurentId } = req.params;
 
         const stats = await Commande.aggregate([
-            { $match: { 
-                restaurent: restaurentId
-             } 
+            {
+                $match: {
+                    restaurent: restaurentId
+                }
             },
             {
                 $group: {
                     _id: '$status',
                     count: { $sum: 1 }
                 }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    status: '$_id',
+                    count: 1
+                }
             }
         ]);
 
-        res.json(stats);
+        res.status(200).json(stats);
     } catch (error) {
-        return res.status(500).json({
+        res.status(500).json({
             message: error.message
         });
     }
-}
+};
 
 exports.getMeilleuresVentes = async (req, res) => {
   try {
