@@ -143,7 +143,13 @@ const getOrderForm = (req, res) => {
     }
 
     const form = createOrderForm(meal.nom, meal.price, restaurantId, mealId);
-    res.json(form.toJSON());
+
+    // Ajout manuel du lien de soumission car le SDK ne le supporte pas nativement dans submitButton
+    if (form.content && form.content.submit) {
+        form.content.submit.href = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
+    }
+
+    res.json(form);
 };
 
 //Appel au message de confirmation de commande
@@ -158,35 +164,21 @@ const submitOrder = (req, res) => {
     console.log('📅 Date:', new Date().toLocaleString());
     console.log('📦 ==============================================');
 
-    // On prépare le message de succès avec le SDK
-    const successMessage = new MessageView(`order-success-${Date.now()}`, 'Commande Réussie !')
-        .setIntro('Succès !')
-        .setBody(`Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`)
-        .setSeverity('success')
-        .setPrimaryAction('OK, merci', 'GET')
-        .setDismissible(true);
-
-    // On génère le JSON standard du SDK
-    const sdkResponse = successMessage.toJSON();
-
-    // On crée une réponse hybride qui inclut aussi le format "manuel" (vu dans les erreurs 404)
-    // car l'application mobile semble parfois attendre ces champs à la racine.
-    const response = {
-        ...sdkResponse, // Champs SDK: id, type, content
-        viewId: sdkResponse.id,
-        viewTitle: sdkResponse.content.title,
-        viewType: 'message', // Format manuel attendu par certaines versions de l'app
-        intro: sdkResponse.content.intro,
-        body: sdkResponse.content.body,
-        severity: sdkResponse.content.severity,
+    // On renvoie une vue "message" au format plat attendu par l'interface mobile
+    res.json({
+        viewId: `order-success-${Date.now()}`,
+        viewTitle: 'Commande Réussie !',
+        viewType: 'message',
+        intro: 'Succès !',
+        body: `Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`,
+        severity: 'success',
         primaryAction: {
-            label: 'OK, merci',
+            label: 'Retour à l\'accueil',
             type: 'GET',
             href: 'https://resto-back-xazy.onrender.com/mobile'
-        }
-    };
-
-    res.json(response);
+        },
+        dismissible: true
+    });
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
