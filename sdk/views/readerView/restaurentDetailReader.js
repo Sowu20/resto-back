@@ -47,10 +47,10 @@ const createRestaurantDetailReader = (restaurantId) => {
         .addStat('⏰ Horaires', `Ouvert à ${data.horaire}`)
         .setImage(data.image)
         .addAction('Voir les menus', 'GET', {
-            href: `/mobile/restaurents/${restaurantId}/menu`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
         })
         .addAction('Voir les repas', 'GET', {
-            href: `/mobile/restaurents/${restaurantId}/repas`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
         });
 };
 

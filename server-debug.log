@@ -1,0 +1,7 @@
+[2026-01-27T13:42:47.494Z] GET /mobile/restaurents
+[2026-01-27T13:42:50.727Z] GET /mobile
+[2026-01-27T13:43:04.655Z] GET /mobile/restaurents
+[2026-01-27T13:43:39.148Z] GET /mobile/restaurents/1/repas
+[2026-01-27T13:43:41.137Z] GET /mobile/restaurents/1
+[2026-01-27T13:43:58.286Z] GET /mobile/restaurents/1/repas
+[2026-01-27T13:44:44.397Z] GET /mobile/restaurents/1
