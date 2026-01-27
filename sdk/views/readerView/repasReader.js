@@ -67,7 +67,7 @@ const createRepasDetailReader = (restaurantId, repasId) => {
   const plat = data.plats.find(p => p.id === repasId);
   if (!plat) return null;
 
-  // Créer la CardView
+  // Créer la CardView de commande
   return new CardView(`repas-detail-${repasId}`, plat.nom)
     .setSubtitle('Détails du repas')
     .setImage(plat.image)
