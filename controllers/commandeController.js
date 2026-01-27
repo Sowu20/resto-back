@@ -108,3 +108,129 @@ exports.faireCommande = async(req, res) => {
         });
     }
 }
+
+exports.getStats = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+
+        const totalCommande = await Commande.countDocuments({
+            restaurent: restaurentId
+        });
+
+        const totalVente = await Commande.aggregate([
+            { $match: { restaurent: restaurentId, payment_status: 'paye' } },
+            { $group: { _id: null, total: { $sum: '$total_amount' } } }
+        ])
+
+        const commandeMoyenne = await Commande.aggregate([
+            { $match: { restaurent: restaurentId, payment_status: 'paye' } },
+            { $group: { _id: null, avg: { $avg: '$total_amount' } } }
+        ]);
+
+        const clients = await Commande.distinct('customer_phone', {
+            restaurent: restaurentId
+        });
+
+        res.json({
+           total_commandes: totalCommande,
+           chiffre_affaires: totalVente[0]?.total || 0,
+           panier_moyenne: commandeMoyenne[0]?.avg || 0,
+           clients: clients.length
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+exports.getRevenus = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+
+        const revenus = await Commande.aggregate([
+        {
+            $match: {
+            restaurent: restaurentId,
+            payment_status: 'paye'
+            }
+        },
+        {
+            $group: {
+            _id: {
+                $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+            },
+            total: { $sum: '$total_amount' }
+            }
+        },
+        { $sort: { _id: 1 } }
+        ]);
+
+        res.json(revenus);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+exports.getStatusCommande = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+
+        const stats = await Commande.aggregate([
+            { $match: { restaurent: restaurentId } },
+            {
+                $group: {
+                _id: '$status',
+                count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        res.json(stats);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+exports.getMeilleuresVentes = async (req, res) => {
+  try {
+    const { restaurentId } = req.params;
+
+    const ventes = await Commande.aggregate([
+      { $match: { restaurent: restaurentId } },
+      { $unwind: '$items' },
+      {
+        $group: {
+          _id: '$items.repas',
+          nom: { $first: '$items.nom_repas' },
+          quantite_vendue: { $sum: '$items.quantite' }
+        }
+      },
+      { $sort: { quantite_vendue: -1 } },
+      { $limit: 5 }
+    ]);
+
+    res.json(ventes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getCommandesRecentes = async (req, res) => {
+  try {
+    const { restaurentId } = req.params;
+
+    const commandes = await Commande.find({ restaurent: restaurentId })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('order_number customer_name total_amount status createdAt');
+
+    res.json(commandes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
