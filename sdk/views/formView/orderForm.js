@@ -30,7 +30,7 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
         // Bouton de soumission
         .submitButton('Confirmer la commande', 'POST', `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`);
 
-    return form.toJSON();
+    return form;
 };
 
 module.exports = { createOrderForm };

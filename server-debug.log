@@ -5,3 +5,7 @@
 [2026-01-27T13:43:41.137Z] GET /mobile/restaurents/1
 [2026-01-27T13:43:58.286Z] GET /mobile/restaurents/1/repas
 [2026-01-27T13:44:44.397Z] GET /mobile/restaurents/1
+[2026-01-27T14:02:19.745Z] GET /mobile/restaurents/1/repas
+[2026-01-27T14:02:31.347Z] GET /mobile/restaurents/1/repas/fufu
+[2026-01-27T14:02:49.979Z] GET /mobile/restaurents/1/repas/fufu/order
+[2026-01-27T14:04:13.946Z] GET /mobile/restaurents/1/repas/fufu/order
