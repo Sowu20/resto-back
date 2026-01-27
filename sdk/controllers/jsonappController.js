@@ -7,7 +7,7 @@ const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
 const { createOrderForm } = require('../views/formView/orderForm');
-const { MessageView } = require('@numerum-tech/cmsdk');
+const { createOrderConfirmationView } = require('../views/messageView/orderConfirmation');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -143,13 +143,7 @@ const getOrderForm = (req, res) => {
     }
 
     const form = createOrderForm(meal.nom, meal.price, restaurantId, mealId);
-
-    // Ajout manuel du lien de soumission car le SDK ne le supporte pas nativement dans submitButton
-    if (form.content && form.content.submit) {
-        form.content.submit.href = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
-    }
-
-    res.json(form);
+    res.json(form.toJSON());
 };
 
 //Appel au message de confirmation de commande
@@ -164,21 +158,14 @@ const submitOrder = (req, res) => {
     console.log('📅 Date:', new Date().toLocaleString());
     console.log('📦 ==============================================');
 
-    // On renvoie une vue "message" au format plat attendu par l'interface mobile
-    res.json({
-        viewId: `order-success-${Date.now()}`,
-        viewTitle: 'Commande Réussie !',
-        viewType: 'message',
-        intro: 'Succès !',
-        body: `Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`,
-        severity: 'success',
-        primaryAction: {
-            label: 'Retour à l\'accueil',
-            type: 'GET',
-            href: 'https://resto-back-xazy.onrender.com/mobile'
-        },
-        dismissible: true
-    });
+    // On utilise la vue de confirmation externe
+    const successMessage = createOrderConfirmationView(
+        orderData.customer_name,
+        orderData.customer_phone
+    );
+
+    // Retourner le JSON du SDK
+    res.json(successMessage.toJSON());
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
