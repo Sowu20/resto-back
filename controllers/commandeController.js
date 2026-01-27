@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const Commande = require('../models/Commande');
 
 exports.createCommande = async(req, res) => {
@@ -151,8 +152,8 @@ exports.getRevenus = async(req, res) => {
         const revenus = await Commande.aggregate([
         {
             $match: {
-            restaurent: restaurentId,
-            payment_status: 'paye'
+                restaurent: restaurentId,
+                payment_status: 'paye'
             }
         },
         {
@@ -179,11 +180,14 @@ exports.getStatusCommande = async(req, res) => {
         const { restaurentId } = req.params;
 
         const stats = await Commande.aggregate([
-            { $match: { restaurent: restaurentId } },
+            { $match: { 
+                restaurent: new mongoose.Types.ObjectId(restaurentId)
+             } 
+            },
             {
                 $group: {
-                _id: '$status',
-                count: { $sum: 1 }
+                    _id: '$status',
+                    count: { $sum: 1 }
                 }
             }
         ]);
