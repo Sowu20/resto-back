@@ -80,7 +80,7 @@ exports.detailResto = async(req, res) => {
             message: "ID de l'utilisateur invalide !"
         });
     }
-}
+};
 
 exports.updateResto = async(req, res) => {
     try {
@@ -116,7 +116,7 @@ exports.deleteResto = async(req, res) => {
             message: "ID de l'utilisateur invalide !"
         });
     }
-}
+};
 
 exports.getRestaurentsLoc = async(req, res) => {
     try {
@@ -149,4 +149,79 @@ exports.getRestaurentsLoc = async(req, res) => {
             message: error.message
         });
     }
+};
+
+exports.getRestaurentStats = async(req, res) => {
+    try {
+        const total = await Restaurent.countDocuments();
+        const ouverts = await Restaurent.countDocuments({
+            disponibilite: 'ouvert'
+        });
+        const ferme = await Restaurent.countDocuments({
+            disponibilite: 'ferme'
+        });
+
+        res.status(200).json({
+            total,
+            ouverts,
+            ferme
+        });
+    } catch (error) {
+        return res(500).json({
+            message: error.message
+        });
+    }
+};
+
+exports.getRestaurents = async(req, res) => {
+    try {
+        const restaurents = await Restaurent.find()
+            .populate('user', 'name email phone')
+            .sort({ createdAt: -1 });
+
+        res.json(200).json({
+            restaurents
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+exports.getStatusRestaurents = async(req, res) => {
+    try {
+        const { status } = req.query;
+
+        const filter = status ? { disponibilite: status } : {};
+
+        const restaurents = await Restaurent.find(filter)
+            .populate('user', 'name email');
+
+        res.status(200).json(
+            restaurents
+        );
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        })
+    }
 }
+
+exports.searchRestaurent = async (req, res) => {
+    try {
+        const { q } = req.query;
+
+        const restaurents = await Restaurent.find({
+            $or: [
+                { name: { $regex: q, $options: 'i' } },
+                { email: { $regex: q, $options: 'i' } },
+                { address: { $regex: q, $options: 'i' } }
+            ]
+        });
+
+        res.status(200).json(restaurents);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
