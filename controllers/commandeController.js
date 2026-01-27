@@ -181,7 +181,7 @@ exports.getStatusCommande = async(req, res) => {
 
         const stats = await Commande.aggregate([
             { $match: { 
-                restaurent: new mongoose.Types.ObjectId(restaurentId)
+                restaurent: restaurentId
              } 
             },
             {
