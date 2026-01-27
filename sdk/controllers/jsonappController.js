@@ -156,21 +156,18 @@ const submitOrder = (req, res) => {
     console.log('📅 Date:', new Date().toLocaleString());
     console.log('📦 ==============================================');
 
-    // On utilise MessageView du SDK pour garantir la compatibilité mobile
+    // On utilise MessageView en suivant la documentation fournie
     const successMessage = new MessageView(`order-success-${Date.now()}`, 'Commande Réussie !')
-        .setIntro('Succès')
+        .setIntro('Succès !')
         .setBody(`Merci ${orderData.customer_name || 'cher client'} ! Votre commande a été reçue. Nous vous contacterons au ${orderData.customer_phone || 'votre numéro'} si besoin.`)
         .setSeverity('success')
-        .setPrimaryAction('Retour à l\'accueil', 'GET');
+        .setPrimaryAction('OK, merci', 'GET')
+        .setDismissible(true);
 
-    const jsonResponse = successMessage.toJSON();
+    // Utilisation de setNext pour la redirection vers l'accueil mobile
+    successMessage.setNext('https://resto-back-xazy.onrender.com/mobile');
 
-    // Correction de l'accès à l'URL de l'action confirm
-    if (jsonResponse.content && jsonResponse.content.confirm) {
-        jsonResponse.content.confirm.href = 'https://resto-back-xazy.onrender.com/mobile';
-    }
-
-    res.json(jsonResponse);
+    res.json(successMessage.toJSON());
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
