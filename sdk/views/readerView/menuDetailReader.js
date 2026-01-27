@@ -156,14 +156,14 @@ const createMenuDetailView = (menuId) => {
             id: 'back-to-restaurant',
             label: '🏠 Voir le restaurant',
             type: 'GET',
-            href: `/mobile/restaurents/${menuDetail.restaurantId}`,
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}`,
             variant: 'link'
         },
         {
             id: 'back-to-menus',
             label: '📋 Voir tous les menus',
             type: 'GET',
-            href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}/menu`,
             variant: 'link'
         }
     ];
