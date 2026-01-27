@@ -15,6 +15,6 @@ router.delete('/restaurent/:id', auth, role(['Admin']), restaurentController.del
 router.get('/restaurent/stats', auth, restaurentController.getRestaurentStats);
 router.get('/restaurent/liste', auth, restaurentController.getRestaurents);
 router.get('/restaurent/search', auth, restaurentController.searchRestaurent);
-router.get('/restaurent', auth, restaurentController.getStatusRestaurents);
+router.get('/restaurent/:restaurentd/status', auth, restaurentController.getStatusRestaurents);
 
 module.exports = router;
