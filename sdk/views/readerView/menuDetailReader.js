@@ -88,47 +88,26 @@ const createMenuDetailView = (menuId) => {
         };
     }
 
-    // Crée le carrousel
+    // Crée le carrousel exactement comme dans la documentation
     const carousel = new CarouselView(`menu-carousel-${menuId}`, menuDetail.menuName);
 
-    // Crée d'abord un slide pour les informations du menu (slide 0)
-    const menuInfoSlide = carousel.createSlide(
-        `menu-${menuId}-info`,
-        `${menuDetail.restaurantName}`,
-        `${menuDetail.price} • ${menuDetail.duration}\n\n${menuDetail.description}`,
-        {
-            imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'
-        }
-    );
-    carousel.addSlide(menuInfoSlide);
-
-    // Ajoute une action pour commander le menu complet sur le slide 0
-    carousel.addSlideAction(
-        `menu-${menuId}-info`,  // Même ID que le slide
-        '🛒 Commander ce menu',
-        'POST',
-        {
-            href: `/api/cart/add?menuId=${menuId}`,
-            confirmMessage: `Ajouter le "${menuDetail.menuName}" complet pour ${menuDetail.price} ?`
-        }
-    );
-
-    // Ajoute chaque plat comme un slide (à partir du slide 1)
+    // Ajoute chaque plat comme un slide
     menuDetail.dishes.forEach((dish, index) => {
-        const dishSlide = carousel.createSlide(
-            `dish-${menuId}-${index}`,
-            dish.name,
-            dish.description || '',
-            {
-                imageUrl: dish.imageUrl || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
-                badge: index === 0 ? '⭐ Inclus' : undefined
-            }
+        carousel.addSlide(
+            carousel.createSlide(
+                `dish-${menuId}-${index}`,
+                dish.name,
+                dish.description || '',
+                {
+                    imageUrl: dish.imageUrl || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+                    badge: index === 0 ? '⭐ Inclus' : undefined
+                }
+            )
         );
-        carousel.addSlide(dishSlide);
 
-        // Ajoute une action pour chaque slide de plat
+        // Ajoute une action pour chaque slide (optionnel)
         carousel.addSlideAction(
-            `dish-${menuId}-${index}`,  // Même ID que le slide du plat
+            `dish-${menuId}-${index}`,
             '➕ Ajouter ce plat',
             'POST',
             {
@@ -137,6 +116,17 @@ const createMenuDetailView = (menuId) => {
             }
         );
     });
+
+    // Ajoute une action globale pour le menu complet
+    carousel.addSlideAction(
+        `menu-${menuId}-full`,
+        '🛒 Commander le menu complet',
+        'POST',
+        {
+            href: `/api/cart/add?menuId=${menuId}`,
+            confirmMessage: `Ajouter le "${menuDetail.menuName}" complet pour ${menuDetail.price} ?`
+        }
+    );
 
     // Configure les paramètres du carrousel
     carousel.setSettings({
@@ -147,26 +137,27 @@ const createMenuDetailView = (menuId) => {
         showArrows: true
     });
 
-    // Convertir en JSON
-    const carouselJson = carousel.toJSON();
-
-    // Ajouter des actions globales (navigation) au JSON
-    carouselJson.actions = [
+    // Ajoute des actions globales (navigation)
+    const actions = [
         {
             id: 'back-to-restaurant',
             label: '🏠 Voir le restaurant',
             type: 'GET',
-            href: `/mobile/restaurents/${menuDetail.restaurantId}`,
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}`,
             variant: 'link'
         },
         {
             id: 'back-to-menus',
             label: '📋 Voir tous les menus',
             type: 'GET',
-            href: `/mobile/restaurents/${menuDetail.restaurantId}/menu`,
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${menuDetail.restaurantId}/menu`,
             variant: 'link'
         }
     ];
+
+    // Convertir en JSON et ajouter les actions globales
+    const carouselJson = carousel.toJSON();
+    carouselJson.actions = actions;
 
     return carouselJson;
 };
