@@ -12,5 +12,9 @@ router.get('/restaurent/:id', restaurentController.detailResto);
 router.get('/restaurent/localisation', restaurentController.getRestaurentsLoc);
 router.put('/restaurent/:id', auth, check, restaurentController.updateResto);
 router.delete('/restaurent/:id', auth, role(['Admin']), restaurentController.deleteResto);
+router.get('/restaurent/stats', auth, restaurentController.getRestaurentStats);
+router.get('/restaurent/liste', auth, restaurentController.getRestaurents);
+router.get('/restaurent/search', auth, restaurentController.searchRestaurent);
+router.get('/restaurent', auth, restaurentController.getStatusRestaurents);
 
 module.exports = router;
