@@ -18,7 +18,7 @@ router.get('/mobile/restaurents/:restaurantId/repas/:mealId', getRepasDetails);
 // Route pour afficher le formulaire de commande
 router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm);
 // Route pour soumettre la commande (POST)
-router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', submitOrder);
+//router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', submitOrder);
 // NOUVELLE Route pour la prévisualisation (Résumé)
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/preview', previewOrder);
 
