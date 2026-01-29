@@ -179,6 +179,7 @@ const previewOrder = (req, res) => {
         const orderData = req.body;
 
         console.log('📦 =========== PRÉVISUALISATION COMMANDE ===========');
+        console.log('📍 Body reçu:', JSON.stringify(req.body, null, 2));
 
         // Récupérer les infos du plat pour le résumé
         const meal = getMealData(restaurantId, mealId);

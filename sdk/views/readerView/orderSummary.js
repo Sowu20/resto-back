@@ -10,22 +10,15 @@ const { ReaderView } = require('@numerum-tech/cmsdk');
  * @param {string} mealId
  */
 const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId) => {
-    return new ReaderView(`order-summary-${Date.now()}`, 'Récapitulatif de commande')
+    return new ReaderView(`order-summary-view`, 'Récapitulatif de votre commande')
         .setIntro('✅ Commande confirmée !')
-        .addSubTitle('Informations Client')
-        .addListField([
-            `Nom : ${customerName}`,
-            `Téléphone : ${customerPhone}`
-        ])
-        .addSeparator()
-        .addSubTitle('Détails du plat')
-        .addListField([
-            `Plat : ${mealName}`,
-            `Prix : ${price}`
-        ])
-        .addParagraph('Merci de votre commande. Le restaurant a été notifié et vous contactera si nécessaire.')
-        // Utilisation de setNext pour le bouton "Continuer" qui retourne à l'accueil
-        .setNext('https://resto-back-xazy.onrender.com/mobile');
+        .addParagraph('Informations Client')
+        .addParagraph('Nom : ' + (customerName || 'Non spécifié'))
+        .addParagraph('Téléphone : ' + (customerPhone || 'Non spécifié'))
+        .addParagraph('Détails du plat')
+        .addParagraph('Plat : ' + (mealName || 'Non spécifié'))
+        .addParagraph('Prix : ' + (price || 'Non spécifié'))
+        .addParagraph('Merci de votre commande. Le restaurant a été notifié et vous contactera si nécessaire.');
 };
 
 module.exports = { createOrderSummaryView };
