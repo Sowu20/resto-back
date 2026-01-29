@@ -189,34 +189,36 @@ exports.getRestaurents = async(req, res) => {
     }
 };
 
-exports.getStatusRestaurents = async(req, res) => {
+exports.getStatusRestaurents = async (req, res) => {
     try {
-        const { status } = req.query;
+        let { status } = req.query;
 
-        const filter = status ? { disponibilite: status } : {};
+        const allowedStatus = ['ouvert', 'ferme'];
+
+        const filter = {};
+
+        if (status && allowedStatus.includes(status.toLowerCase())) {
+            filter.status = status.toLowerCase();
+        }
 
         const restaurents = await Restaurent.find(filter)
             .populate('user', 'name email');
 
-        res.status(200).json(
-            restaurents
-        );
+        res.status(200).json(restaurents);
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        })
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 exports.searchRestaurent = async (req, res) => {
     try {
-        const { q } = req.query;
+        const { restaurent } = req.query;
 
         const restaurents = await Restaurent.find({
             $or: [
-                { name: { $regex: q, $options: 'i' } },
-                { email: { $regex: q, $options: 'i' } },
-                { address: { $regex: q, $options: 'i' } }
+                { name: { $regex: restaurent, $options: 'i' } },
+                { email: { $regex: restaurent, $options: 'i' } },
+                { address: { $regex: restaurent, $options: 'i' } }
             ]
         });
 
