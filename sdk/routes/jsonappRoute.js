@@ -1,5 +1,5 @@
 const express = require('express');
-const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder } = require('../controllers/jsonappController');
+const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder, getScanView } = require('../controllers/jsonappController');
 
 const router = express.Router();
 
@@ -17,9 +17,14 @@ router.get('/mobile/restaurents/:id/repas', Repas);
 router.get('/mobile/restaurents/:restaurantId/repas/:mealId', getRepasDetails);
 // Route pour afficher le formulaire de commande
 router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm);
+
 // Route pour soumettre la commande (POST)
 //router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', submitOrder);
+
 // NOUVELLE Route pour la prévisualisation (Résumé)
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder);
+
+// Route pour le scanner QR
+router.get('/mobile/scan-qr', getScanView);
 
 module.exports = router;

@@ -204,4 +204,10 @@ const previewOrder = (req, res) => {
     }
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder };
+//Fonction pour le scanner
+const getScanView = (req, res) => {
+    const { scanView } = require('../views/scannerView/scanView');
+    res.json(scanView.toJSON());
+};
+
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder, getScanView };
