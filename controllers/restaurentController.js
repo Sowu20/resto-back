@@ -193,7 +193,7 @@ exports.getStatusRestaurents = async (req, res) => {
     try {
         let { status } = req.query;
 
-        const allowedStatus = ['ouvert', 'ferme'];
+        const allowedStatus = ['Ouvert', 'Fermé'];
 
         const filter = {};
 
