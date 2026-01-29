@@ -10,6 +10,7 @@ const { createOrderForm } = require('../views/formView/orderForm');
 const { createOrderConfirmationView } = require('../views/messageView/orderConfirmation');
 const { createOrderSummaryView } = require('../views/readerView/orderSummary');
 const { getMealData } = require('../views/readerView/repasReader');
+const { aboutView } = require('../views/readerView/aboutReader');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -210,4 +211,8 @@ const getScanView = (req, res) => {
     res.json(scanView.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder, getScanView };
+const getAboutView = (req, res) => {
+    res.json(aboutView.toJSON());
+};
+
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder, getScanView, getAboutView };
