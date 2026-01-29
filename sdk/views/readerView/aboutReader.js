@@ -9,6 +9,6 @@ const aboutView = new ReaderView('about-app', 'À propos de CityMate Resto')
     .addParagraph('🛒 Commander en un clic : Passez vos commandes directement depuis l\'application, que vous soyez sur place ou à emporter.')
     .addParagraph('🔍 Scanner pour commander : Utilisez le scanner QR intégré sur votre table pour accéder instantanément au menu et commander.')
     .addParagraph('🚀 Suivi rapide : Profitez d\'un service plus rapide et d\'une meilleure communication avec l\'établissement.')
-    .addLink('/mobile', 'Retour à l\'accueil');
+// .addLink('/mobile', 'Retour à l\'accueil');
 
 module.exports = { aboutView };
