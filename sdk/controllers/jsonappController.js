@@ -173,26 +173,35 @@ const getOrderForm = (req, res) => {
 
 // Nouvelle fonction pour afficher le résumé (Preview)
 const previewOrder = (req, res) => {
-    const { restaurantId, mealId } = req.params;
-    const orderData = req.body;
+    try {
+        const { restaurantId, mealId } = req.params;
+        const orderData = req.body;
 
-    console.log('📦 =========== PRÉVISUALISATION COMMANDE ===========');
+        console.log('📦 =========== PRÉVISUALISATION COMMANDE ===========');
 
-    // Récupérer les infos du plat pour le résumé
-    const meal = getMealData(restaurantId, mealId);
-    const mealName = meal ? meal.nom : 'Plat inconnu';
-    const price = meal ? meal.price : 'Prix inconnu';
+        // Récupérer les infos du plat pour le résumé
+        const meal = getMealData(restaurantId, mealId);
+        const mealName = meal ? meal.nom : 'Plat inconnu';
+        const price = meal ? meal.price : 'Prix inconnu';
 
-    const summaryView = createOrderSummaryView(
-        orderData.customer_name,
-        orderData.customer_phone,
-        mealName,
-        price,
-        restaurantId,
-        mealId
-    );
+        const summaryView = createOrderSummaryView(
+            orderData.customer_name,
+            orderData.customer_phone,
+            mealName,
+            price,
+            restaurantId,
+            mealId
+        );
 
-    return res.json(summaryView.toJSON());
+        return res.json(summaryView.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur dans previewOrder:', error);
+        return res.status(500).json({
+            error: 'Erreur interne lors de la prévisualisation',
+            details: error.message,
+            stack: error.stack
+        });
+    }
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder };

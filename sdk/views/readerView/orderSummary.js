@@ -25,7 +25,7 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         ])
         .addParagraph('Merci de votre commande. Le restaurant a été notifié et vous contactera si nécessaire.')
         // Utilisation de setNext pour le bouton "Continuer" qui retourne à l'accueil
-        .setNext('/mobile');
+        .setNext('https://resto-back-xazy.onrender.com/mobile');
 };
 
 module.exports = { createOrderSummaryView };
