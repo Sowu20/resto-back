@@ -18,7 +18,7 @@ const restaurentSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['ouvert', 'ferme'],
+        enum: ['Ouvert', 'Fermé'],
         default: 'ouvert'
     },
     location: {
