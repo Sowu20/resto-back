@@ -149,27 +149,27 @@ const getOrderForm = (req, res) => {
 };
 
 //Appel au message de confirmation de commande
-const submitOrder = (req, res) => {
-    const { restaurantId, mealId } = req.params;
-    const orderData = req.body;
+// const submitOrder = (req, res) => {
+//     const { restaurantId, mealId } = req.params;
+//     const orderData = req.body;
 
-    console.log('📦 =========== NOUVELLE COMMANDE REÇUE ===========');
-    console.log('📍 Restaurant ID:', restaurantId);
-    console.log('📍 Meal ID:', mealId);
-    console.log('📍 Données client:', JSON.stringify(orderData, null, 2));
-    console.log('📅 Date:', new Date().toLocaleString());
-    console.log('📦 ==============================================');
+//     console.log('📦 =========== NOUVELLE COMMANDE REÇUE ===========');
+//     console.log('📍 Restaurant ID:', restaurantId);
+//     console.log('📍 Meal ID:', mealId);
+//     console.log('📍 Données client:', JSON.stringify(orderData, null, 2));
+//     console.log('📅 Date:', new Date().toLocaleString());
+//     console.log('📦 ==============================================');
 
-    // On utilise la vue de confirmation externe (on appelle la fonction 
-    // createOrderConfirmationView et on Passe deux paramètres extraits de orderData (customer_name et customer_phone))
-    const successMessage = createOrderConfirmationView(
-        orderData.customer_name,
-        orderData.customer_phone
-    );
+//     // On utilise la vue de confirmation externe (on appelle la fonction 
+//     // createOrderConfirmationView et on Passe deux paramètres extraits de orderData (customer_name et customer_phone))
+//     const successMessage = createOrderConfirmationView(
+//         orderData.customer_name,
+//         orderData.customer_phone
+//     );
 
-    // Retourner le JSON du SDK
-    return res.json(successMessage.toJSON());
-};
+//     // Retourner le JSON du SDK
+//     return res.json(successMessage.toJSON());
+// };
 
 // Nouvelle fonction pour afficher le résumé (Preview)
 const previewOrder = (req, res) => {
@@ -195,4 +195,4 @@ const previewOrder = (req, res) => {
     return res.json(summaryView.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder };
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder };
