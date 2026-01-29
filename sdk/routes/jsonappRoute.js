@@ -20,6 +20,6 @@ router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm
 // Route pour soumettre la commande (POST)
 //router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', submitOrder);
 // NOUVELLE Route pour la prévisualisation (Résumé)
-router.post('/mobile/restaurents/:restaurantId/repas/:mealId/preview', previewOrder);
+router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder);
 
 module.exports = router;

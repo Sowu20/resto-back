@@ -28,7 +28,7 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
         //.submitButton('Confirmer la commande', 'POST', submitUrl);
 
         // NOUVEAU bouton pour voir le résumé
-        .submitButton('Confirmer', 'POST', `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/preview`);
+        .submitButton('Confirmer', 'POST', `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`);
 
     return form;
 };
