@@ -117,7 +117,7 @@ const getRepasDetails = (req, res) => {
         return res.status(404).json({ error: 'Repas non trouvé' });
     }
 
-    res.json(reader.toJSON());
+    return res.json(reader.toJSON());
 };
 
 //Appel au formulaire
@@ -165,7 +165,7 @@ const submitOrder = (req, res) => {
     );
 
     // Retourner le JSON du SDK
-    res.json(successMessage.toJSON());
+    return res.json(successMessage.toJSON());
 };
 
 module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
