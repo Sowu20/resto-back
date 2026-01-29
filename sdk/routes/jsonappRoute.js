@@ -1,5 +1,5 @@
 const express = require('express');
-const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder } = require('../controllers/jsonappController');
+const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder } = require('../controllers/jsonappController');
 
 const router = express.Router();
 
@@ -19,5 +19,7 @@ router.get('/mobile/restaurents/:restaurantId/repas/:mealId', getRepasDetails);
 router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm);
 // Route pour soumettre la commande (POST)
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', submitOrder);
+// NOUVELLE Route pour la prévisualisation (Résumé)
+router.post('/mobile/restaurents/:restaurantId/repas/:mealId/preview', previewOrder);
 
 module.exports = router;

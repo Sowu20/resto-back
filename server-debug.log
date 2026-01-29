@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [2026-01-27T13:42:47.494Z] GET /mobile/restaurents
 [2026-01-27T13:42:50.727Z] GET /mobile
 [2026-01-27T13:43:04.655Z] GET /mobile/restaurents
@@ -27,3 +28,13 @@
 [2026-01-29T10:32:13.283Z] GET /api/restaurent/status_restaurent?status=ferme
 [2026-01-29T10:38:17.006Z] GET /api/restaurent/liste
 [2026-01-29T10:38:45.992Z] GET /api/restaurent
+=======
+[2026-01-29T11:49:16.929Z] GET /
+[2026-01-29T11:49:22.556Z] GET /mobile/restaurents/1/menu
+[2026-01-29T11:49:23.059Z] GET /favicon.ico
+[2026-01-29T11:49:28.765Z] GET /mobile/restaurents/1/repas
+[2026-01-29T11:49:30.889Z] GET /mobile/restaurents/1/repas/fufu
+[2026-01-29T11:49:41.036Z] GET /mobile/restaurents/1/repas/fufu/order
+[2026-01-29T11:50:02.162Z] GET /mobile/restaurents/1/repas/fufu/order/preview
+[2026-01-29T11:50:05.042Z] GET /mobile/restaurents/1/repas/fufu/order/preview
+>>>>>>> 54f9810 (modification pour redirection vers une page, apres commande)

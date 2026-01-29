@@ -8,6 +8,8 @@ const { createMenuDetailView } = require('../views/readerView/menuDetailReader')
 const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
 const { createOrderForm } = require('../views/formView/orderForm');
 const { createOrderConfirmationView } = require('../views/messageView/orderConfirmation');
+const { createOrderSummaryView } = require('../views/readerView/orderSummary');
+const { getMealData } = require('../views/readerView/repasReader');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -158,7 +160,8 @@ const submitOrder = (req, res) => {
     console.log('📅 Date:', new Date().toLocaleString());
     console.log('📦 ==============================================');
 
-    // On utilise la vue de confirmation externe
+    // On utilise la vue de confirmation externe (on appelle la fonction 
+    // createOrderConfirmationView et on Passe deux paramètres extraits de orderData (customer_name et customer_phone))
     const successMessage = createOrderConfirmationView(
         orderData.customer_name,
         orderData.customer_phone
@@ -168,4 +171,28 @@ const submitOrder = (req, res) => {
     return res.json(successMessage.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder };
+// Nouvelle fonction pour afficher le résumé (Preview)
+const previewOrder = (req, res) => {
+    const { restaurantId, mealId } = req.params;
+    const orderData = req.body;
+
+    console.log('📦 =========== PRÉVISUALISATION COMMANDE ===========');
+
+    // Récupérer les infos du plat pour le résumé
+    const meal = getMealData(restaurantId, mealId);
+    const mealName = meal ? meal.nom : 'Plat inconnu';
+    const price = meal ? meal.price : 'Prix inconnu';
+
+    const summaryView = createOrderSummaryView(
+        orderData.customer_name,
+        orderData.customer_phone,
+        mealName,
+        price,
+        restaurantId,
+        mealId
+    );
+
+    return res.json(summaryView.toJSON());
+};
+
+module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder };
