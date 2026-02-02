@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     return next();
   }
 
-  if (req.user.role !== 'Restaurateur') {
+  if (req.user.role !== 'restaurant') {
     return res.status(403).json({ 
       message: "Accès interdit" 
     });
