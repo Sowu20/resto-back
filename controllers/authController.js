@@ -56,13 +56,16 @@ exports.registerRestaurent = async(req, res) => {
 
         const hashedPass = await bcrypt.hash(password, 10);
 
+        const createdBy = req.user ? req.user._id : null;
+
         const user = await User.create({
             name,
             address,
             phone,
             email,
             role: 'restaurant',
-            password: hashedPass
+            password: hashedPass,
+            createdBy
         });
 
         const restaurent = await Restaurent.create({
@@ -71,7 +74,8 @@ exports.registerRestaurent = async(req, res) => {
             phone,
             email,
             password:hashedPass,
-            user: user._id
+            user: user._id,
+            createdBy
         });
 
         return res.status(201).json({
