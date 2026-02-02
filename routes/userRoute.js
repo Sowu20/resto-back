@@ -8,6 +8,7 @@ const role = require('../middlewares/rolemiddleware');
 const check = require('../middlewares/checkusermiddleware');
 
 router.post('/register', authController.registerRestaurent);
+router.post('/admin/register', auth, role(['Admin']), authController.registerRestaurent);
 router.post('/login', authController.login);
 router.get('/user',auth, role(['Admin']), userController.listUser);
 router.get('/user/:id', auth, check, userController.detailUser);
