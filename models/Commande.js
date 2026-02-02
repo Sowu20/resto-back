@@ -38,7 +38,7 @@ const cmdeSchema = new mongoose.Schema({
     ],
     status: {
         type: String,
-        enum: ['en_attente', 'en_cours', 'termine']
+        enum: ['en_attente', 'livres', 'annules']
     },
     payment_status: {
         type: String,
