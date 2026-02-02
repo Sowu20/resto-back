@@ -8,3 +8,15 @@
 [2026-01-29T14:46:54.049Z] GET /mobile
 [2026-01-29T15:43:14.931Z] GET /mobile/about
 [2026-01-29T15:51:23.505Z] GET /mobile/about
+[2026-02-02T12:05:16.034Z] HEAD /api/images/alloco.jpg?w=100
+[2026-02-02T13:27:48.277Z] GET /
+[2026-02-02T13:27:48.314Z] GET /
+[2026-02-02T13:35:24.810Z] GET /mobile/restaurents/1/menu
+[2026-02-02T13:35:26.433Z] GET /favicon.ico
+[2026-02-02T13:35:39.927Z] GET /mobile/restaurents/1/menu/petit-dej-1
+[2026-02-02T13:35:41.129Z] GET /mobile/restaurents/1/menu/petit-dej-1
+[2026-02-02T13:36:09.542Z] GET /mobile/restaurents/1/menu/petit-dej-1
+[2026-02-02T13:36:11.892Z] GET /mobile/restaurents/1/menu/dej-1
+[2026-02-02T13:36:15.160Z] GET /mobile/restaurents/1/menu/dej-1
+[2026-02-02T13:36:30.344Z] GET /mobile/restaurents/1/repas/fufu
+[2026-02-02T13:36:44.716Z] GET /mobile/restaurents/1/repas/fufu/order

@@ -45,7 +45,9 @@ const cmdeRoute = require('./routes/commandeRoute');
 const categorieRoute = require('./routes/categorieRoute');
 const tableRoute = require('./routes/tableRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
+const imageController = require('./controllers/imageController');
 
+app.get('/api/images/:filename', imageController.getOptimizedImage);
 app.use('/api', userRoute);
 app.use('/api', restoRoute);
 app.use('/api', menuRoute);

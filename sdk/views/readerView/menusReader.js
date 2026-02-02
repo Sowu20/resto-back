@@ -1,4 +1,5 @@
 const { ActionGridView } = require('@numerum-tech/cmsdk');
+const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 // Données des menus pour chaque restaurant
 const menusData = {
@@ -52,7 +53,7 @@ const createMenusGrid = (restaurantId) => {
       menu.id,
       menu.nom,
       description,
-      menu.image,
+      getOptimizedImageUrl(menu.image, { width: 300 }),
       {
         type: 'GET',
         // Ici tu peux mettre l'URL pour voir les détails du menu spécifique

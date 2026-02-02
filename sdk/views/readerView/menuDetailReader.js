@@ -1,4 +1,5 @@
 const { CarouselView } = require('@numerum-tech/cmsdk');
+const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 // Données détaillées des plats pour chaque menu
 const menuDetailsData = {
@@ -99,7 +100,7 @@ const createMenuDetailView = (menuId) => {
                 dish.name,
                 dish.description || '',
                 {
-                    imageUrl: dish.imageUrl || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+                    imageUrl: getOptimizedImageUrl(dish.imageUrl || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4', { width: 500 }),
                     badge: index === 0 ? '⭐ Inclus' : undefined
                 }
             )

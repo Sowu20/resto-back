@@ -1,4 +1,5 @@
 const { ActionGridView, CardView } = require('@numerum-tech/cmsdk');
+const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 const platsData = {
   '1': {
@@ -47,7 +48,7 @@ const createRepasReader = (restaurantId) => {
       plats.id,
       plats.nom,
       plats.description || 'Description du plat',
-      plats.image,
+      getOptimizedImageUrl(plats.image, { width: 300 }),
       {
         type: 'GET',
         // Utilisation de chemin relatif pour la compatibilité 
@@ -70,7 +71,7 @@ const createRepasDetailReader = (restaurantId, repasId) => {
   // Créer la CardView de commande
   return new CardView(`repas-detail-${repasId}`, plat.nom)
     .setSubtitle('Détails du repas')
-    .setImage(plat.image)
+    .setImage(getOptimizedImageUrl(plat.image, { width: 600 }))
     .setDescription(plat.description || 'Succulent plat préparé avec soin.')
     .addStat('Prix', plat.price || 'Prix sur demande')
     .addAction('🛒 Commander', 'GET', {
