@@ -1,4 +1,5 @@
 const { CardView } = require('@numerum-tech/cmsdk');
+const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 // Données statiques des 3 restaurants
 const restaurantsData = {
@@ -45,7 +46,7 @@ const createRestaurantDetailReader = (restaurantId) => {
         .addStat('📍 Adresse', data.adresse)
         .addStat('📞 Téléphone', data.telephone)
         .addStat('⏰ Horaires', `Ouvert à ${data.horaire}`)
-        .setImage(data.image)
+        .setImage(getOptimizedImageUrl(data.image, { width: 600 }))
         .addAction('Voir les menus', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
         })

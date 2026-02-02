@@ -43,7 +43,7 @@ const RestaurentDetail = (req, res) => {
 const Menu = (req, res) => {
     const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
 
-    // Correction: Use createMenusGrid instead of createMenusReader
+    // Correction : Utilise createMenusGrid au lieu de createMenusReader
     const reader = createMenusGrid(restaurantId);
 
     if (!reader) {
