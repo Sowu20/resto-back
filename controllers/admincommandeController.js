@@ -43,14 +43,12 @@ exports.getlistCommande = async (req, res) => {
         if (payment_method) filter.payment_method = payment_method;
         if (restaurent) filter.restaurent = restaurent;
 
-        // Période (30 derniers jours)
         if (period === '30days') {
             filter.createdAt = {
                 $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
             };
         }
 
-        // Recherche
         if (search) {
             filter.$or = [
                 { order_number: { $regex: search, $options: 'i' } },
@@ -73,7 +71,6 @@ exports.getlistCommande = async (req, res) => {
             pages: Math.ceil(total / limit),
             commandes
         });
-
     } catch (error) {
         return res.status(500).json({
             message: "Erreur lors de l'affiche de la liste des commandes",
