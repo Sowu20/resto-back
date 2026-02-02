@@ -40,9 +40,9 @@ exports.getOptimizedImage = async (req, res) => {
         const buffer = await transform.toBuffer(); // Image traitée en mémoire
 
         // Configuration du cache pour la performance
-        res.set('Cache-Control', 'public, max-age=31536000');
-        res.type(`image/${ext.replace('.', '') || 'jpeg'}`); // Type MIME de l'image   
-        res.send(buffer);
+        res.set('Cache-Control', 'public, max-age=31536000');// Cache longue durée (1 an) car l'image ne change pas
+        res.type(`image/${ext.replace('.', '') || 'jpeg'}`); // Détermine le Content-Type 
+        res.send(buffer); // Envoie l'image binaire
 
     } catch (error) {
         console.error('Erreur optimisation image:', error);
