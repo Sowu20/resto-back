@@ -6,7 +6,7 @@ const auth = require('../middlewares/authmiddleware');
 const role = require('../middlewares/rolemiddleware');
 const check = require('../middlewares/checkrestaurentmiddleware');
 
-router.post('/restaurent', auth, role(['Restaurateur']), restaurentController.createResto);
+router.post('/restaurent', auth, role(['restaurant', 'Admin']), restaurentController.createResto);
 router.get('/restaurent', restaurentController.listResto);
 router.get('/restaurent/stats', auth, restaurentController.getRestaurentStats);
 router.get('/restaurent/liste', auth, restaurentController.getRestaurents);
