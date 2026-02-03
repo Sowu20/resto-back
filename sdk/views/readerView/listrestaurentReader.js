@@ -1,11 +1,28 @@
 const { ActionGridView } = require('@numerum-tech/cmsdk');
 const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
-const listrestaurentMenu = new ActionGridView('restaurent-list', 'Nos restaurents')
-    .setColumns(3)
-    .setSpacing(18)
-    .addAction('1', 'Chez Nana', 'Restaurant africain traditionnel', getOptimizedImageUrl('https://resto-back-xazy.onrender.com/assets/resto1.jpg', { width: 300 }))
-    .addAction('2', 'Chez Bordille', 'Spécialités locales et grillades', getOptimizedImageUrl('https://resto-back-xazy.onrender.com/assets/resto2.jpg', { width: 300 }))
-    .addAction('3', 'Chez Manon', 'Cuisine raffinée et poissons frais', getOptimizedImageUrl('https://resto-back-xazy.onrender.com/assets/resto3.jpg', { width: 300 }));
+/**
+ * Génère la vue de la liste des restaurants de manière dynamique.
+ * @param {Array} restaurants - Liste des restaurants provenant de la base de données.
+ * @returns {ActionGridView} La vue formatée pour le SDK.
+ */
+const createRestaurantsList = (restaurants) => {
+    const list = new ActionGridView('restaurent-list', 'Nos restaurants')
+        .setColumns(3)
+        .setSpacing(18);
 
-module.exports = { listrestaurentMenu }
+    if (restaurants && restaurants.length > 0) {
+        restaurants.forEach(resto => {
+            list.addAction(
+                resto._id.toString(),
+                resto.name,
+                resto.address || 'Découvrez nos saveurs',
+                getOptimizedImageUrl(resto.image, { width: 300 })
+            );
+        });
+    }
+
+    return list;
+};
+
+module.exports = { createRestaurantsList };
