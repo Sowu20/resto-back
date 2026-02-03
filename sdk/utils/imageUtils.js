@@ -4,6 +4,7 @@
  */
 
 const BASE_URL = 'https://resto-back-xazy.onrender.com';
+const DEFAULT_IMAGE_URL = `${BASE_URL}/assets/Restaurant.jpg`;
 
 /**
  * Génère une URL d'image optimisée.
@@ -16,7 +17,8 @@ const BASE_URL = 'https://resto-back-xazy.onrender.com';
  * @returns {string} L'URL optimisée.
  */
 const getOptimizedImageUrl = (url, options = {}) => {
-    if (!url) return '';
+    // Si pas d'URL fournie, utiliser l'image par défaut
+    if (!url) return DEFAULT_IMAGE_URL;
 
     const { width, height, quality = 80 } = options;
 
