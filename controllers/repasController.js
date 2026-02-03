@@ -83,7 +83,7 @@ exports.getRepasByCategorie = async (req, res) => {
 
     const repas = await Repas.find({
       categorie: req.params.categorieId,
-      restaurent: req.user.restaurent
+      resturent: req.user.restaurent
     });
 
     return res.status(200).json(repas);
