@@ -10,4 +10,5 @@ router.get('/repas/:id', auth, repasController.detailRepas);
 router.put('/repas/:id', auth, repasController.updateRepas);
 router.delete('/repas/:id', auth, repasController.deleteMenu);
 router.get('/repas/categorie/:categorieId/repas', auth, role(['restaurant','Admin']), repasController.getRepasByCategorie);
+
 module.exports = router;
