@@ -11,7 +11,7 @@ const catSchema = new mongoose.Schema({
     isActive: {
         type: Boolean
     },
-    resturent: {
+    restaurent: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Restaurent',
         required: true
