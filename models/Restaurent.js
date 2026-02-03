@@ -21,6 +21,9 @@ const restaurentSchema = new mongoose.Schema({
         enum: ['Ouvert', 'Fermé'],
         default: 'Ouvert'
     },
+    image: {
+        type: String
+    },
     location: {
         type: {
             type: String,
