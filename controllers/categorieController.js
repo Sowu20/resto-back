@@ -77,3 +77,20 @@ exports.deleteCategorie = async(req, res) => {
         });
     }
 };
+
+exports.getCategorieMenu = async(req, res) => {
+    try {
+        const categories = await Categorie.find({
+            menu: req.params.menuId,
+            restaurent: req.user.restaurent
+        });
+
+        return res.status(200).json(
+            categories
+        );
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
