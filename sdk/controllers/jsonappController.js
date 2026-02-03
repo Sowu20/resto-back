@@ -1,8 +1,9 @@
 const { mainMenu } = require('../views/menuView/mainMenu');
 const { registerForm } = require('../views/formView/registerForm');
 const { userReader } = require('../views/readerView/reader');
-const { listrestaurentMenu } = require('../views/readerView/listrestaurentReader');
+const { createRestaurantsList } = require('../views/readerView/listrestaurentReader');
 const { createRestaurantDetailReader } = require('../views/readerView/restaurentDetailReader');
+const Restaurent = require('../../models/Restaurent');
 const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
@@ -24,20 +25,34 @@ const getReader = (req, res) => {
     res.json(userReader.toJSON());
 };
 
-const Restaurents = (req, res) => {
-    res.json(listrestaurentMenu.toJSON());
+const Restaurents = async (req, res) => {
+    try {
+        const restaurants = await Restaurent.find();
+        const reader = createRestaurantsList(restaurants);
+        res.json(reader.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur Restaurents:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des restaurants' });
+    }
 };
 
-const RestaurentDetail = (req, res) => {
-    const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
+const RestaurentDetail = async (req, res) => {
+    try {
+        const restaurantId = req.params.id;
+        console.log('🔍 Chercher restaurant ID:', restaurantId);
+        const restaurant = await Restaurent.findById(restaurantId);
 
-    const reader = createRestaurantDetailReader(restaurantId);
+        if (!restaurant) {
+            console.log('⚠️ Restaurant non trouvé:', restaurantId);
+            return res.status(404).json({ error: 'Restaurant non trouvé' });
+        }
 
-    if (!reader) {
-        return res.status(404).json({ error: 'Restaurant non trouvé' });
+        const reader = createRestaurantDetailReader(restaurant);
+        res.json(reader.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur RestaurentDetail:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération du détail du restaurant', details: error.message });
     }
-
-    res.json(reader.toJSON());
 };
 
 const Menu = (req, res) => {
