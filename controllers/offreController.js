@@ -8,20 +8,24 @@ exports.createOffre = async(req, res) => {
             offre
         });
     } catch (error) {
-        return res.status(404).json({
+        return res.status(500).json({
             message: error.message
         });
     }
 };
 
 exports.listOffre = async(req, res) => {
-    const offres = await Offre.find().populate('restaurent', 'repas');
+    const offres = await Offre.find()
+        .populate('restaurent')
+        .populate('repas');
     res.json(offres);
 };
 
 exports.detailOffre = async(req, res) => {
     try {
-        const offre = await Offre.findById(req.params.id).populate('restaurent', 'repas');
+        const offre = await Offre.findById(req.params.id)
+            .populate('restaurent')
+            .populate('repas');
         if (!offre) {
             return res.status(404).json({
                 message: 'Offre introuvable'
@@ -29,8 +33,8 @@ exports.detailOffre = async(req, res) => {
         };
         res.json(offre);
     } catch (error) {
-        return res.status(400).json({
-            message: 'ID invalide'
+        return res.status(500).json({
+            message: error.message
         });
     }
 };
@@ -52,8 +56,8 @@ exports.updateOffre = async(req, res) => {
             offre
         });
     } catch (error) {
-        return res.status(400).json({
-            message: 'ID invalide'
+        return res.status(500).json({
+            message: error.message
         });
     }
 };
@@ -65,8 +69,40 @@ exports.deleteOffre = async(req, res) => {
             message: 'Offre supprimée avec succès'
         });
     } catch (error) {
-        return res.status(400).json({
-            message: 'ID invalide'
+        return res.status(500).json({
+            message: error.message
         });
     }
 };
+
+exports.getOffreByRestaurent = async(req, res) => {
+    try {
+        const offres = await Offre.find({
+            restaurent: req.params.restaurentId
+        }).populate('repas');
+
+        return res.status(200).json({
+            offres
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+exports.getOffreByRepas = async(req, res) => {
+    try {
+        const offres = await Offre.find({
+            repas: req.params.repasId
+        });
+
+        return res.status(200).json({
+            offres
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
