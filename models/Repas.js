@@ -16,6 +16,9 @@ const repasSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    image: {
+        type: String
+    },
     menu: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Menu',
