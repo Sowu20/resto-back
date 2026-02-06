@@ -55,17 +55,28 @@ const RestaurentDetail = async (req, res) => {
     }
 };
 
-const Menu = (req, res) => {
-    const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
+const Menu = async (req, res) => {
+    try {
+        const restaurantId = req.params.id;
+        const MenuModel = require('../../models/Menu');
 
-    // Correction : Utilise createMenusGrid au lieu de createMenusReader
-    const reader = createMenusGrid(restaurantId);
+        // Récupérer les menus actifs du restaurant depuis MongoDB
+        const menus = await MenuModel.find({
+            restaurent: restaurantId,
+            isActive: true
+        });
 
-    if (!reader) {
-        return res.status(404).json({ error: 'Restaurant non trouvé' });
+        const reader = createMenusGrid(restaurantId, menus);
+
+        if (!reader) {
+            return res.status(404).json({ error: 'Aucun menu trouvé' });
+        }
+
+        res.json(reader);
+    } catch (error) {
+        console.error('❌ Erreur Menu:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des menus' });
     }
-
-    res.json(reader);
 };
 
 //fonction pour les détails d'un menu
@@ -115,53 +126,71 @@ const getMenuDetails = (req, res) => {
     res.json(menuDetail);
 };
 
-const Repas = (req, res) => {
-    const restaurantId = req.params.id;  // Récupère l'ID depuis l'URL
+const Repas = async (req, res) => {
+    try {
+        const restaurantId = req.params.id;
+        const RepasModel = require('../../models/Repas');
 
-    const reader = createRepasReader(restaurantId);
+        // Récupérer les repas disponibles du restaurant depuis MongoDB
+        const repas = await RepasModel.find({
+            restaurent: restaurantId,
+            isAvaible: true
+        });
 
-    if (!reader) {
-        return res.status(404).json({ error: 'Restaurant non trouvé' });
+        const reader = createRepasReader(restaurantId, repas);
+
+        if (!reader) {
+            return res.status(404).json({ error: 'Aucun repas disponible' });
+        }
+
+        res.json(reader);
+    } catch (error) {
+        console.error('❌ Erreur Repas:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des repas' });
     }
-
-    res.json(reader);
 };
 
-const getRepasDetails = (req, res) => {
-    const { restaurantId, mealId } = req.params;
-    const reader = createRepasDetailReader(restaurantId, mealId);
+const getRepasDetails = async (req, res) => {
+    try {
+        const { restaurantId, mealId } = req.params;
+        const RepasModel = require('../../models/Repas');
 
-    if (!reader) {
-        return res.status(404).json({ error: 'Repas non trouvé' });
+        const repas = await RepasModel.findById(mealId);
+
+        if (!repas) {
+            return res.status(404).json({ error: 'Repas non trouvé' });
+        }
+
+        const reader = createRepasDetailReader(restaurantId, repas);
+        return res.json(reader.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur getRepasDetails:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération du repas' });
     }
-
-    return res.json(reader.toJSON());
 };
 
-//Appel au formulaire
-const getOrderForm = (req, res) => {
-    const { restaurantId, mealId } = req.params;
+const getOrderForm = async (req, res) => {
+    try {
+        const { restaurantId, mealId } = req.params;
+        const RepasModel = require('../../models/Repas');
 
-    // Pour récupérer les infos du plat, on utilise une fonction helper (à ajouter dans repasReader)
-    // ou on pourrait importer les données directement.
-    // Pour simplifier ici, on va supposer qu'on a besoin d'importer platsData ou un helper.
-    // Ajoutons un helper dans repasReader.js d'abord.
+        const repas = await RepasModel.findById(mealId);
 
-    // Temporaire: appelons createRepasDetailReader pour avoir le CardView et extraire le titre/prix?
-    // Un peu bête. Mieux vaut modifier repasReader.js pour exporter une fonction getMealInfo.
+        if (!repas) {
+            return res.status(404).json({ error: 'Repas non trouvé' });
+        }
 
-    // Approche : On va modifer repasReader.js dans la foulée pour exporter 'getMealInfo'.
-
-    // Supposons que getMealInfo existe (je vais l'ajouter juste après).
-    const { getMealData } = require('../views/readerView/repasReader');
-    const meal = getMealData(restaurantId, mealId);
-
-    if (!meal) {
-        return res.status(404).json({ error: 'Repas non trouvé pour commande' });
+        const form = createOrderForm(
+            repas.name,
+            `${repas.price} FCFA`,
+            restaurantId,
+            mealId
+        );
+        res.json(form.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur getOrderForm:', error);
+        res.status(500).json({ error: 'Erreur lors de la création du formulaire' });
     }
-
-    const form = createOrderForm(meal.nom, meal.price, restaurantId, mealId);
-    res.json(form.toJSON());
 };
 
 //Appel au message de confirmation de commande
@@ -187,36 +216,65 @@ const getOrderForm = (req, res) => {
 //     return res.json(successMessage.toJSON());
 // };
 
-// Nouvelle fonction pour afficher le résumé (Preview)
-const previewOrder = (req, res) => {
+// Nouvelle fonction pour afficher le résumé (Preview) et créer la commande
+const previewOrder = async (req, res) => {
     try {
         const { restaurantId, mealId } = req.params;
         const orderData = req.body;
+        const RepasModel = require('../../models/Repas');
+        const CommandeModel = require('../../models/Commande');
 
-        console.log('📦 =========== PRÉVISUALISATION COMMANDE ===========');
+        console.log('📦 =========== CRÉATION COMMANDE ===========');
         console.log('📍 Body reçu:', JSON.stringify(req.body, null, 2));
 
-        // Récupérer les infos du plat pour le résumé
-        const meal = getMealData(restaurantId, mealId);
-        const mealName = meal ? meal.nom : 'Plat inconnu';
-        const price = meal ? meal.price : 'Prix inconnu';
+        // Récupérer le repas depuis la BD
+        const repas = await RepasModel.findById(mealId);
+        if (!repas) {
+            return res.status(404).json({ error: 'Repas non trouvé' });
+        }
 
+        // Générer un numéro de commande unique
+        const orderNumber = `CMD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+        // Créer la commande dans MongoDB
+        const newOrder = await CommandeModel.create({
+            order_number: orderNumber,
+            customer_name: orderData.customer_name,
+            customer_phone: orderData.customer_phone,
+            payment_method: orderData.payement_method,
+            items: [{
+                repas: mealId,
+                nom_repas: repas.name,
+                prix_unitaire: repas.price,
+                quantite: 1,
+                total: repas.price
+            }],
+            total_amount: repas.price,
+            status: 'en_attente',
+            payment_status: 'en_attente',
+            restaurent: restaurantId,
+            table: '507f1f77bcf86cd799439011' // ID de table par défaut (à adapter selon votre logique)
+        });
+
+        console.log('✅ Commande créée:', newOrder._id);
+
+        // Afficher le résumé avec bouton de paiement
         const summaryView = createOrderSummaryView(
             orderData.customer_name,
             orderData.customer_phone,
-            mealName,
-            price,
+            repas.name,
+            `${repas.price} FCFA`,
             restaurantId,
-            mealId
+            mealId,
+            newOrder._id.toString()
         );
 
         return res.json(summaryView.toJSON());
     } catch (error) {
         console.error('❌ Erreur dans previewOrder:', error);
         return res.status(500).json({
-            error: 'Erreur interne lors de la prévisualisation',
-            details: error.message,
-            stack: error.stack
+            error: 'Erreur lors de la création de la commande',
+            details: error.message
         });
     }
 };
@@ -231,4 +289,76 @@ const getAboutView = (req, res) => {
     res.json(aboutView.toJSON());
 };
 
-module.exports = { HomeScreen, RegisterForm, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, previewOrder, getScanView, getAboutView };
+// Fonction pour afficher l'interface de paiement
+const getPaymentForm = async (req, res) => {
+    try {
+        const { restaurantId, orderId } = req.params;
+        const CommandeModel = require('../../models/Commande');
+
+        const order = await CommandeModel.findById(orderId);
+
+        if (!order) {
+            return res.status(404).json({ error: 'Commande non trouvée' });
+        }
+
+        const { createPaymentView } = require('../views/formView/paymentForm');
+        const paymentView = createPaymentView(order, restaurantId);
+
+        res.json(paymentView.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur getPaymentForm:', error);
+        res.status(500).json({ error: 'Erreur lors de l\'affichage du paiement' });
+    }
+};
+
+// Fonction pour confirmer le paiement
+const confirmPayment = async (req, res) => {
+    try {
+        const { restaurantId, orderId } = req.params;
+        const CommandeModel = require('../../models/Commande');
+
+        // Mettre à jour le statut de paiement
+        const order = await CommandeModel.findByIdAndUpdate(
+            orderId,
+            {
+                payment_status: 'paye',
+                status: 'en_attente' // Commande en attente de préparation
+            },
+            { new: true }
+        );
+
+        if (!order) {
+            return res.status(404).json({ error: 'Commande non trouvée' });
+        }
+
+        // Afficher la confirmation
+        const confirmationView = createOrderConfirmationView(
+            order.customer_name,
+            order.customer_phone,
+            order.order_number
+        );
+
+        res.json(confirmationView.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur confirmPayment:', error);
+        res.status(500).json({ error: 'Erreur lors de la confirmation du paiement' });
+    }
+};
+
+module.exports = {
+    HomeScreen,
+    RegisterForm,
+    getReader,
+    Restaurents,
+    RestaurentDetail,
+    Menu,
+    Repas,
+    getMenuDetails,
+    getRepasDetails,
+    getOrderForm,
+    previewOrder,
+    getScanView,
+    getAboutView,
+    getPaymentForm,
+    confirmPayment
+};
