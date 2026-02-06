@@ -44,6 +44,8 @@ const repasRoute = require('./routes/repasRoute');
 const cmdeRoute = require('./routes/commandeRoute');
 const categorieRoute = require('./routes/categorieRoute');
 const tableRoute = require('./routes/tableRoute');
+const offreRoute = require('./routes/offreRoute');
+const promotionRoute = require('./routes/promotionRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
 const imageController = require('./controllers/imageController');
 
@@ -55,6 +57,8 @@ app.use('/api', repasRoute);
 app.use('/api', cmdeRoute);
 app.use('/api', categorieRoute);
 app.use('/api', tableRoute);
+app.use('/api', offreRoute);
+app.use('/api', promotionRoute);
 app.use(jsonappRoute);
 
 app.use('/doc-swagger', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
