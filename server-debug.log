@@ -70,3 +70,5 @@
 [2026-02-05T16:26:06.319Z] GET /mobile/restaurents/6980cb06fcb2c9d5b28b8a3c/repas
 [2026-02-05T16:26:30.521Z] GET /mobile/restaurents/6980cb06fcb2c9d5b28b8a3c/repas/695b9c861f7ca693974165a0
 [2026-02-05T16:30:15.085Z] GET /mobile/restaurents/6980cb06fcb2c9d5b28b8a3c/repas/695b9c861f7ca693974165a0/order
+[2026-02-06T06:35:44.446Z] GET /mobile/restaurents/6980cb06fcb2c9d5b28b8a3c/menu
+[2026-02-06T06:36:04.164Z] GET /mobile/restaurents/6980cb06fcb2c9d5b28b8a3c/menu/694d75c18287a713833cf2ab

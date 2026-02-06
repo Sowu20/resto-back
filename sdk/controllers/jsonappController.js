@@ -80,50 +80,56 @@ const Menu = async (req, res) => {
 };
 
 //fonction pour les détails d'un menu
-const getMenuDetails = (req, res) => {
-    // ⭐⭐⭐ LOGS DE DEBUG ⭐⭐⭐
-    console.log('🔍 =========== DEBUG getMenuDetails ===========');
-    console.log('📍 URL complète:', req.originalUrl);
-    console.log('📍 Méthode HTTP:', req.method);
-    console.log('📍 Params reçus:', req.params);
-    console.log('📍 Query params:', req.query);
-    console.log('📍 Headers:', {
-        'user-agent': req.headers['user-agent'],
-        'x-app-version': req.headers['x-app-version'] || 'non spécifié'
-    });
-    console.log('📍 Timestamp:', new Date().toISOString());
-    console.log('🔍 ===========================================');
+const getMenuDetails = async (req, res) => {
+    try {
+        // ⭐⭐⭐ LOGS DE DEBUG ⭐⭐⭐
+        console.log('🔍 =========== DEBUG getMenuDetails ===========');
+        console.log('📍 Params reçus:', req.params);
 
-    const { restaurantId, menuId } = req.params;
+        const { restaurantId, menuId } = req.params;
+        const MenuModel = require('../../models/Menu');
+        const RepasModel = require('../../models/Repas');
 
-    // Log supplémentaire pour voir ce qu'on extrait
-    console.log('📋 Paramètres extraits:', { restaurantId, menuId });
+        // 1. Récupérer le menu
+        const menu = await MenuModel.findById(menuId);
 
-    // Détermine l'ID à utiliser
-    const actualMenuId = menuId;
-    console.log('🎯 ID du menu à chercher:', actualMenuId);
+        if (!menu) {
+            console.log('❌ Menu non trouvé:', menuId);
+            return res.status(404).json({
+                viewId: 'menu-not-found',
+                viewTitle: 'Menu non trouvé',
+                viewType: 'message',
+                intro: 'Erreur',
+                body: `Le menu demandé n'existe pas.`,
+                severity: 'error',
+                primaryAction: {
+                    label: 'Retour aux menus',
+                    type: 'GET',
+                    href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
+                }
+            });
+        }
 
-    const menuDetail = createMenuDetailView(actualMenuId);
+        // 2. Récupérer les repas associés à ce menu
+        // On suppose que le modèle Repas a un champ 'menu' qui référence le Menu
+        const dishes = await RepasModel.find({
+            menu: menuId,
+            isAvaible: true // Optionnel : ne montrer que les plats dispos
+        });
 
-    if (!menuDetail) {
-        console.log('❌ Menu non trouvé:', actualMenuId);
-        return res.status(404).json({
-            viewId: 'menu-not-found',
-            viewTitle: 'Menu non trouvé',
-            viewType: 'message',
-            intro: 'Erreur',
-            body: `Menu ${actualMenuId} non trouvé.`,
-            severity: 'error',
-            primaryAction: {
-                label: 'Retour aux menus',
-                type: 'GET',
-                href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
-            }
+        console.log(`✅ Menu trouvé: ${menu.name}, Plats trouvés: ${dishes.length}`);
+
+        // 3. Générer la vue via le Reader mis à jour
+        const menuDetail = createMenuDetailView(menu, dishes);
+
+        res.json(menuDetail);
+    } catch (error) {
+        console.error('❌ Erreur getMenuDetails:', error);
+        res.status(500).json({
+            error: 'Erreur lors de la récupération du détail du menu',
+            details: error.message
         });
     }
-
-    console.log('✅ Menu trouvé, envoi de la vue');
-    res.json(menuDetail);
 };
 
 const Repas = async (req, res) => {
