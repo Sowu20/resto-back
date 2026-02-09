@@ -1,11 +1,18 @@
 const express = require('express');
-const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder, getScanView, getAboutView } = require('../controllers/jsonappController');
+const { RegisterForm, HomeScreen, getReader, Restaurents, RestaurentDetail, Menu, Repas, getMenuDetails, getRepasDetails, getOrderForm, submitOrder, previewOrder, getScanView, getAboutView, getPaymentForm, confirmPayment } = require('../controllers/jsonappController');
 
 const router = express.Router();
 
 router.get('/mobile', HomeScreen);
 router.get('/mobile/forms', RegisterForm);
 router.get('/mobile/readers', getReader);
+// Route pour le scanner QR
+router.get('/mobile/scan-qr', getScanView);
+
+// Route pour À propos
+router.get('/mobile/about', getAboutView);
+
+// Route pour les Restaurants
 router.get('/mobile/restaurents', Restaurents);
 router.get('/mobile/restaurents/:id', RestaurentDetail);
 router.get('/mobile/restaurents/:id/menu', Menu);
@@ -24,10 +31,10 @@ router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm
 // NOUVELLE Route pour la prévisualisation (Résumé)
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder);
 
-// Route pour le scanner QR
-router.get('/mobile/scan-qr', getScanView);
 
-// Route pour À propos
-router.get('/mobile/about', getAboutView);
+
+// Routes pour le paiement
+router.get('/mobile/restaurents/:restaurantId/orders/:orderId/payment', getPaymentForm);
+router.post('/mobile/restaurents/:restaurantId/orders/:orderId/confirm-payment', confirmPayment);
 
 module.exports = router;

@@ -1,58 +1,27 @@
 const { ActionGridView, CardView } = require('@numerum-tech/cmsdk');
 const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
-const platsData = {
-  '1': {
-    nom: 'Chez Nana',
-    plats: [
-      { id: 'riz', nom: 'Riz sauce arachide', image: 'https://resto-back-xazy.onrender.com/assets/riz1.jgp', description: 'Un délicieux riz accompagné d\'une sauce onctueuse à l\'arachide.', price: '2000 FCFA' },
-      { id: 'fufu', nom: 'Fufu sauce graine', image: 'https://resto-back-xazy.onrender.com/assets/fufu.jpg', description: 'Boule de fufu moelleuse avec une sauce graine riche en saveurs.', price: '2500 FCFA' },
-      { id: 'pate', nom: 'Pâte + sauce tomate', image: 'https://resto-back-xazy.onrender.com/assets/pate.jpg', description: 'Pâte traditionnelle servie avec une sauce tomate épicée.', price: '1500 FCFA' },
-      { id: 'poulet', nom: 'Poulet braisé', image: 'https://resto-back-xazy.onrender.com/assets/poulet.jpg', description: 'Quart de poulet mariné et braisé au charbon.', price: '3000 FCFA' }
-    ]
-  },
-  '2': {
-    nom: 'Chez Bordille',
-    plats: [
-      { id: 'attieke', nom: 'Attiéké poisson', image: 'https://resto-back-xazy.onrender.com/assets/attieke.jpg', description: 'Semoule de manioc avec poisson frit et légumes.', price: '2500 FCFA' },
-      { id: 'garba', nom: 'Garba (attiéké + thon)', image: 'https://resto-back-xazy.onrender.com/assets/garba.jpg', description: 'Le classique ivoirien : attiéké et thon frit.', price: '1500 FCFA' },
-      { id: 'alloco', nom: 'Alloco plantin', image: 'https://resto-back-xazy.onrender.com/assets/alloco.jpg', description: 'Bananes plantains frites, dorées et sucrées.', price: '1000 FCFA' },
-      { id: 'poisson', nom: 'Poisson grillé', image: 'https://resto-back-xazy.onrender.com/assets/poisson.jpg', description: 'Poisson frais grillé aux épices locales.', price: '4000 FCFA' }
-    ]
-  },
-  '3': {
-    nom: 'Chez Manon',
-    plats: [
-      { id: 'riz-2', nom: 'Riz gras', image: 'https://resto-back-xazy.onrender.com/assets/riz2.jpg', description: 'Riz cuit dans un bouillon de viande et légumes.', price: '2000 FCFA' },
-      { id: 'sauce', nom: 'Sauce claire + igname', image: 'https://resto-back-xazy.onrender.com/assets/sauce.jpg', description: 'Sauce légère aux épices avec morceaux d\'igname.', price: '2500 FCFA' },
-      { id: 'couscous', nom: 'Couscous de manioc', image: 'https://resto-back-xazy.onrender.com/assets/couscous.jpg', description: 'Couscous fin à base de manioc.', price: '1500 FCFA' }
-    ]
-  }
-};
 
-const createRepasReader = (restaurantId) => {
-  const data = platsData[restaurantId];
-
-  if (!data) {
+const createRepasReader = (restaurantId, repas = []) => {
+  if (!repas || repas.length === 0) {
     return null;
   }
 
-  const grid = new ActionGridView(`raps-grid-${restaurantId}`, `Repas - ${data.nom}`)
-    .setIntro('Sélectionnz un plats')
+  const grid = new ActionGridView(`repas-grid-${restaurantId}`, 'Nos Repas')
+    .setIntro('Sélectionnez un plat')
     .setColumns(3)
     .setSpacing(16);
 
   // Ajouter chaque plat comme une action
-  data.plats.forEach(plats => {
+  repas.forEach(plat => {
     grid.addAction(
-      plats.id,
-      plats.nom,
-      plats.description || 'Description du plat',
-      getOptimizedImageUrl(plats.image, { width: 300 }),
+      plat._id.toString(),
+      plat.name,
+      plat.description || 'Délicieux plat',
+      plat.image ? getOptimizedImageUrl(plat.image, { width: 300 }) : undefined,
       {
         type: 'GET',
-        // Utilisation de chemin relatif pour la compatibilité 
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${plats.id}`
+        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${plat._id}`
       }
     );
   });
@@ -60,30 +29,24 @@ const createRepasReader = (restaurantId) => {
   return grid.toJSON();
 };
 
-const createRepasDetailReader = (restaurantId, repasId) => {
-  const data = platsData[restaurantId];
-  if (!data) return null;
+const createRepasDetailReader = (restaurantId, repas) => {
+  if (!repas) return null;
 
-  // Trouver le plat spécifique dans la liste
-  const plat = data.plats.find(p => p.id === repasId);
-  if (!plat) return null;
-
-  // Créer la CardView de commande
-  return new CardView(`repas-detail-${repasId}`, plat.nom)
+  const card = new CardView(`repas-detail-${repas._id}`, repas.name)
     .setSubtitle('Détails du repas')
-    .setImage(getOptimizedImageUrl(plat.image, { width: 600 }))
-    .setDescription(plat.description || 'Succulent plat préparé avec soin.')
-    .addStat('Prix', plat.price || 'Prix sur demande')
-    .addAction('🛒 Commander', 'GET', {
-      href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${repasId}/order`,
-    });
+    .setDescription(repas.description || 'Succulent plat préparé avec soin.')
+    .addStat('Prix', `${repas.price} FCFA`);
+
+  // Ajouter l'image seulement si elle existe
+  if (repas.image) {
+    card.setImage(getOptimizedImageUrl(repas.image, { width: 600 }));
+  }
+
+  card.addAction('🛒 Commander', 'GET', {
+    href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${repas._id}/order`,
+  });
+
+  return card;
 };
 
-//Recuperation des données des plats
-const getMealData = (restaurantId, mealId) => {
-  const data = platsData[restaurantId];
-  if (!data) return null;
-  return data.plats.find(p => p.id === mealId);
-};
-
-module.exports = { createRepasReader, createRepasDetailReader, getMealData };
+module.exports = { createRepasReader, createRepasDetailReader };
