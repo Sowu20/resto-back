@@ -38,10 +38,18 @@ exports.getlistCommande = async (req, res) => {
 
         const filter = {};
 
-        if (status) filter.status = status;
-        if (payment_status) filter.payment_status = payment_status;
-        if (payment_method) filter.payment_method = payment_method;
-        if (restaurent) filter.restaurent = restaurent;
+        if (status) {
+            filter.status = status
+        };
+        if (payment_status) {
+            filter.payment_status = payment_status
+        };
+        if (payment_method) {
+            filter.payment_method = payment_method
+        };
+        if (restaurent) {
+            filter.restaurent = restaurent
+        };
 
         if (period === '30days') {
             filter.createdAt = {
