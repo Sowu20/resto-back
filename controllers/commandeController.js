@@ -114,29 +114,29 @@ exports.getStats = async(req, res) => {
     try {
         const { restaurentId } = req.params;
 
-        const totalCommande = await Commande.countDocuments({
+        const totalOrders = await Commande.countDocuments({
             restaurent: restaurentId
         });
 
-        const totalVente = await Commande.aggregate([
+        const totalRevenue = await Commande.aggregate([
             { $match: { restaurent: restaurentId, payment_status: 'paye' } },
             { $group: { _id: null, total: { $sum: '$total_amount' } } }
         ])
 
-        const commandeMoyenne = await Commande.aggregate([
+        const averageOrderValue = await Commande.aggregate([
             { $match: { restaurent: restaurentId, payment_status: 'paye' } },
             { $group: { _id: null, avg: { $avg: '$total_amount' } } }
         ]);
 
-        const clients = await Commande.distinct('customer_phone', {
+        const totalCustomers = await Commande.distinct('customer_phone', {
             restaurent: restaurentId
         });
 
         res.json({
-           total_commandes: totalCommande,
-           chiffre_affaires: totalVente[0]?.total || 0,
-           panier_moyenne: commandeMoyenne[0]?.avg || 0,
-           clients: clients.length
+           total_commandes: totalOrders,
+           chiffre_affaires: totalRevenue[0]?.total || 0,
+           panier_moyenne: averageOrderValue[0]?.avg || 0,
+           clients: totalCustomers.length
         });
     } catch (error) {
         return res.status(500).json({
