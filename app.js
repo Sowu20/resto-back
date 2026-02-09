@@ -47,6 +47,7 @@ const tableRoute = require('./routes/tableRoute');
 const offreRoute = require('./routes/offreRoute');
 const promotionRoute = require('./routes/promotionRoute');
 const annonceRoute = require('./routes/annonceRoute');
+const messageRoute = require('./routes/messageRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
 const imageController = require('./controllers/imageController');
 
@@ -61,6 +62,7 @@ app.use('/api', tableRoute);
 app.use('/api', offreRoute);
 app.use('/api', promotionRoute);
 app.use('/api', annonceRoute);
+app.use('/api', messageRoute);
 app.use(jsonappRoute);
 
 app.use('/doc-swagger', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
