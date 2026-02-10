@@ -108,7 +108,7 @@ exports.RevenuChart = async(req, res) => {
         {
                 $group: {
                     _id: { $dayOfMonth: "$createdAt" },
-                    total: { $sum: "total_amount" }
+                    total: { $sum: "$total_amount" }
                 }   
         },
         { $sort: { _id: 1 } } 
