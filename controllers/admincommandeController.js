@@ -44,7 +44,7 @@ exports.StatOrders = async(req, res) => {
         ).size;
 
         return res.status(200).json({
-            total_commandes: totalOrders,
+            totalOrders,
             totalRevenue,
             averageOrderValue,
             totalCustomers
