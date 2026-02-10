@@ -34,11 +34,10 @@ exports.StatOrders = async (req, res) => {
             filter.restaurent = req.query.restaurent;
         }
 
-        if (req.user.role === 'restaurent') {
-            filter.restaurent = req.user.restaurent;
-        }
-
-        const orders = await Commande.find(filter);
+        const orders = await Commande.find({
+            ...filter,
+            status: 'livres'
+        });
         const totalOrders = orders.length;
         const livres = orders.filter(c => c.status === 'livres');
         const totalRevenue = livres.reduce(
