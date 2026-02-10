@@ -1,14 +1,24 @@
 const Commande = require('../models/Commande');
 
+const Filter = (req) => {
+    const filter = {};
+    if (req.user.role === 'Admin' && req.query.restaurent) {
+        filter.restaurent = req.query.restaurent;
+    } else if (req.user.role !== 'Admin') {
+        filter.restaurent = req.user.restaurent;
+    }
+    return filter;
+};
+
 exports.CommandesStats = async(req, res) => {
     try {
-        const filter = {};
+        const filter = Filter(req);
 
         const [total, en_attente, livres, non_paye] = await Promise.all([
-            Commande.countDocuments(),
-            Commande.countDocuments({ status: 'en_attente' }),
-            Commande.countDocuments({ status: 'livres' }),
-            Commande.countDocuments({ payment_status: 'non_paye' })
+            Commande.countDocuments(filter),
+            Commande.countDocuments({ ...filter, status: 'en_attente' }),
+            Commande.countDocuments({ ...filter, status: 'livres' }),
+            Commande.countDocuments({ ...filter, payment_status: 'non_paye' })
         ]);
 
         res.status(200).json({
@@ -27,40 +37,52 @@ exports.CommandesStats = async(req, res) => {
 
 exports.StatOrders = async (req, res) => {
     try {
-
         const filter = {};
-
-        if (req.user.role === 'admin' && req.query.restaurent) {
-            filter.restaurent = req.query.restaurent;
+        
+        if (req.user.role === 'Admin') {
+            if (req.query.restaurent) {
+                filter.restaurent = req.query.restaurent;
+            }
+        } else {
+            filter.restaurent = req.user.restaurent;
         }
 
-        const orders = await Commande.find({
-            ...filter,
-            status: 'livres'
-        });
-        const totalOrders = orders.length;
-        const livres = orders.filter(c => c.status === 'livres');
-        const totalRevenue = livres.reduce(
-            (acc, c) => acc + c.total_amount,
-            0
-        );
-        const averageOrderValue = livres.length
-            ? totalRevenue / livres.length
-            : 0;
-        const totalCustomers = new Set(
-            orders.map(c => c.customer_phone)
-        ).size;
+        // filter.status = 'livres';
+
+        const stats = await Commande.aggregate([
+            { $match: filter },
+            {
+                $group: {
+                    _id: null,
+                    totalOrders: { $sum: 1 },
+                    totalRevenue: { $sum: "$total_amount" },
+                    customers: { $addToSet: "$customer_phone" }
+                }
+            }
+        ]);
+
+        if (stats.length === 0) {
+            return res.status(200).json({
+                totalOrders: 0,
+                totalRevenue: 0,
+                averageOrderValue: 0,
+                totalCustomers: 0
+            });
+        }
+
+        const data = stats[0];
 
         return res.status(200).json({
-            totalOrders,
-            totalRevenue,
-            averageOrderValue,
-            totalCustomers
+            totalOrders: data.totalOrders,
+            totalRevenue: data.totalRevenue,
+            averageOrderValue: data.totalOrders > 0 ? data.totalRevenue / data.totalOrders : 0,
+            totalCustomers: data.customers.length
         });
 
     } catch (error) {
         return res.status(500).json({
-            message: error.message
+            message: "Erreur lors du calcul des statistiques de commandes",
+            error: error.message
         });
     }
 };
@@ -78,7 +100,7 @@ exports.listCommande = async (req, res) => {
             limit = 10
         } = req.query;
 
-        const filter = {};
+        const filter = Filter();
 
         if (status) {
             filter.status = status
@@ -92,6 +114,10 @@ exports.listCommande = async (req, res) => {
         if (restaurent) {
             filter.restaurent = restaurent
         };
+
+        if (req.user.role === 'Admin' && restaurent) {
+            filter.restaurent = restaurent;
+        }
 
         if (period === '30days') {
             filter.createdAt = {
@@ -131,37 +157,30 @@ exports.listCommande = async (req, res) => {
 
 exports.RevenuChart = async(req, res) => {
     try {
-        const filter = { 
-            status: 'livres'
-        };
-
-        if (req.query.restaurent) {
-            filter.restaurent = req.user.restaurent;
-        };
-
+        const filter = Filter(req);
+        filter.status = 'livres';
         const data = await Commande.aggregate([
-        { $match: filter },
-        {
+            { $match: filter },
+            {
                 $group: {
                     _id: { $dayOfMonth: "$createdAt" },
                     total: { $sum: "$total_amount" }
                 }   
-        },
-        { $sort: { _id: 1 } } 
+            },
+            { $sort: { _id: 1 } } 
         ]);
 
         return res.status(200).json(data);
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
+        return res.status(500).json({ 
+            message: error.message 
         });
     }
 };
 
 exports.RecentOrders = async(req, res) => {
     try {
-        const filter = {};
-
+        const filter = Filter(req);
         const commandes = await Commande.find(filter)
             .populate('restaurent', 'name')
             .sort({ createdAt: -1 })
@@ -169,8 +188,8 @@ exports.RecentOrders = async(req, res) => {
 
         return res.status(200).json(commandes);
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
+        return res.status(500).json({ 
+            message: error.message 
         });
     }
 };
