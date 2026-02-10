@@ -4,22 +4,18 @@ exports.CommandesStats = async(req, res) => {
     try {
         const filter = {};
 
-        if (req.query.restaurent) {
-            filter.restaurent = req.query.restaurent;
-        }
-
-        const [total, en_attente, livres, annules] = await Promise.all([
+        const [total, en_attente, livres, non_paye] = await Promise.all([
             Commande.countDocuments(),
             Commande.countDocuments({ status: 'en_attente' }),
             Commande.countDocuments({ status: 'livres' }),
-            Commande.countDocuments({ payment_status: 'annules' })
+            Commande.countDocuments({ payment_status: 'non_paye' })
         ]);
 
         res.status(200).json({
             total,
             en_attente,
             livres,
-            annules
+            non_paye
         });
     } catch (error) {
         return res.status(500).json({
@@ -27,7 +23,38 @@ exports.CommandesStats = async(req, res) => {
             error: error.message
         })
     }
-}; 
+};
+
+exports.StatOrders = async(req, res) => {
+    try {
+        const filter = {};
+        if (req.user.role === 'admin' && req.query.restaurent) {
+            filter.restaurent = req.user.restaurent;
+        };
+
+        const orders = await Commande.find(filter);
+        const totalOrders = orders.length;
+        const livres = orders.filter(c => c.status === 'livres');
+        const totalRevenue = livres.reduce((acc, c) => acc + c.total_amount, 0);
+        const averageOrderValue  = livres.length
+            ? chiffre_affaire / livres.length
+            : 0;
+        const totalCustomers  = new Set(
+            orders.map(c => c.customer_phone)
+        ).size;
+
+        return res.status(200).json({
+            total_commandes: totalOrders,
+            totalRevenue,
+            averageOrderValue,
+            totalCustomers
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
 
 exports.listCommande = async (req, res) => {
     try {
@@ -139,28 +166,31 @@ exports.RecentOrders = async(req, res) => {
     }
 };
 
-exports.totalCustomers = async(req, res) => {
+exports.topSellingMeals = async (req, res) => {
     try {
-        const filter = {};
 
-        const clients = await Commande.aggregate([
+        const filter = { status: 'livres' };
+
+        if (req.user.role === 'admin' && req.query.restaurent) {
+            filter.restaurent = req.query.restaurent;
+        }
+
+        const data = await Commande.aggregate([
             { $match: filter },
+            { $unwind: "$items" },
             {
                 $group: {
-                    _id: "$customer_phone",
-                    name: { $first: "$customer_name" },
-                    phone: { $first: "$customer_phone" },
-                    total_orders: { $sum: 1 },
-                    total_depense: { $sum: "$total_amount" }
+                    _id: "$items.nom_repas",
+                    total_vendus: { $sum: "$items.quantite" }
                 }
             },
-            { $sort: { total_depense: -1 } }
+            { $sort: { total_vendus: -1 } },
+            { $limit: 5 }
         ]);
 
-        return res.status(200).json(clients);
+        res.json(data);
+
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        res.status(500).json({ message: error.message });
     }
 };
