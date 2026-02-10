@@ -25,21 +25,30 @@ exports.CommandesStats = async(req, res) => {
     }
 };
 
-exports.StatOrders = async(req, res) => {
+exports.StatOrders = async (req, res) => {
     try {
+
         const filter = {};
+
         if (req.user.role === 'admin' && req.query.restaurent) {
+            filter.restaurent = req.query.restaurent;
+        }
+
+        if (req.user.role === 'restaurent') {
             filter.restaurent = req.user.restaurent;
-        };
+        }
 
         const orders = await Commande.find(filter);
         const totalOrders = orders.length;
         const livres = orders.filter(c => c.status === 'livres');
-        const totalRevenue = livres.reduce((acc, c) => acc + c.total_amount, 0);
-        const averageOrderValue  = livres.length
-            ? chiffre_affaire / livres.length
+        const totalRevenue = livres.reduce(
+            (acc, c) => acc + c.total_amount,
+            0
+        );
+        const averageOrderValue = livres.length
+            ? totalRevenue / livres.length
             : 0;
-        const totalCustomers  = new Set(
+        const totalCustomers = new Set(
             orders.map(c => c.customer_phone)
         ).size;
 
@@ -48,7 +57,8 @@ exports.StatOrders = async(req, res) => {
             totalRevenue,
             averageOrderValue,
             totalCustomers
-        })
+        });
+
     } catch (error) {
         return res.status(500).json({
             message: error.message
