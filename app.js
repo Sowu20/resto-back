@@ -37,21 +37,23 @@ mongoose.connect("mongodb+srv://sowukelly67:sowukelly@clusterresto.srmvdzb.mongo
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-const userRoute = require('./routes/userRoute');
-const restoRoute = require('./routes/restaurentRoute');
-const menuRoute = require('./routes/menuRoute');
-const repasRoute = require('./routes/repasRoute');
-const cmdeRoute = require('./routes/commandeRoute');
-const categorieRoute = require('./routes/categorieRoute');
-const tableRoute = require('./routes/tableRoute');
-const offreRoute = require('./routes/offreRoute');
-const promotionRoute = require('./routes/promotionRoute');
-const annonceRoute = require('./routes/annonceRoute');
-const messageRoute = require('./routes/messageRoute');
+const dashboardRoute = require('./routes/admin/dashboardRoute');
+const userRoute = require('./routes/restaurent/userRoute');
+const restoRoute = require('./routes/restaurent/restaurentRoute');
+const menuRoute = require('./routes/restaurent/menuRoute');
+const repasRoute = require('./routes/restaurent/repasRoute');
+const cmdeRoute = require('./routes/restaurent/commandeRoute');
+const categorieRoute = require('./routes/restaurent/categorieRoute');
+const tableRoute = require('./routes/restaurent/tableRoute');
+const offreRoute = require('./routes/restaurent/offreRoute');
+const promotionRoute = require('./routes/restaurent/promotionRoute');
+const annonceRoute = require('./routes/restaurent/annonceRoute');
+const messageRoute = require('./routes/restaurent/messageRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
-const imageController = require('./controllers/imageController');
+const imageController = require('./controllers/restaurent/imageController');
 
 app.get('/api/images/:filename', imageController.getOptimizedImage);
+app.use('/api', dashboardRoute);
 app.use('/api', userRoute);
 app.use('/api', restoRoute);
 app.use('/api', menuRoute);
