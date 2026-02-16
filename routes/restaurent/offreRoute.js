@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const offreController = require('../controllers/offreController');
-const auth = require('../middlewares/authmiddleware');
-const role = require('../middlewares/rolemiddleware');
+const auth = require('../../middlewares/authmiddleware');
+const role = require('../../middlewares/rolemiddleware');
 
 router.post('/offre', auth, role(['Admin', 'restaurent']), offreController.createOffre);
 router.get('/offre', auth, role(['Admin', 'restaurent']), offreController.listOffre);

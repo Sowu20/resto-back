@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const repasController = require('../controllers/repasController');
-const auth = require('../middlewares/authmiddleware');
-const role = require('../middlewares/rolemiddleware');
+const auth = require('../../middlewares/authmiddleware');
+const role = require('../../middlewares/rolemiddleware');
 
 router.post('/repas', auth, repasController.createRepas);
 router.get('/repas', auth, repasController.listRepas);

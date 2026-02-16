@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const restaurentController = require('../controllers/restaurentController');
 
-const auth = require('../middlewares/authmiddleware');
-const role = require('../middlewares/rolemiddleware');
-const check = require('../middlewares/checkrestaurentmiddleware');
+const auth = require('../../middlewares/authmiddleware');
+const role = require('../../middlewares/rolemiddleware');
+const check = require('../../middlewares/checkrestaurentmiddleware');
 
 router.post('/restaurent', auth, role(['restaurant', 'Admin']), restaurentController.createResto);
 router.get('/restaurent', restaurentController.listResto);

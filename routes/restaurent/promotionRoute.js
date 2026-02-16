@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const promotionController = require('../controllers/promotionController');
-const auth = require('../middlewares/authmiddleware');
-const role = require('../middlewares/rolemiddleware');
+const auth = require('../../middlewares/authmiddleware');
+const role = require('../../middlewares/rolemiddleware');
 
 router.post('/promotion', auth, role(['Admin', 'restaurent']), promotionController.createPromotion);
 router.get('/promotion', auth, role(['Admin', 'restaurent']), promotionController.listPromotion);

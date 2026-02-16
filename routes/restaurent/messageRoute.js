@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const messageController = require('../controllers/messageController');
-const auth = require('../middlewares/authmiddleware');
+const auth = require('../../middlewares/authmiddleware');
 
 router.post('/message', auth, messageController.addMessage);
 router.get('/message', auth, messageController.listMessage);

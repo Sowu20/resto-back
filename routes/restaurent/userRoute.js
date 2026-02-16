@@ -3,9 +3,9 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 
-const auth = require('../middlewares/authmiddleware');
-const role = require('../middlewares/rolemiddleware');
-const check = require('../middlewares/checkusermiddleware');
+const auth = require('../../middlewares/authmiddleware');
+const role = require('../../middlewares/rolemiddleware');
+const check = require('../../middlewares/checkusermiddleware');
 
 router.post('/register', authController.registerRestaurent);
 router.post('/admin/register', auth, role(['Admin']), authController.registerRestaurent);
