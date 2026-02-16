@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const menuController = require('../controllers/menuController');
+const menuController = require('../../controllers/restaurent/menuController');
 const auth = require('../../middlewares/authmiddleware');
 
 router.post('/menu', auth, menuController.createMenu);
