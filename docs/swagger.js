@@ -12,6 +12,11 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
+    servers: [
+        {
+            url: 'https://resto-back-xazy.onrender.com',
+        },
+    ],
     apis: ['./docs/*.js'],
 }
 

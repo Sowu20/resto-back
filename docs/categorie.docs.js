@@ -5,6 +5,7 @@
  *   description: Gestion des catégories de repas
  */
 
+
 /**
  * @swagger
  * /api/categorie:
@@ -24,14 +25,17 @@
  *         description: Catégorie créée avec succès
  *       400:
  *         description: Erreur de validation
+ *       401:
+ *         description: Non authentifié
  */
+
 
 /**
  * @swagger
  * /api/categorie:
  *   get:
  *     tags: [Categorie]
- *     summary: Lister toutes les catégories
+ *     summary: Liste des catégories
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -43,14 +47,17 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Categorie'
+ *       401:
+ *         description: Non authentifié
  */
+
 
 /**
  * @swagger
  * /api/categorie/{id}:
  *   get:
  *     tags: [Categorie]
- *     summary: Détails d’une catégorie
+ *     summary: Détail d'une catégorie
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -62,9 +69,14 @@
  *     responses:
  *       200:
  *         description: Catégorie trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Categorie'
  *       404:
  *         description: Catégorie introuvable
  */
+
 
 /**
  * @swagger
@@ -81,17 +93,17 @@
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Categorie'
  *     responses:
- *       201:
+ *       200:
  *         description: Catégorie modifiée avec succès
  *       404:
  *         description: Catégorie introuvable
  */
+
 
 /**
  * @swagger
@@ -109,7 +121,38 @@
  *           type: string
  *     responses:
  *       202:
- *         description: Catégorie supprimée avec succès
+ *         description: Catégorie supprimée
  *       400:
  *         description: ID invalide
+ */
+
+
+/**
+ * @swagger
+ * /api/categorie/menu/{menuId}/repas:
+ *   get:
+ *     tags: [Categorie]
+ *     summary: Liste des catégories par menu
+ *     description: Récupère les catégories d’un menu pour le restaurent connecté
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: menuId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste des catégories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Categorie'
+ *       401:
+ *         description: Non authentifié
+ *       403:
+ *         description: Accès refusé
  */

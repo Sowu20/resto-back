@@ -5,6 +5,7 @@
  *   description: Gestion des menus
  */
 
+
 /**
  * @swagger
  * /api/menu:
@@ -23,15 +24,16 @@
  *       201:
  *         description: Menu créé avec succès
  *       400:
- *         description: Erreur de validation
+ *         description: Erreur
  */
+
 
 /**
  * @swagger
  * /api/menu:
  *   get:
  *     tags: [Menu]
- *     summary: Lister tous les menus
+ *     summary: Liste des menus
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -45,12 +47,13 @@
  *                 $ref: '#/components/schemas/Menu'
  */
 
+
 /**
  * @swagger
  * /api/menu/{id}:
  *   get:
  *     tags: [Menu]
- *     summary: Détails d’un menu
+ *     summary: Détail d’un menu
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -66,6 +69,7 @@
  *         description: Menu introuvable
  */
 
+
 /**
  * @swagger
  * /api/menu/{id}:
@@ -76,22 +80,22 @@
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
- *         in: path
  *         required: true
+ *         in: path
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Menu'
  *     responses:
  *       201:
- *         description: Menu modifié avec succès
+ *         description: Menu modifié
  *       404:
  *         description: Menu introuvable
  */
+
 
 /**
  * @swagger
@@ -103,13 +107,13 @@
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
- *         in: path
  *         required: true
+ *         in: path
  *         schema:
  *           type: string
  *     responses:
  *       202:
- *         description: Menu supprimé avec succès
+ *         description: Menu supprimé
  *       400:
  *         description: ID invalide
  */
