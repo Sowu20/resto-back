@@ -38,6 +38,7 @@ mongoose.connect("mongodb+srv://sowukelly67:sowukelly@clusterresto.srmvdzb.mongo
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const dashboardRoute = require('./routes/admin/dashboardRoute');
+const adminCommandeRoute = require('./routes/admin/commandeRoute');
 const userRoute = require('./routes/restaurent/userRoute');
 const restoRoute = require('./routes/restaurent/restaurentRoute');
 const menuRoute = require('./routes/restaurent/menuRoute');
@@ -54,6 +55,7 @@ const imageController = require('./controllers/restaurent/imageController');
 
 app.get('/api/images/:filename', imageController.getOptimizedImage);
 app.use('/api', dashboardRoute);
+app.use('/api', adminCommandeRoute);
 app.use('/api', userRoute);
 app.use('/api', restoRoute);
 app.use('/api', menuRoute);
