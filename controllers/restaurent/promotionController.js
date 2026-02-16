@@ -1,4 +1,4 @@
-const Promotion = require('../models/Promotion');
+const Promotion = require('../../models/Promotion');
 
 exports.createPromotion = async(req, res) => {
     try {

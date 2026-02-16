@@ -1,4 +1,4 @@
-const Annonce = require('../models/Annonce');
+const Annonce = require('../../models/Annonce');
 
 exports.createAnnonce = async(req, res) => {
     try {

@@ -1,5 +1,5 @@
-const Restaurent = require('../models/Restaurent');
-const User = require('../models/User');
+const Restaurent = require('../../models/Restaurent');
+const User = require('../../models/User');
 
 exports.createResto = async(req, res) => {
     try {

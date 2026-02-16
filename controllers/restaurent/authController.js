@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Restaurent = require('../models/Restaurent');
+const User = require('../../models/User');
+const Restaurent = require('../../models/Restaurent');
 
 const secret_key ='0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03ed05';
 

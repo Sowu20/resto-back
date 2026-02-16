@@ -1,4 +1,4 @@
-const Repas = require('../models/Repas');
+const Repas = require('../../models/Repas');
 
 exports.createRepas = async(req, res) => {
     try {

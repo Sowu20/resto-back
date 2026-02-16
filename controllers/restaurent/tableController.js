@@ -1,6 +1,6 @@
-const Table = require('../models/Table');
-const Menu = require('../models/Menu');
-const Repas = require('../models/Repas');
+const Table = require('../../models/Table');
+const Menu = require('../../models/Menu');
+const Repas = require('../../models/Repas');
 const crypto = require('crypto');
 
 exports.createTable = async(req, res) => {

@@ -1,4 +1,4 @@
-const Commande = require('../models/Commande');
+const Commande = require('../../models/Commande');
 
 const Filter = (req) => {
     const filter = {};

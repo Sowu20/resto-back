@@ -1,5 +1,5 @@
 const { default: mongoose } = require('mongoose');
-const Commande = require('../models/Commande');
+const Commande = require('../../models/Commande');
 
 exports.createCommande = async(req, res) => {
     try {
