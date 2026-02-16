@@ -19,8 +19,35 @@ exports.createCommande = async(req, res) => {
 };
 
 exports.listCommande = async(req, res) => {
-    const commandes = await Commande.find()
-    res.json(commandes);
+    try {
+        const { restaurentId } = req.params;
+        const { search, status, payment_status, limit = 10 } = req.query;
+
+        let query = { restaurent: restaurentId };
+        if (search) {
+            query.$or = [
+                { customer_name: { $regex: search, $options: 'i' } },
+                { order_number: { $regex: search, $options: 'i' } }
+            ];
+        };
+
+        if (status && status !== 'Tous les status') {
+            query.status = status;
+        };
+        if (payment_status) {
+            query.payment_status = payment_status;
+        };
+
+        const commandes = await Commande.find(query)
+            .sort({ createdAt: -1 })
+            .limit(parseInt(limit));
+
+        res.json(commandes);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 exports.detailCommande = async(req, res) => {
@@ -92,10 +119,10 @@ exports.faireCommande = async(req, res) => {
             items,
             payment_method,
             status: 'en_attente',
-            sourec: 'qr_code',
+            source: 'qr_code',
             payment_status: 'en_attente',
             table: tableId,
-            resturent: restaurentId
+            restaurent: restaurentId
         });
 
         await commande.save();
@@ -110,38 +137,27 @@ exports.faireCommande = async(req, res) => {
     }
 }
 
-exports.getStats = async(req, res) => {
+exports.getStats = async (req, res) => {
     try {
         const { restaurentId } = req.params;
+        const rId = new mongoose.Types.ObjectId(restaurentId);
 
-        const totalOrders = await Commande.countDocuments({
-            restaurent: restaurentId
-        });
-
-        const totalRevenue = await Commande.aggregate([
-            { $match: { restaurent: restaurentId, payment_status: 'paye' } },
-            { $group: { _id: null, total: { $sum: '$total_amount' } } }
-        ])
-
-        const averageOrderValue = await Commande.aggregate([
-            { $match: { restaurent: restaurentId, payment_status: 'paye' } },
-            { $group: { _id: null, avg: { $avg: '$total_amount' } } }
+        const stats = await Commande.aggregate([
+            { $match: { restaurent: rId } },
+            {
+                $group: {
+                    total: { $sum: 1 },
+                    en_attente: { $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] } },
+                    livres: { $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] } },
+                    annules: { $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] } }
+                }
+            }
         ]);
 
-        const totalCustomers = await Commande.distinct('customer_phone', {
-            restaurent: restaurentId
-        });
-
-        res.json({
-           total_commandes: totalOrders,
-           chiffre_affaires: totalRevenue[0]?.total || 0,
-           panier_moyenne: averageOrderValue[0]?.avg || 0,
-           clients: totalCustomers.length
-        });
+        const result = stats[0] || { total: 0, en_attente: 0, livre: 0, annule: 0 };
+        res.json(result);
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        res.status(500).json({ message: error.message });
     }
 };
 
