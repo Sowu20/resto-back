@@ -146,6 +146,7 @@ exports.getStats = async (req, res) => {
             { $match: { restaurent: rId } },
             {
                 $group: {
+                    _id: null,
                     total: { $sum: 1 },
                     en_attente: { $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] } },
                     livres: { $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] } },
