@@ -1,5 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const Commande = require('../../models/Commande');
+const Repas = require('../../models/Repas');
 
 exports.createCommande = async(req, res) => {
     try {
@@ -109,33 +110,60 @@ exports.faireCommande = async(req, res) => {
             customer_phone,
             items,
             payment_method,
-            tableId,
-            restaurentId
+            table,
+            restaurent
         } = req.body;
 
-        const commande = new Commande ({
+        const itemsCommande = [];
+        let totalCommande = 0;
+
+        for (const item of items) {
+            const repas = await Repas.findById(item.repas);
+            if (!repas) {
+                return res.status(404).json({
+                    message: "Repas non trouvé"
+                });
+            }
+
+            const prixUnitaire = repas.price
+            const total = repas.price * item.quantite;
+
+            itemsCommande.push({
+                repas: repas._id,
+                nom_repas: repas.name,
+                prix_unitaire: prixUnitaire,
+                quantite: item.quantite,
+                total: total
+            });
+
+            totalCommande += total;
+        }
+
+        const commande = new Commande({
             customer_name,
             customer_phone,
-            items,
+            items: itemsCommande,
             payment_method,
             status: 'en_attente',
             source: 'qr_code',
             payment_status: 'en_attente',
-            table: tableId,
-            restaurent: restaurentId
+            table,
+            restaurent,
+            total_amount: totalCommande
         });
 
         await commande.save();
 
         return res.status(201).json({
-            message: 'Commande passée avec succès'
+            message: 'Commande passée avec succès',
+            commande
         });
     } catch (error) {
         return res.status(500).json({
             message: error.message
         });
     }
-}
+};
 
 exports.getStats = async (req, res) => {
     try {
