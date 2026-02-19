@@ -18,13 +18,11 @@ const cmdeSchema = new mongoose.Schema({
                 ref: 'Repas',
                 required: true
             },
-            nom_repas: {
-                type: String,
-                required: true
+            name: {
+                type: String
             },
-            prix_unitaire: {
-                type: Number,
-                required: true
+            price: {
+                type: Number
             },
             quantite: {
                 type: Number,
