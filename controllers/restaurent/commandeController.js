@@ -118,20 +118,28 @@ exports.faireCommande = async(req, res) => {
         let totalCommande = 0;
 
         for (const item of items) {
-            const repas = await Repas.findById(item.repas);
+            const repas = await Repas.findById(item.repas).lean();
+
             if (!repas) {
                 return res.status(404).json({
                     message: "Repas non trouvé"
                 });
             }
 
-            const prixUnitaire = repas.price
-            const total = repas.price * item.quantite;
+            if (!repas.price || !repas.name) {
+                return res.status(400).json({
+                    message: "Repas invalide (name ou price manquant)"
+                });
+            }
+
+            const prixUnitaire = repas.price;
+
+            const total = prixUnitaire * item.quantite;
 
             itemsCommande.push({
                 repas: repas._id,
-                nom_repas: repas.name,
-                prix_unitaire: prixUnitaire,
+                name: repas.name,
+                price: prixUnitaire,
                 quantite: item.quantite,
                 total: total
             });
@@ -139,7 +147,10 @@ exports.faireCommande = async(req, res) => {
             totalCommande += total;
         }
 
+        const order_number = `CMD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
         const commande = new Commande({
+            order_number,
             customer_name,
             customer_phone,
             items: itemsCommande,
@@ -159,6 +170,7 @@ exports.faireCommande = async(req, res) => {
             commande
         });
     } catch (error) {
+        console.error(error);
         return res.status(500).json({
             message: error.message
         });
