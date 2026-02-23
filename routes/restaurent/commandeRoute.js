@@ -6,11 +6,11 @@ const role = require('../../middlewares/rolemiddleware');
 
 router.post('/commande', auth, commandeController.createCommande);
 router.post('/commande', commandeController.faireCommande);
-router.get('/commande/:restaurentId', auth, commandeController.listCommande);
 router.get('/commande/:id', auth, commandeController.detailCommande);
 router.put('/commande/:id', auth, commandeController.updateCommande);
 router.delete('/commande/:id', auth, commandeController.deleteCommande);
-router.get('/commande/:restaurentId/stats', auth, commandeController.getStats);
+router.get('/order/:restaurentId', auth, commandeController.listCommande);
+router.get('/order/:restaurentId/stats', auth, commandeController.getStats);
 router.get('/commande/:restaurentId/revenus', auth, commandeController.getRevenus);
 router.get('/commande/:restaurentId/status', auth, commandeController.getStatusCommande);
 router.get('/commande/:restaurentId/meilleurs_ventes', auth, commandeController.getMeilleuresVentes);
