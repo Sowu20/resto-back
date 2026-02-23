@@ -2,7 +2,16 @@ const Categorie = require('../../models/CategorieRepas');
 
 exports.createCategorie = async(req, res) => {
     try {
-        const categorie = await Categorie.create(req.body);
+        const { restaurentId } = req.params;
+        const { name, description, menu, isActive, commande } = req.body;
+        const categorie = await Categorie.create({
+            name,
+            description,
+            menu,
+            isActive,
+            commande,
+            restaurent: restaurentId
+        });
         return res.status(201).json({
             message: 'Catégorie enregistré avec succès !',
             categorie
@@ -15,12 +24,21 @@ exports.createCategorie = async(req, res) => {
 };
 
 exports.listCategorie = async(req, res) => {
-    const categories = await Categorie
-        .find()
-        .populate('resturent', 'nom')
+    try {
+        const categories = await Categorie
+        .find({
+            restaurent: req.params.restaurentId
+        }).sort({ createdAt: -1 })
+        .populate('restaurent', 'nom')
         .populate('menu', 'name')
         .populate('commande', 'customer_name');
-    res.json(categories);
+
+        res.json(categories);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 exports.detailCategorie = async(req, res) => {
@@ -44,8 +62,12 @@ exports.detailCategorie = async(req, res) => {
 
 exports.updateCategorie = async(req, res) => {
     try {
-        const categorie = await Categorie.findByIdAndUpdate(
-            req.params.id,
+        const { id, restaurentId } = req.params;
+        const categorie = await Categorie.findOneAndUpdate(
+            {
+                _id: id,
+                restaurent: restaurentId  
+            },
             req.body,
             { new: true }
         );
@@ -67,7 +89,11 @@ exports.updateCategorie = async(req, res) => {
 
 exports.deleteCategorie = async(req, res) => {
     try {
-        await Categorie.findByIdAndDelete(req.params.id);
+        const { id, restaurentId } = req.params;
+        await Categorie.findOneAndDelete({
+            _id: id,
+            restaurent: restaurentId
+        });
         return res.status(202).json({
             message: 'Menu supprimé avec succès !'
         });
@@ -80,9 +106,10 @@ exports.deleteCategorie = async(req, res) => {
 
 exports.getCategorieMenu = async(req, res) => {
     try {
+        const { restaurentId, menuId } = req.params;
         const categories = await Categorie.find({
-            menu: req.params.menuId,
-            restaurent: req.user.restaurent
+            menu: menuId,
+            restaurent: restaurentId
         });
 
         return res.status(200).json(

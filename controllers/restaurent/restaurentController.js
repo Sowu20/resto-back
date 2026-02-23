@@ -1,5 +1,6 @@
 const Restaurent = require('../../models/Restaurent');
 const User = require('../../models/User');
+const cloudinary = require('../../config/cloudinary');
 
 exports.createResto = async(req, res) => {
     try {
@@ -33,12 +34,31 @@ exports.createResto = async(req, res) => {
             });
         }
 
+        let imageUrl = "";
+        if (req.file) {
+            const result = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "restaurent" },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+                stream.end(req.file.bluffer);
+            });
+            imageUrl = result.secure_url;
+        }
+
         const resto = await Restaurent.create({
             nom,
             adresse,
             telephone,
             email,
             disponibilite,
+            image: imageUrl,
             location: {
                 type: 'Point',
                 coordonnes: [longitude, latitude]

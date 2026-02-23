@@ -3,7 +3,6 @@ const Repas = require('../../models/Repas');
 
 exports.createRepas = async(req, res) => {
     try {
-        const { restaurentId } = req.params;
         const {
             name,
             description,
@@ -26,20 +25,19 @@ exports.createRepas = async(req, res) => {
                             }
                         }
                     );
-                    stream.end(req.file.buffer);
+                    stream.end(req.file.bluffer);
                 });
                 imageUrl = result.secure_url;
             }
 
-        const repas = await Repas.create({
+        const repas = Repas.create({
             name,
             description,
             price,
             image: imageUrl,
             menu,
             categorie,
-            isAvaible,
-            restaurent: restaurentId
+            isAvaible
         });
         return res.status(201).json({
             message: 'Repas enregistré avec succès !',
@@ -53,51 +51,18 @@ exports.createRepas = async(req, res) => {
 };
 
 exports.listRepas = async(req, res) => {
-    try {
-        const repas = await Repas.find({
-            restaurent: req.params.restaurentId
-        }).sort({ createdAt: -1 })
+    const repas = await Repas.find()
         .populate('menu', 'name')
         .populate('restaurent', 'nom')
         .populate('categorie', 'name');
-
-        res.json(repas);
-    } catch (error) {
-        return res.status(error).json({
-            message: error.message
-        });
-    }
-};
-
-exports.detailRepas = async(req, res) => {
-    try {
-        const repas = await Repas.findById(req.params.id)
-            .populate('menu', 'name')
-            .populate('restaurent', 'nom')
-            .populate('categorie', 'name');
-        if (!repas) {
-            return res.status(404).json({
-                message: 'Repas introuvable'
-            });
-        }
-        res.json(repas);
-    } catch (error) {
-        return res.status(400).json({
-            message: 'ID invalide !'
-        });
-    }
+    res.json(repas);
 };
 
 exports.updateRepas = async (req, res) => {
     try {
-        const { id, restaurentId } = req.params;
-        const repas = await Repas.findOneAndUpdate(
-            {
-                _id: id,
-                restaurent: restaurentId  
-            },
+        const repas = await Repas.findByIdAndUpdate(
+            req.params.id,
             req.body,
-            { new: true }
         );
         
         if (!repas) {
@@ -119,11 +84,7 @@ exports.updateRepas = async (req, res) => {
 
 exports.deleteMenu = async(req, res) => {
     try {
-        const { id, restaurentId } = req.params
-        await Repas.findOneAndDelete({
-            _id: id,
-            restaurent: restaurentId
-        });
+        await Repas.findByIdAndDelete(req.params.id);
         return res.status(202).json({
             message: 'Repas supprimé avec succès !'
         });
@@ -136,10 +97,10 @@ exports.deleteMenu = async(req, res) => {
 
 exports.getRepasByCategorie = async (req, res) => {
   try {
-    const { restaurentId, categorieId } = req.params;
+
     const repas = await Repas.find({
-      categorie: categorieId,
-      restaurent: restaurentId
+      categorie: req.params.categorieId,
+      restaurent: req.user.restaurent
     });
 
     return res.status(200).json(repas);
