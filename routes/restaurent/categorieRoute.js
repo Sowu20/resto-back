@@ -4,11 +4,11 @@ const categorieController = require('../../controllers/restaurent/categorieContr
 const auth = require('../../middlewares/authmiddleware');
 const role = require('../../middlewares/rolemiddleware');
 
-router.post('/categorie', auth, categorieController.createCategorie);
-router.get('/categorie', auth, categorieController.listCategorie);
-router.get('/categorie/:id', auth, categorieController.detailCategorie);
-router.get('/categorie/menu/:menuId/repas', auth, role(['restaurant', 'Admin']), categorieController.getCategorieMenu);
-router.put('/categorie/:id', auth, categorieController.updateCategorie);
-router.delete('/categorie/:id', auth, categorieController.deleteCategorie);
+router.post('/categorie/:restaurentId', auth, categorieController.createCategorie);
+router.get('/categorie/:restaurentId/', auth, categorieController.listCategorie);
+router.get('/categorie/:restaurentId/:id', auth, categorieController.detailCategorie);
+router.get('/categorie/menu/:restaurentId/:menuId', categorieController.getCategorieMenu);
+router.put('/categorie/:restaurentId/:id', auth, categorieController.updateCategorie);
+router.delete('/categorie/:restaurentId/:id', auth, categorieController.deleteCategorie);
 
 module.exports = router;
