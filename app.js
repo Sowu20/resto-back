@@ -39,6 +39,8 @@ mongoose.connect("mongodb+srv://sowukelly67:sowukelly@clusterresto.srmvdzb.mongo
 
 const dashboardRoute = require('./routes/admin/dashboardRoute');
 const adminCommandeRoute = require('./routes/admin/commandeRoute');
+const categorieAdminRoute = require('./routes/admin/categorieRoute');
+const repasAdminRoute = require('./routes/admin/repasRoute');
 const userRoute = require('./routes/restaurent/userRoute');
 const restoRoute = require('./routes/restaurent/restaurentRoute');
 const menuRoute = require('./routes/restaurent/menuRoute');
@@ -51,11 +53,15 @@ const promotionRoute = require('./routes/restaurent/promotionRoute');
 const annonceRoute = require('./routes/restaurent/annonceRoute');
 const messageRoute = require('./routes/restaurent/messageRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
+const uploadRoute = require('./routes/uploadRoute');
 const imageController = require('./controllers/restaurent/imageController');
 
 app.get('/api/images/:filename', imageController.getOptimizedImage);
+app.use(uploadRoute);
 app.use('/api', dashboardRoute);
 app.use('/api', adminCommandeRoute);
+app.use('/api', categorieAdminRoute);
+app.use('/api', repasAdminRoute);
 app.use('/api', userRoute);
 app.use('/api', restoRoute);
 app.use('/api', menuRoute);
