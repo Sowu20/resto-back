@@ -17,9 +17,7 @@ exports.createCategorie = async(req, res) => {
 exports.listCategorie = async(req, res) => {
     const categories = await Categorie
         .find()
-        .populate('resturent', 'nom')
-        .populate('menu', 'name')
-        .populate('commande', 'customer_name');
+        .populate('restaurent', 'nom');
     res.json(categories);
 };
 
