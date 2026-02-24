@@ -3,13 +3,11 @@ const Categorie = require('../../models/CategorieRepas');
 exports.createCategorie = async(req, res) => {
     try {
         const { restaurentId } = req.params;
-        const { name, description, menu, isActive, commande } = req.body;
+        const { name, description, isActive } = req.body;
         const categorie = await Categorie.create({
             name,
             description,
-            menu,
             isActive,
-            commande,
             restaurent: restaurentId
         });
         return res.status(201).json({
@@ -29,9 +27,7 @@ exports.listCategorie = async(req, res) => {
         .find({
             restaurent: req.params.restaurentId
         }).sort({ createdAt: -1 })
-        .populate('restaurent', 'nom')
-        .populate('menu', 'name')
-        .populate('commande', 'customer_name');
+        .populate('restaurent', 'nom');
 
         res.json(categories);
     } catch (error) {
@@ -44,9 +40,7 @@ exports.listCategorie = async(req, res) => {
 exports.detailCategorie = async(req, res) => {
     try {
         const categorie = await Categorie.findById(req.params.id)
-            .populate('resturent', 'nom')
-            .populate('menu', 'name')
-            .populate('commande', 'customer_name');
+            .populate('resturent', 'nom');
         if (!categorie) {
             return res.status(404).json({
                 message: 'Categorie introuvable'
