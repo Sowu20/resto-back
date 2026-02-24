@@ -17,19 +17,19 @@ exports.createRepas = async(req, res) => {
         if (req.file) {
             const result = await new Promise((resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream(
-                    { folder: "restaurent" },
-                        (error, result) => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                resolve(result);
-                            }
+                    { folder: "repas" },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
                         }
-                    );
-                    stream.end(req.file.buffer);
-                });
-                imageUrl = result.secure_url;
-            }
+                    }
+                );
+                stream.end(req.file.buffer);
+            });
+            imageUrl = result.secure_url;
+        }
 
         const repas = await Repas.create({
             name,

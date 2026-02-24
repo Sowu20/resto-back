@@ -40,7 +40,7 @@ exports.listCategorie = async(req, res) => {
 exports.detailCategorie = async(req, res) => {
     try {
         const categorie = await Categorie.findById(req.params.id)
-            .populate('resturent', 'nom');
+            .populate('restaurent', 'nom');
         if (!categorie) {
             return res.status(404).json({
                 message: 'Categorie introuvable'
