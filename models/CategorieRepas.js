@@ -16,16 +16,6 @@ const catSchema = new mongoose.Schema({
         ref: 'Restaurent',
         required: true
     },
-    menu: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Menu',
-        required: true
-    },
-    commande: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Commande',
-        required: true
-    }
 });
 
 const categorieRepas = mongoose.model('Categorie', catSchema);
