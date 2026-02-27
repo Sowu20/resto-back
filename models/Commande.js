@@ -33,7 +33,7 @@ const cmdeSchema = new mongoose.Schema({
             total: {
                 type: Number,
                 required: true
-            } 
+            }
         }
     ],
     status: {
@@ -46,7 +46,7 @@ const cmdeSchema = new mongoose.Schema({
     },
     payment_method: {
         type: String,
-        enum: ['espece', 'virement']
+        enum: ['espece', 'virement', 'tmoney', 'flooz']
     },
     source: {
         type: String
