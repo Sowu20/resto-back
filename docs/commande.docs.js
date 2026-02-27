@@ -5,12 +5,13 @@
  *   description: Gestion des commandes
  */
 
+
 /**
  * @swagger
  * /api/commande:
  *   post:
- *     summary: Créer une commande
  *     tags: [Commande]
+ *     summary: Créer une commande (utilisateur connecté)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -21,17 +22,18 @@
  *             $ref: '#/components/schemas/Commande'
  *     responses:
  *       201:
- *         description: Commande créée avec succès
+ *         description: Commande créée
  *       400:
- *         description: Erreur de validation
+ *         description: Erreur
  */
+
 
 /**
  * @swagger
  * /api/commande:
  *   get:
- *     summary: Lister toutes les commandes
  *     tags: [Commande]
+ *     summary: Liste des commandes
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -45,17 +47,18 @@
  *                 $ref: '#/components/schemas/Commande'
  */
 
+
 /**
  * @swagger
  * /api/commande/{id}:
  *   get:
- *     summary: Détail d'une commande
  *     tags: [Commande]
+ *     summary: Détail d’une commande
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
@@ -63,93 +66,217 @@
  *       200:
  *         description: Commande trouvée
  *       404:
- *         description: Commande introuvable
+ *         description: Non trouvée
  */
+
 
 /**
  * @swagger
  * /api/commande/{id}:
  *   put:
- *     summary: Modifier une commande
  *     tags: [Commande]
+ *     summary: Modifier une commande
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
  *         required: true
+ *         in: path
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Commande'
  *     responses:
  *       202:
- *         description: Commande modifiée
- *       404:
- *         description: Commande introuvable
+ *         description: Modifiée
  */
+
 
 /**
  * @swagger
  * /api/commande/{id}:
  *   delete:
- *     summary: Supprimer une commande
  *     tags: [Commande]
+ *     summary: Supprimer une commande
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
  *         required: true
- *         schema:
- *           type: string
+ *         in: path
  *     responses:
- *       201:
- *         description: Commande supprimée
+ *       200:
+ *         description: Supprimée
  */
+
+
 
 /**
  * @swagger
- * /api/commande:
- *   post:
- *     summary: Passer une commande via QR Code
+ * /api/commande/{restaurentId}/stats:
+ *   get:
  *     tags: [Commande]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - customer_name
- *               - customer_phone
- *               - items
- *               - payment_method
- *               - tableId
- *               - restaurentId
- *             properties:
- *               customer_name:
- *                 type: string
- *               customer_phone:
- *                 type: string
- *               items:
- *                 type: array
- *                 items:
- *                   $ref: '#/components/schemas/CommandeItem'
- *               payment_method:
- *                 type: string
- *                 enum: [espece, virement]
- *               tableId:
- *                 type: string
- *               restaurentId:
- *                 type: string
+ *     summary: Statistiques générales du restaurent
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurentId
+ *         in: path
+ *         required: true
  *     responses:
- *       201:
- *         description: Commande passée avec succès
- *       500:
- *         description: Erreur serveur
+ *       200:
+ *         description: Statistiques
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/{restaurentId}/revenus:
+ *   get:
+ *     tags: [Commande]
+ *     summary: Revenus par jour
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurentId
+ *         in: path
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Revenus
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/{restaurentId}/status:
+ *   get:
+ *     tags: [Commande]
+ *     summary: Nombre de commandes par status
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurentId
+ *         required: true
+ *         in: path
+ *     responses:
+ *       200:
+ *         description: Stats status
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/{restaurentId}/meilleurs_ventes:
+ *   get:
+ *     tags: [Commande]
+ *     summary: Top 5 repas vendus
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurentId
+ *         required: true
+ *         in: path
+ *     responses:
+ *       200:
+ *         description: Top ventes
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/{restaurentId}/commandes_recente:
+ *   get:
+ *     tags: [Commande]
+ *     summary: 5 dernières commandes
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: restaurentId
+ *         required: true
+ *         in: path
+ *     responses:
+ *       200:
+ *         description: Commandes récentes
+ */
+
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Admin Commande
+ *   description: Dashboard administrateur commandes
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/admin/status:
+ *   get:
+ *     tags: [Admin Commande]
+ *     summary: Statistiques rapides
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Stats
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/admin/statorder:
+ *   get:
+ *     tags: [Admin Commande]
+ *     summary: Statistiques commandes complètes
+ *     security:
+ *       - bearerAuth: []
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/admin/listcommande:
+ *   get:
+ *     tags: [Admin Commande]
+ *     summary: Liste commandes avec filtres
+ *     security:
+ *       - bearerAuth: []
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/admin/revenuchart:
+ *   get:
+ *     tags: [Admin Commande]
+ *     summary: Graphique revenus
+ *     security:
+ *       - bearerAuth: []
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/admin/recent_order:
+ *   get:
+ *     tags: [Admin Commande]
+ *     summary: Commandes récentes admin
+ *     security:
+ *       - bearerAuth: []
+ */
+
+
+/**
+ * @swagger
+ * /api/commande/admin/top_sell:
+ *   get:
+ *     tags: [Admin Commande]
+ *     summary: Repas les plus vendus
+ *     security:
+ *       - bearerAuth: []
  */

@@ -5,6 +5,7 @@
  *   description: Gestion des repas
  */
 
+
 /**
  * @swagger
  * /api/repas:
@@ -23,15 +24,16 @@
  *       201:
  *         description: Repas créé avec succès
  *       400:
- *         description: Erreur de validation
+ *         description: Erreur
  */
+
 
 /**
  * @swagger
  * /api/repas:
  *   get:
  *     tags: [Repas]
- *     summary: Lister tous les repas
+ *     summary: Liste des repas
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -45,12 +47,13 @@
  *                 $ref: '#/components/schemas/Repas'
  */
 
+
 /**
  * @swagger
  * /api/repas/{id}:
  *   get:
  *     tags: [Repas]
- *     summary: Détails d’un repas
+ *     summary: Détail d’un repas
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -66,6 +69,7 @@
  *         description: Repas introuvable
  */
 
+
 /**
  * @swagger
  * /api/repas/{id}:
@@ -76,22 +80,22 @@
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
- *         in: path
  *         required: true
+ *         in: path
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Repas'
  *     responses:
  *       200:
- *         description: Repas modifié avec succès
+ *         description: Repas modifié
  *       404:
  *         description: Repas introuvable
  */
+
 
 /**
  * @swagger
@@ -103,13 +107,33 @@
  *       - bearerAuth: []
  *     parameters:
  *       - name: id
- *         in: path
  *         required: true
+ *         in: path
  *         schema:
  *           type: string
  *     responses:
  *       202:
- *         description: Repas supprimé avec succès
+ *         description: Repas supprimé
  *       400:
  *         description: ID invalide
+ */
+
+
+/**
+ * @swagger
+ * /api/repas/categorie/{categorieId}/repas:
+ *   get:
+ *     tags: [Repas]
+ *     summary: Liste des repas par catégorie
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: categorieId
+ *         required: true
+ *         in: path
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste des repas
  */

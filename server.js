@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const http = require('http');
 const app = require('./app');
+const socketio = require('socket.io');
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -38,6 +39,9 @@ const errorHandler = error => {
 };
 
 const server = http.createServer(app);
+const io = socketio(server);
+
+require('./socket/socket')(io);
 
 server.on('error', errorHandler);
 server.on('listening', () => {

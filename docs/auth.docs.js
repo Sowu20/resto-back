@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: Authentification
- *   description: Gestion de l’authentification des utilisateurs
+ *   description: Gestion de l’authentification
  */
 
 /**
@@ -10,21 +10,82 @@
  * /api/register:
  *   post:
  *     tags: [Authentification]
- *     summary: Création d’un compte utilisateur
+ *     summary: Créer un compte Restaurent
+ *     description: Crée un utilisateur avec le rôle "restaurant" et son restaurent associé
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             required:
+ *               - name
+ *               - address
+ *               - phone
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               phone:
+ *                 type: number
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       201:
- *         description: Utilisateur créé avec succès
+ *         description: Restaurent créé avec succès
  *       400:
- *         description: Email déjà utilisé ou erreur de validation
+ *         description: Email déjà utilisé
  *       500:
  *         description: Erreur serveur
  */
+
+
+/**
+ * @swagger
+ * /api/admin/register:
+ *   post:
+ *     tags: [Authentification]
+ *     summary: Créer un Restaurent par Admin
+ *     security:
+ *       - bearerAuth: []
+ *     description: Permet à un Admin de créer un restaurent
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - address
+ *               - phone
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               phone:
+ *                 type: number
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Restaurent créé avec succès
+ *       401:
+ *         description: Non authentifié
+ *       403:
+ *         description: Accès refusé
+ */
+
 
 /**
  * @swagger
@@ -48,14 +109,33 @@
  *                 type: string
  *     responses:
  *       200:
- *         description: Connexion réussie (JWT retourné)
+ *         description: Connexion réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     role:
+ *                       type: string
  *       400:
  *         description: Mot de passe incorrect
  *       404:
  *         description: Utilisateur non trouvé
- *       500:
- *         description: Erreur serveur
  */
+
 
 /**
  * @swagger
@@ -64,40 +144,42 @@
  *   description: Gestion des utilisateurs
  */
 
+
 /**
  * @swagger
  * /api/user:
  *   get:
  *     tags: [User]
- *     summary: Liste de tous les utilisateurs
+ *     summary: Liste des utilisateurs
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des utilisateurs
+ *         description: Liste récupérée
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
- *       403:
- *         description: Accès refusé
  *       401:
  *         description: Non authentifié
+ *       403:
+ *         description: Accès refusé
  */
+
 
 /**
  * @swagger
  * /api/user/{id}:
  *   get:
  *     tags: [User]
- *     summary: Détails d’un utilisateur
+ *     summary: Détails utilisateur
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
@@ -108,66 +190,49 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
- *       403:
- *         description: Accès interdit
- *       404:
- *         description: Utilisateur introuvable
- *       401:
- *         description: Non authentifié
  */
+
 
 /**
  * @swagger
  * /api/user/{id}:
  *   put:
  *     tags: [User]
- *     summary: Modifier un utilisateur
+ *     summary: Modifier utilisateur
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: Utilisateur modifié avec succès
- *       403:
- *         description: Accès interdit
- *       404:
- *         description: Utilisateur introuvable
- *       401:
- *         description: Non authentifié
+ *         description: Modifié
  */
+
 
 /**
  * @swagger
  * /api/user/{id}:
  *   delete:
  *     tags: [User]
- *     summary: Supprimer un utilisateur
+ *     summary: Supprimer utilisateur
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Utilisateur supprimé avec succès
- *       403:
- *         description: Accès refusé
- *       404:
- *         description: Utilisateur introuvable
- *       401:
- *         description: Non authentifié
+ *         description: Supprimé
  */
