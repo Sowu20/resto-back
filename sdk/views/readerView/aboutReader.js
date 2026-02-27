@@ -1,7 +1,7 @@
 const { ReaderView } = require('@numerum-tech/cmsdk');
 
-const aboutView = new ReaderView('about-app', 'À propos de CityMate Resto')
-    .setIntro('Bienvenue sur CityMate Resto, votre compagnon gastronomique intelligent.')
+const aboutView = new ReaderView('about-app', 'À propos de Zamora')
+    .setIntro('Bienvenue sur Zamora, votre compagnon gastronomique intelligent.')
     .addParagraph('Cette application a été conçue pour simplifier votre expérience en restaurant et vous offrir un service fluide et moderne.')
     .addParagraph('Voici ce que vous pouvez faire avec cette application :')
     .addParagraph('🍴 Découvrir les restaurants : Explorez une sélection des meilleurs établissements locaux avec leurs spécialités.')
