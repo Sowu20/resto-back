@@ -24,7 +24,7 @@ const cmdeSchema = new mongoose.Schema({
             },
             price: {
                 type: Number,
-                require: true
+                required: true
             },
             quantite: {
                 type: Number,
@@ -49,7 +49,8 @@ const cmdeSchema = new mongoose.Schema({
         enum: ['espece', 'virement', 'tmoney', 'flooz']
     },
     source: {
-        type: String
+        type: String,
+        enum: ['sur_place', 'a_emporter', 'livraison', 'web', 'qrCode'],
     },
     total_amount: {
         type: Number,
@@ -62,7 +63,7 @@ const cmdeSchema = new mongoose.Schema({
     table: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Table',
-        required: true
+        required: false
     }
 }, { timestamps: true });
 
