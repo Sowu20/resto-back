@@ -4,13 +4,12 @@ const promotionController = require('../../controllers/restaurent/promotionContr
 const auth = require('../../middlewares/authmiddleware');
 const role = require('../../middlewares/rolemiddleware');
 
-router.post('/promotion', auth, role(['Admin', 'restaurent']), promotionController.createPromotion);
-router.get('/promotion', auth, role(['Admin', 'restaurent']), promotionController.listPromotion);
-router.get('/promotion/actives', auth, role(['Admin', 'restaurent']), promotionController.avaiblePromotion);
-router.get('/promotion/expires', auth, role(['Admin', 'restaurent']), promotionController.duePromotion);
-router.get('/promotion/:id', auth, role(['Admin', 'restaurent']), promotionController.detailPromotion);
-router.get('/promotion/restaurent/:restaurentId', auth, role(['Admin', 'restaurent']), promotionController.promotionByRestaurent);
-router.put('/promotion/:id', auth, role(['Admin', 'restaurent']), promotionController.updatePromotion);
-router.delete('/promotion/:id', auth, role(['Admin', 'restaurent']), promotionController.deletePromotion);
+router.post('/promotion/:restaurentId', auth, promotionController.createPromotion);
+router.get('/promotion/:restaurentId', auth, promotionController.listPromotion);
+router.get('/promotion/actives/:restaurentId', auth, promotionController.avaiblePromotion);
+router.get('/promotion/expires/:restaurentId', auth, promotionController.duePromotion);
+router.get('/promotion/:restaurentId/:id', auth, promotionController.detailPromotion);
+router.put('/promotion/:restaurentId/:id', auth, promotionController.updatePromotion);
+router.delete('/promotion/:restaurentId/:id', auth, promotionController.deletePromotion);
 
 module.exports = router;

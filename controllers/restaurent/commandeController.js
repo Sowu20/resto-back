@@ -2,11 +2,71 @@ const { default: mongoose } = require('mongoose');
 const Commande = require('../../models/Commande');
 const Repas = require('../../models/Repas');
 
-exports.createCommande = async(req, res) => {
+exports.faireCommande = async(req, res) => {
     try {
+        const { restaurentId } = req.params;
+        const {
+            customer_name,
+            customer_phone,
+            items,
+            payment_method,
+            source,
+            table
+        } = req.body;
+
+        if (!items || items.length === 0) {
+            return res.status(400).json({
+                message: "La commande doit contenir au moins un repas"
+            });
+        }
+
+        let total_amount = 0;
+        const itemsTotal = [];
+
+        for (let item of items) {
+            const repasData = await Repas.findById(item.repas);
+            if (!repasData) {
+                return res.status(404).json({
+                    message: 'Repas introuvable'
+                });
+            }
+            if (!repasData.isAvaible) {
+                return res.status(400).json({
+                    message: `Ce repas n'est pas disponible pour le moment`
+                });
+            }
+
+            const total = repasData.price * item.quantite;
+            total_amount += total;
+            itemsTotal.push({
+                repas: repasData._id,
+                name: repasData.name,
+                price: repasData.price,
+                quantite: Number(item.quantite) || 0,
+                total
+            });
+        }
+
+        // Générer numéro commande
+        const order_number = "CMD-" + Date.now();
+
+        let tableValue = null;
+        if (source === "sur_place") {
+            tableValue = table || null;
+        }
+
         const commande = await Commande.create({
-            ...req.body,
-            user: req.userId
+            order_number,
+            customer_name,
+            customer_phone,
+            items: itemsTotal,
+            total_amount,
+            payment_method,
+            source,
+            table: tableValue,
+            status: "en_attente",
+            payment_status: "en_attente",
+            restaurent: restaurentId
         });
         return res.status(201).json({
             message: 'Commande enregistré avec succès',
@@ -53,7 +113,11 @@ exports.listCommande = async(req, res) => {
 
 exports.detailCommande = async(req, res) => {
     try {
-        const commande = await Commande.findById(req.params.id).populate('restaurent');
+        const { id, restaurentId } = req.params;
+        const commande = await Commande.findById({
+            _id: id,
+            restaurent: restaurentId
+        });
         if (!commande) {
             return res.status(404).json({
                 message: 'Commande introuvable'
@@ -69,8 +133,12 @@ exports.detailCommande = async(req, res) => {
 
 exports.updateCommande = async(req, res) => {
     try {
-        const commande = await Commande.findByIdAndUpdate(
-            req.params.id,
+        const { id, restaurentId } = req.params;
+        const commande = await Commande.findOneAndUpdate(
+            {
+                _id: id,
+                restaurent: restaurentId
+            },
             req.body,
             { new: true }
         );
@@ -92,87 +160,17 @@ exports.updateCommande = async(req, res) => {
 
 exports.deleteCommande = async(req, res) => {
     try {
-        await Commande.findByIdAndDelete(req.params.id);
+        const { id, restaurentId } = req.params;
+        await Commande.findByIdAndDelete({
+            _id: id,
+            restaurent: restaurentId
+        });
         return res.status(201).json({
             message: 'Commande supprimée avec succès'
         });
     } catch (error) {
         return res.status(400).json({
             message: 'ID invalide'
-        });
-    }
-};
-
-exports.faireCommande = async(req, res) => {
-    try {
-        const {
-            customer_name,
-            customer_phone,
-            items,
-            payment_method,
-            table,
-            restaurent
-        } = req.body;
-
-        const itemsCommande = [];
-        let totalCommande = 0;
-
-        for (const item of items) {
-            const repas = await Repas.findById(item.repas).lean();
-
-            if (!repas) {
-                return res.status(404).json({
-                    message: "Repas non trouvé"
-                });
-            }
-
-            if (!repas.price || !repas.name) {
-                return res.status(400).json({
-                    message: "Repas invalide (name ou price manquant)"
-                });
-            }
-
-            const prixUnitaire = repas.price;
-
-            const total = prixUnitaire * item.quantite;
-
-            itemsCommande.push({
-                repas: repas._id,
-                name: repas.name,
-                price: prixUnitaire,
-                quantite: item.quantite,
-                total: total
-            });
-
-            totalCommande += total;
-        }
-
-        const order_number = `CMD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
-        const commande = new Commande({
-            order_number,
-            customer_name,
-            customer_phone,
-            items: itemsCommande,
-            payment_method,
-            status: 'en_attente',
-            source: 'qr_code',
-            payment_status: 'en_attente',
-            table,
-            restaurent,
-            total_amount: totalCommande
-        });
-
-        await commande.save();
-
-        return res.status(201).json({
-            message: 'Commande passée avec succès',
-            commande
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            message: error.message
         });
     }
 };
