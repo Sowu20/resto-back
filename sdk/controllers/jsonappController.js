@@ -252,8 +252,8 @@ const previewOrder = async (req, res) => {
             payment_method: orderData.payment_method,
             items: [{
                 repas: mealId,
-                nom_repas: repas.name,
-                prix_unitaire: repas.price,
+                name: repas.name,
+                price: repas.price,
                 quantite: 1,
                 total: repas.price
             }],
@@ -261,7 +261,7 @@ const previewOrder = async (req, res) => {
             status: 'en_attente',
             payment_status: 'en_attente',
             restaurent: restaurantId,
-            table: '507f1f77bcf86cd799439011' // ID de table par défaut (à adapter selon votre logique)
+            table: new mongoose.Types.ObjectId('507f1f77bcf86cd799439011') // ID de table par défaut (à adapter selon votre logique) // si elle existe vraiment
         });
 
         console.log('✅ Commande créée:', newOrder._id);
