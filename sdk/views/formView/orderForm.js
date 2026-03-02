@@ -19,7 +19,7 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
         // Champs du formulaire
         .addTextField('customer_name', 'Nom complet', true)
         .addPhoneField('customer_phone', 'Numéro de téléphone', true)
-        .addSelectField('payement_method', 'Moyen de paiement', true, [
+        .addSelectField('payment_method', 'Moyen de paiement', true, [
             { label: 'Tmoney', value: 'tmoney' },
             { label: 'Flooz', value: 'flooz' },
             { label: 'Espèces', value: 'espece' }
