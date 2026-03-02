@@ -19,10 +19,12 @@ const cmdeSchema = new mongoose.Schema({
                 required: true
             },
             name: {
-                type: String
+                type: String,
+                required: true
             },
             price: {
-                type: Number
+                type: Number,
+                require: true
             },
             quantite: {
                 type: Number,
