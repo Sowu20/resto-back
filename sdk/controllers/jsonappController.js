@@ -223,6 +223,8 @@ const getOrderForm = async (req, res) => {
 // };
 
 // Nouvelle fonction pour afficher le résumé (Preview) et créer la commande
+
+
 const previewOrder = async (req, res) => {
     try {
         const { restaurantId, mealId } = req.params;
@@ -247,7 +249,7 @@ const previewOrder = async (req, res) => {
             order_number: orderNumber,
             customer_name: orderData.customer_name,
             customer_phone: orderData.customer_phone,
-            payment_method: orderData.payement_method,
+            payment_method: orderData.payment_method,
             items: [{
                 repas: mealId,
                 nom_repas: repas.name,
