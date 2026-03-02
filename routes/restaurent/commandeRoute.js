@@ -5,8 +5,8 @@ const auth = require('../../middlewares/authmiddleware');
 const role = require('../../middlewares/rolemiddleware');
 
 router.post('/order/:restaurentId', commandeController.faireCommande);
-router.get('/order/:restaurentId/:id', auth, commandeController.detailCommande);
 router.get('/order/:restaurentId', auth, commandeController.listCommande);
+router.get('/order/:restaurentId/:id', auth, commandeController.detailCommande);
 router.get('/order/stats/:restaurentId', auth, commandeController.getStats);
 router.get('/order/revenus/:restaurentId', auth, commandeController.getRevenus);
 router.get('/order/status/:restaurentId', auth, commandeController.getStatusCommande);
