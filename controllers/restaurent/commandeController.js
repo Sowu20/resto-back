@@ -181,19 +181,30 @@ exports.getStats = async (req, res) => {
         const rId = new mongoose.Types.ObjectId(restaurentId);
 
         const stats = await Commande.aggregate([
-            { $match: { restaurent: rId } },
+            { $match: { restaurent: rId, customer_phone: { $ne: null } } },
             {
                 $group: {
                     _id: null,
                     total: { $sum: 1 },
                     en_attente: { $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] } },
                     livres: { $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] } },
-                    annules: { $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] } }
+                    annules: { $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] } },
+                    totalCustomers: { $addToSet: "$customer_phone" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    total: 1,
+                    en_attente: 1,
+                    livres: 1,
+                    annules: 1,
+                    totalCustomers: { $size: "$totalCustomers" }
                 }
             }
         ]);
 
-        const result = stats[0] || { total: 0, en_attente: 0, livre: 0, annule: 0 };
+        const result = stats[0] || { total: 0, en_attente: 0, livre: 0, annule: 0, totalCustomers: 0 };
         res.json(result);
     } catch (error) {
         res.status(500).json({ message: error.message });
