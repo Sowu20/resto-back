@@ -2,23 +2,7 @@ const Promotion = require('../../models/Promotion');
 
 exports.createPromotion = async(req, res) => {
     try {
-        const { restaurentId } = req.params;
-        const {
-            titre_promo,
-            description,
-            date_debut,
-            date_fin,
-            pourcentage_reduction,
-        } = req.body;
-
-        const promotion = await Promotion.create({
-            titre_promo,
-            description,
-            date_debut,
-            date_fin,
-            pourcentage_reduction,
-            restaurent: restaurentId    
-        });
+        const promotion = await Promotion.create(req.body);
 
         return res.status(201).json({
             message: 'Promotion créée avec succès',
@@ -33,9 +17,8 @@ exports.createPromotion = async(req, res) => {
 
 exports.listPromotion = async(req, res) => {
     try {
-        const promotions = await Promotion.find({
-            restaurent: req.params.restaurentId
-        }).sort({ createdAt: -1 });
+        const promotions = await Promotion.find()
+            .populate('restaurent');
 
         return res.status(200).json(promotions)
     } catch (error) {
@@ -47,11 +30,8 @@ exports.listPromotion = async(req, res) => {
 
 exports.detailPromotion = async(req, res) => {
     try {
-        const { id, restaurentId } = req.params;
-        const promotion = await Promotion.findById({
-            _id: id,
-            restaurent: restaurentId
-        })
+        const promotion = await Promotion.findById(req.params.id)
+            .populate('restaurent');
         
         if (!promotion) {
             return res.status(404).json({
@@ -69,12 +49,8 @@ exports.detailPromotion = async(req, res) => {
 
 exports.updatePromotion = async(req, res) => {
     try {
-        const { id, restaurentId } = req.params;
-        const promotion = await Promotion.findOneAndReplace(
-            {
-              _id: id,
-              restaurent: restaurentId  
-            },
+        const promotion = await Promotion.findByIdAndUpdate(
+            req.params.id,
             req.body,
             { new: true }
         );
@@ -98,11 +74,7 @@ exports.updatePromotion = async(req, res) => {
 
 exports.deletePromotion = async(req, res) => {
     try {
-        const { id, restaurentId } = req.params;
-        await Promotion.findOneAndUpdate({
-            _id: id,
-            restaurent: restaurentId
-        });
+        await Promotion.findByIdAndDelete(req.params.id);
         res.json({
             message: 'Promotion supprimée avec succès'
         });
@@ -115,14 +87,12 @@ exports.deletePromotion = async(req, res) => {
 
 exports.avaiblePromotion = async(req, res) => {
     try {
-        const { restaurentId } = req.params;
         const now = new Date();
 
         const promotions = await Promotion.find({
             date_debut: { $lte: now },
-            date_fin: { $gte: now },
-            restaurent: restaurentId
-        });
+            date_fin: { $gte: now }
+        }).populate('restaurent');
 
         return res.status(200).json(promotions);
     } catch (error) {
@@ -134,13 +104,11 @@ exports.avaiblePromotion = async(req, res) => {
 
 exports.duePromotion = async(req, res) => {
     try {
-        const { restaurentId } = req.params;
         const now = new Date();
 
         const promotions = await Promotion.find({
-            date_fin: { $lt: now },
-            restaurent: restaurentId
-        });
+            date_fin: { $lt: now }
+        }).populate('restaurent');
 
         return res.status(200).json(promotions);
     } catch (error) {
@@ -149,3 +117,17 @@ exports.duePromotion = async(req, res) => {
         });
     }
 };
+
+exports.promotionByRestaurent = async(req, res) => {
+    try {
+        const promotions = await Promotion.find({
+            restaurent: req.params.restaurentId
+        });
+
+        return res.status(200).json(promotions);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
