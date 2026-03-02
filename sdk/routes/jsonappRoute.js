@@ -31,8 +31,6 @@ router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm
 // NOUVELLE Route pour la prévisualisation (Résumé)
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder);
 
-
-
 // Routes pour le paiement
 router.get('/mobile/restaurents/:restaurantId/orders/:orderId/payment', getPaymentForm);
 router.post('/mobile/restaurents/:restaurantId/orders/:orderId/confirm-payment', confirmPayment);
