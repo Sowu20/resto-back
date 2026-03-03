@@ -5,18 +5,26 @@ const crypto = require('crypto');
 
 exports.createTable = async(req, res) => {
     try {
-        const { numero_table, restaurent } = req.body;
+        const { restaurentId } = req.params;
+        const { numero_table, nom_table, capacite } = req.body;
         const qrCode = crypto.randomBytes(16).toString('hex');
 
         const table = await Table.create({
             numero_table,
-            restaurent,
+            nom_table,
+            capacite,
+            restaurent: restaurentId,
             qrCode
         });
 
+        const backendUrl = `https://resto-back-xazy.onrender.com/mobile/${qrCode}/restaurents/${restaurentId}/tables/${table._id}`;
+
+        const qrLink = `https://demo.city-mate.com/services/696e5f99ed00d4dfdc05a4a8/play?url=${encodeURIComponent(backendUrl)}`;
+
         return res.status(201).json({
             message: "Table créé avec succès !",
-            table
+            table,
+            qrLink
         });
     } catch (error) {
         return res.status(400).json({
@@ -26,13 +34,21 @@ exports.createTable = async(req, res) => {
 };
 
 exports.listTable = async(req, res) => {
-    const tables = await Table.find().populate('restaurent', 'nom');
+    const { restaurentId } = req.params;
+    const tables = await Table.find({
+        restaurent: restaurentId
+    })
+        .sort({ numero_table: 1 });
     res.json(tables);
 };
 
 exports.detailTable = async(req, res) => {
     try {
-        const table = await Table.findById(req.params.id).populate('restaurent', 'nom');
+        const { id, restaurentId } = req.params;
+        const table = await Table.findOne({
+            _id: id,
+            restaurentId
+        });
         if (!table) {
             return res.status(404).json({
                 message: 'Table introuvable'
@@ -48,8 +64,12 @@ exports.detailTable = async(req, res) => {
 
 exports.updateTable = async(req, res) => {
     try {
-        const table = await Table.findByIdAndUpdate(
-            req.params.id,
+        const { id, restaurentId } = req.params;
+        const table = await Table.findOneAndUpdate(
+            {
+                _id: id,
+                restaurent: restaurentId    
+            },
             req.body,
             { new: true }
         )
@@ -71,7 +91,10 @@ exports.updateTable = async(req, res) => {
 
 exports.deleteTable = async(req, res) => {
     try {
-        await Table.findByIdAndDelete(req.params.id);
+        const { restaurentId } = req.params;
+        await Table.findOneAndDelete({
+            restaurent: restaurentId
+        });
         return res.status(201).json({
             message: 'Table supprimé avec succès'
         });
@@ -149,6 +172,63 @@ exports.getMenuandMeal = async(req, res) => {
             // restaurentId,
             menus: menusWithRepas
         });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+exports.statsTable = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+        const total = await Table.countDocuments({ 
+            restaurent: restaurentId 
+        });
+
+        const libres = await Table.countDocuments({
+            restaurent: restaurentId,
+            statut: 'libre'
+        });
+
+        const occupes = await Table.countDocuments({
+            restaurent: restaurentId,
+            statut: 'occupe'
+        });
+
+        const reserve = await Table.countDocuments({
+            restaurent: restaurentId,
+            statut: 'reserve'
+        });
+
+        res.status(200).json({
+            total,
+            libres,
+            occupes,
+            reserve
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+exports.searchTable = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+        const { q } = req.query;
+
+        const tables = await Table.find({
+            restaurent: restaurentId,
+            $or: [
+                { numero_table: Number(q) || 0 },
+                { nom_table: { $regex: q, $options: 'i' } }
+            ]
+        });
+
+        res.status(200).json(tables);
     } catch (error) {
         return res.status(500).json({
             message: error.message
