@@ -8,27 +8,26 @@ const { FormView } = require('@numerum-tech/cmsdk');
  * @param {string} mealId - ID du plat (pour l'API de soumission)
  */
 const createOrderForm = (mealName, price, restaurantId, mealId) => {
-    // ID unique pour le formulaire
-    const formId = `order-form-${restaurantId}-${mealId}`;
+    // Le formId doit correspondre au chemin de la route POST
+    // Le SDK poste automatiquement vers {baseUrl}/{formId}
+    // Route cible : POST /mobile/restaurents/:restaurantId/repas/:mealId/order
+    const formId = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
 
     // Titre affiché en haut du formulaire
-    const title = `Commande : ${mealName}`;
+    const title = `Commande de: ${mealName}`;
 
     const form = new FormView(formId, title)
         .setIntro(`Veuillez compléter vos informations pour commander "${mealName}" (${price}).`)
         // Champs du formulaire
-        .addTextField('customer_name', 'Nom complet', true)
-        .addPhoneField('customer_phone', 'Numéro de téléphone', true)
+        .addTextField('customer_name', 'Votre nom complet', true)
+        .addPhoneField('customer_phone', 'Votre numéro de téléphone', true)
         .addSelectField('payment_method', 'Moyen de paiement', true, [
             { label: 'Tmoney', value: 'tmoney' },
             { label: 'Flooz', value: 'flooz' },
             { label: 'Espèces', value: 'espece' }
         ])
-        // Bouton de soumission
-        //.submitButton('Confirmer la commande', 'POST', submitUrl);
-
-        // NOUVEAU bouton pour voir le résumé
-        .submitButton('Confirmer', 'POST', `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`);
+        // Bouton de soumission → le SDK poste vers {baseUrl}/{formId} automatiquement
+        .submitButton('Voir le résumé', 'POST');
 
     return form;
 };
