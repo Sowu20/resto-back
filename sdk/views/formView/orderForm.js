@@ -8,15 +8,13 @@ const { FormView } = require('@numerum-tech/cmsdk');
  * @param {string} mealId - ID du plat (pour l'API de soumission)
  */
 const createOrderForm = (mealName, price, restaurantId, mealId) => {
-    // Le formId = chemin RELATIF uniquement (sans domaine)
-    // Le SDK construit : {baseUrl}/{formId}
-    // Route cible : POST /mobile/restaurents/:restaurantId/repas/:mealId/order
-    const formId = `mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
+    // Le formId = URL complète de soumission (POST endpoint)
+    const submitUrl = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
 
     // Titre affiché en haut du formulaire
-    const title = `Commande de: ${mealName}`;
+    const title = `Commande de : ${mealName} à ${price}`;
 
-    const form = new FormView(formId, title)
+    const form = new FormView(submitUrl, title)
         .setIntro(`Veuillez compléter vos informations pour commander "${mealName}" (${price}).`)
         // Champs du formulaire
         .addTextField('customer_name', 'Votre nom complet', true)
@@ -26,7 +24,9 @@ const createOrderForm = (mealName, price, restaurantId, mealId) => {
             { label: 'Flooz', value: 'flooz' },
             { label: 'Espèces', value: 'espece' }
         ])
-        // Bouton de soumission → le SDK poste vers {baseUrl}/{formId} automatiquement
+        // setNext() indique à l'app mobile d'afficher la réponse du POST comme nouvelle vue
+        // Sans cela, l'app mobile reste bloquée sur le formulaire après soumission
+        .setNext(submitUrl)
         .submitButton('Voir le résumé', 'POST');
 
     return form;
