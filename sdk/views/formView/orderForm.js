@@ -8,10 +8,10 @@ const { FormView } = require('@numerum-tech/cmsdk');
  * @param {string} mealId - ID du plat (pour l'API de soumission)
  */
 const createOrderForm = (mealName, price, restaurantId, mealId) => {
-    // Le formId doit correspondre au chemin de la route POST
-    // Le SDK poste automatiquement vers {baseUrl}/{formId}
+    // Le formId = chemin RELATIF uniquement (sans domaine)
+    // Le SDK construit : {baseUrl}/{formId}
     // Route cible : POST /mobile/restaurents/:restaurantId/repas/:mealId/order
-    const formId = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
+    const formId = `mobile/restaurents/${restaurantId}/repas/${mealId}/order`;
 
     // Titre affiché en haut du formulaire
     const title = `Commande de: ${mealName}`;
