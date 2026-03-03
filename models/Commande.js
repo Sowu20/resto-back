@@ -63,7 +63,6 @@ const cmdeSchema = new mongoose.Schema({
     table: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Table',
-        required: false
     }
 }, { timestamps: true });
 

@@ -5,6 +5,12 @@ const tableSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    nom_table: {
+        type: String
+    },
+    capacite: {
+        type: Number
+    },
     qrCode: {
         type: String,
         required: true,
@@ -12,7 +18,7 @@ const tableSchema = new mongoose.Schema({
     },
     statut: {
         type: String,
-        enum: ['libre', 'occupe'],
+        enum: ['libre', 'occupe', 'reserve'],
         default: 'libre'
     },
     restaurent: {
