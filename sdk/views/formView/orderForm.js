@@ -8,27 +8,25 @@ const { FormView } = require('@numerum-tech/cmsdk');
  * @param {string} mealId - ID du plat (pour l'API de soumission)
  */
 const createOrderForm = (mealName, price, restaurantId, mealId) => {
-    // ID unique pour le formulaire
-    const formId = `order-form-${restaurantId}-${mealId}`;
+    // formId simplifié pour plus de fiabilité
+    const formId = `https://resto-back-xazy.onrender.com/mobile/repas/order/preview`;
 
-    // Titre affiché en haut du formulaire
-    const title = `Commande : ${mealName}`;
+    const title = `Commande de : ${mealName} à (${price}`;
 
     const form = new FormView(formId, title)
         .setIntro(`Veuillez compléter vos informations pour commander "${mealName}" (${price}).`)
-        // Champs du formulaire
-        .addTextField('customer_name', 'Nom complet', true)
-        .addPhoneField('customer_phone', 'Numéro de téléphone', true)
+        .addTextField('customer_name', 'Votre nom complet', true)
+        .addPhoneField('customer_phone', 'Votre numéro de téléphone', true)
         .addSelectField('payment_method', 'Moyen de paiement', true, [
             { label: 'Tmoney', value: 'tmoney' },
             { label: 'Flooz', value: 'flooz' },
             { label: 'Espèces', value: 'espece' }
         ])
-        // Bouton de soumission
-        //.submitButton('Confirmer la commande', 'POST', submitUrl);
-
-        // NOUVEAU bouton pour voir le résumé
-        .submitButton('Confirmer', 'POST', `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${mealId}/order`);
+        // Champs cachés pour transmettre les IDs au contrôleur
+        .addHiddenField('restaurantId', 'restaurantId', restaurantId)
+        .addHiddenField('mealId', 'mealId', mealId)
+        // Pas de setNext ici : l'app mobile doit afficher directement la réponse JSON du POST
+        .submitButton('Voir le résumé', 'POST');
 
     return form;
 };

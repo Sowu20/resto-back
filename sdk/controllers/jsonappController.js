@@ -12,6 +12,7 @@ const { createOrderConfirmationView } = require('../views/messageView/orderConfi
 const { createOrderSummaryView } = require('../views/readerView/orderSummary');
 const { getMealData } = require('../views/readerView/repasReader');
 const { aboutView } = require('../views/readerView/aboutReader');
+const mongoose = require('mongoose');
 
 const HomeScreen = (req, res) => {
     res.json(mainMenu.toJSON());
@@ -227,8 +228,13 @@ const getOrderForm = async (req, res) => {
 
 const previewOrder = async (req, res) => {
     try {
-        const { restaurantId, mealId } = req.params;
+        const { restaurantId: paramResId, mealId: paramMealId } = req.params;
         const orderData = req.body;
+        const { restaurantId: bodyResId, mealId: bodyMealId } = orderData;
+
+        const restaurantId = bodyResId || paramResId;
+        const mealId = bodyMealId || paramMealId;
+
         const RepasModel = require('../../models/Repas');
         const CommandeModel = require('../../models/Commande');
 

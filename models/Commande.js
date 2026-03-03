@@ -19,12 +19,10 @@ const cmdeSchema = new mongoose.Schema({
                 required: true
             },
             name: {
-                type: String,
-                required: true
+                type: String
             },
             price: {
-                type: Number,
-                required: true
+                type: Number
             },
             quantite: {
                 type: Number,
@@ -32,8 +30,7 @@ const cmdeSchema = new mongoose.Schema({
             },
             total: {
                 type: Number,
-                required: true
-            }
+            } 
         }
     ],
     status: {
@@ -49,8 +46,7 @@ const cmdeSchema = new mongoose.Schema({
         enum: ['espece', 'virement', 'tmoney', 'flooz']
     },
     source: {
-        type: String,
-        enum: ['sur_place', 'a_emporter', 'livraison', 'web', 'qrCode'],
+        type: String
     },
     total_amount: {
         type: Number,
