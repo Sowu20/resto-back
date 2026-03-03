@@ -29,7 +29,7 @@ router.get('/mobile/restaurents/:restaurantId/repas/:mealId/order', getOrderForm
 //router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', submitOrder);
 
 // NOUVELLE Route pour la prévisualisation (Résumé) via formId simplifié
-router.post('/mobile/repas/order/preview', previewOrder);
+router.post('/mobile/restaurents/repas/order/preview', previewOrder);
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder);
 
 // Routes pour le paiement
