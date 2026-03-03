@@ -17,14 +17,14 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         .addParagraph(`📞 Téléphone : ${customerPhone}`)
         .addParagraph(`🍽️ Plat : ${mealName}`)
         .addParagraph(`💰 Prix : ${price}`)
-    // .addLink(
-    //     `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/payment`,
-    //     '💳 Procéder au paiement'
-    // )
-    // .addLink(
-    //     `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`,
-    //     '❌ Annuler'
-    // );
+        .addLink(
+            `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/payment`,
+            '💳 Procéder au paiement'
+        )
+        .addLink(
+            `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`,
+            '❌ Annuler'
+        );
 };
 
 module.exports = { createOrderSummaryView };
