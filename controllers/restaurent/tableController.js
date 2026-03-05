@@ -65,6 +65,10 @@ exports.detailTable = async(req, res) => {
 exports.updateTable = async(req, res) => {
     try {
         const { id, restaurentId } = req.params;
+
+        // Empêcher la modification du qrCode
+        delete req.body.qrCode;
+
         const table = await Table.findOneAndUpdate(
             {
                 _id: id,
