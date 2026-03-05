@@ -1,30 +1,23 @@
-const { ReaderView } = require('@numerum-tech/cmsdk');
+const { CardView } = require('@numerum-tech/cmsdk');
 
 /**
- * Crée une vue récapitulative de la commande (ReaderView)
- * @param {string} customerName - Nom du client
- * @param {string} customerPhone - Numéro de téléphone
- * @param {string} mealName - Nom du plat
- * @param {string} price - Prix du plat
- * @param {string} restaurantId
- * @param {string} mealId
- * @param {string} orderId - ID de la commande créée
+ * Crée une vue récapitulative de la commande (CardView)
+ * ...
  */
 const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId) => {
-    return new ReaderView('order-summary', 'Résumé de votre commande')
-        .setIntro('Vérifiez les détails de votre commande avant de procéder au paiement.')
-        .addParagraph(`👤 Client : ${customerName}`)
-        .addParagraph(`📞 Téléphone : ${customerPhone}`)
-        .addParagraph(`🍽️ Plat : ${mealName}`)
-        .addParagraph(`💰 Prix : ${price}`)
-        .addLink(
-            `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/payment`,
-            '💳 Procéder au paiement'
-        )
-        .addLink(
-            `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`,
-            '❌ Annuler'
-        );
+    return new CardView(`summary-${orderId}`, 'Résumé de votre commande')
+        .setSubtitle(mealName)
+        .setDescription('Vérifiez les détails de votre commande avant de procéder au paiement.')
+        .addStat('👤 Client', customerName)
+        .addStat('📞 Téléphone', customerPhone)
+        .addStat('🍽️ Plat', mealName)
+        .addStat('💰 Prix', price)
+        .addAction('💳 Procéder au paiement', 'GET', {
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/payment`
+        })
+        .addAction('❌ Annuler', 'GET', {
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
+        });
 };
 
 module.exports = { createOrderSummaryView };
