@@ -47,7 +47,7 @@ exports.createResto = async(req, res) => {
                         }
                     }
                 );
-                stream.end(req.file.bluffer);
+                stream.end(req.file.buffer);
             });
             imageUrl = result.secure_url;
         }
@@ -102,7 +102,7 @@ exports.detailResto = async(req, res) => {
     }
 };
 
-exports.updateResto = async(req, res) => {
+exports.updateResto = async (req, res) => {
     try {
         const data = {
             name: req.body.name,
@@ -113,7 +113,22 @@ exports.updateResto = async(req, res) => {
         };
 
         if (req.file) {
-            data.image = req.file.path;
+            const result = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "restaurent" },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+
+                stream.end(req.file.buffer);
+            });
+
+            data.image = result.secure_url;
         }
 
         const resto = await Restaurent.findByIdAndUpdate(
@@ -121,19 +136,24 @@ exports.updateResto = async(req, res) => {
             data,
             { new: true }
         );
+
         if (!resto) {
             return res.status(404).json({
-                message: 'Restaurent introuvable !'
+                message: "Restaurent introuvable !"
             });
         }
-        return res.status(202).json({
-            message: 'Restaurent modifié avec succès',
+
+        return res.status(200).json({
+            message: "Restaurent modifié avec succès",
             resto
         });
+
     } catch (error) {
-        return res.status(400).json({
-            message: "ID de l'utilisateur invalide !"
-        });   
+        console.error(error);
+        return res.status(500).json({
+            message: "Erreur lors de la modification du restaurant",
+            error: error.message
+        });
     }
 };
 
