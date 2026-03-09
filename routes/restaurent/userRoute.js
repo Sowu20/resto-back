@@ -13,6 +13,6 @@ router.get('/user',auth, role(['Admin']), userController.listUser);
 router.put('/user/change_password', auth, userController.changePassword);
 router.get('/user/:id', auth, check, userController.detailUser);
 router.put('/user/:id', auth, check, userController.updateUser);
-router.delete('/user/:id', auth, role(['Admin']), userController.deleteUser);
+router.delete('/user/:id', auth, role(['Admin', 'restaurent']), userController.deleteUser);
 
 module.exports = router;
