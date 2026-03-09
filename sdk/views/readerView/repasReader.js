@@ -42,7 +42,7 @@ const createRepasDetailReader = (restaurantId, repas) => {
     card.setImage(getOptimizedImageUrl(repas.image, { width: 600 }));
   }
 
-  card.addAction('🛒 Commander', 'GET', {
+  card.addAction('Commander', 'GET', {
     href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${repas._id}/order`,
   });
 

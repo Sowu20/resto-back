@@ -8,14 +8,14 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
     return new CardView(`summary-${orderId}`, 'Résumé de votre commande')
         .setSubtitle(mealName)
         .setDescription('Vérifiez les détails de votre commande avant de procéder au paiement.')
-        .addStat('👤 Client', customerName)
-        .addStat('📞 Téléphone', customerPhone)
-        .addStat('🍽️ Plat', mealName)
-        .addStat('💰 Prix', price)
-        .addAction('💳 Procéder au paiement', 'GET', {
+        .addStat('Client', customerName)
+        .addStat('Téléphone', customerPhone)
+        .addStat('Plat', mealName)
+        .addStat('Prix', price)
+        .addAction('Procéder au paiement', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/payment`
         })
-        .addAction('❌ Annuler', 'GET', {
+        .addAction('Annuler', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
         });
 };

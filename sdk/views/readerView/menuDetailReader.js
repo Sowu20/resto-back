@@ -87,14 +87,14 @@ const createMenuDetailView = (menu, dishes = []) => {
     const actions = [
         {
             id: 'back-to-menus',
-            label: '📋 Retour aux menus',
+            label: 'Retour aux menus',
             type: 'GET',
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`,
             variant: 'link'
         },
         {
             id: 'back-to-restaurant',
-            label: '🏠 Voir le restaurant',
+            label: 'Voir le restaurant',
             type: 'GET',
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}`,
             variant: 'link'

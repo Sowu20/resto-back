@@ -18,9 +18,9 @@ const createRestaurantDetailReader = (restaurant) => {
     const reader = new CardView(restaurantId, name)
         .setSubtitle(address)
         .setDescription(restaurant.description || 'Découvrez notre cuisine authentique et savoureuse dans une ambiance chaleureuse.')
-        .addStat('📍 Adresse', address)
-        .addStat('📞 Téléphone', restaurant.phone ? restaurant.phone.toString() : 'Non spécifié')
-        .addStat('⏰ Statut', restaurant.status || 'Voir sur place')
+        .addStat('Adresse', address)
+        .addStat('Téléphone', restaurant.phone ? restaurant.phone.toString() : 'Non spécifié')
+        .addStat('Statut', restaurant.status || 'Voir sur place')
         .setImage(getOptimizedImageUrl(restaurant.image, { width: 400 }))
         .addAction('Voir les menus', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
