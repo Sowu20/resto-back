@@ -72,3 +72,42 @@ exports.deleteUser = async(req, res) => {
         });
     }
 };
+
+exports.changePassword = async(req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({
+        message: 'Veuillez remplir tous les champs avant de continuer !'
+      });
+    }
+
+    if (newPassword != confirmPassword) {
+      return res.status(400).json({
+        message: 'Les nouveaux mots de passe ne correspondent pas !'
+      });
+    }
+
+    const user = await User.findById(req.user.id);
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message: 'Mot de passe actuel incorrect !'
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.status(200).json({
+      message: 'Mot de passe modifié avec succès'
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+};
