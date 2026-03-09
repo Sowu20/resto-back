@@ -104,9 +104,21 @@ exports.detailResto = async(req, res) => {
 
 exports.updateResto = async(req, res) => {
     try {
+        const data = {
+            name: req.body.name,
+            address: req.body.address,
+            phone: req.body.phone,
+            email: req.body.email,
+            description: req.body.description
+        };
+
+        if (req.file) {
+            data.image = req.file.path;
+        }
+
         const resto = await Restaurent.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            data,
             { new: true }
         );
         if (!resto) {
@@ -247,3 +259,27 @@ exports.searchRestaurent = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.changeStatus = async(req, res) => {
+    try {
+        const restaurent = await Restaurent.findById(req.params.id);
+
+        if (!restaurent) {
+            return res.status(400).json({
+                message: 'Restaurent introuvable !'
+            });
+        }
+
+        restaurent.status = restaurent.status === "Ouvert" ? "Fermé" : "Ouvert";
+        await Restaurent.save();
+
+        res.status(200).json({
+            message: 'Status du restaurent mise à jour',
+            status: restaurent.status
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
