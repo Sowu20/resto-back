@@ -291,7 +291,7 @@ exports.changeStatus = async(req, res) => {
         }
 
         restaurent.status = restaurent.status === "Ouvert" ? "Fermé" : "Ouvert";
-        await Restaurent.save();
+        await restaurent.save();
 
         res.status(200).json({
             message: 'Status du restaurent mise à jour',
