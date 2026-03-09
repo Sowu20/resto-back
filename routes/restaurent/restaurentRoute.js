@@ -15,7 +15,7 @@ router.get('/restaurent/status_restaurent', auth, restaurentController.getStatus
 router.get('/restaurent/localisation', restaurentController.getRestaurentsLoc);
 router.get('/restaurent/:id', auth, restaurentController.detailResto);
 router.put('/restaurent/status/:id', auth, restaurentController.changeStatus);
-router.put('/restaurent/:id', auth, role(['Admin', 'restaurent']), upload.single('image'), restaurentController.updateResto);
-router.delete('/restaurent/:id', auth, role(['Admin']), restaurentController.deleteResto);
+router.put('/restaurent/:id', auth, upload.single('image'), restaurentController.updateResto);
+router.delete('/restaurent/:id', auth, restaurentController.deleteResto);
 
 module.exports = router;
