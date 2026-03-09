@@ -7,12 +7,6 @@ const path = require('path');
 
 const app = express();
 
-app.use((req, res, next) => {
-  const fs = require('fs');
-  fs.appendFileSync('server-debug.log', `[${new Date().toISOString()}] ${req.method} ${req.originalUrl}\n`);
-  next();
-});
-
 app.use(express.json());
 
 app.use(cors({
