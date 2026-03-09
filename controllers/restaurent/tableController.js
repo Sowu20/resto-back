@@ -10,7 +10,7 @@ exports.createTable = async(req, res) => {
         const backendUrl = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurentId}&title=zamora`;
         const qrLink = `https://demo.city-mate.com/services/696e5f99ed00d4dfdc05a4a8/play?url=${encodeURIComponent(backendUrl)}`;
 
-        const qrCode = crypto.randomBytes(16).toString('hex');
+        const qrCode = crypto.randomBytes(16).toString('hex'); 
 
         const table = await Table.create({
             numero_table,
