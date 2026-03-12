@@ -16,6 +16,9 @@ const tableSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    qrLink: {
+        type: String
+    },
     statut: {
         type: String,
         enum: ['libre', 'occupe', 'reserve'],
