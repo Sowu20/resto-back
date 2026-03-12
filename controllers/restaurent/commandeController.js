@@ -1,6 +1,8 @@
 const { default: mongoose } = require('mongoose');
 const Commande = require('../../models/Commande');
 const Repas = require('../../models/Repas');
+const User = require('../../models/User');
+const sendNotification = require('../../utils/sendNotification');
 
 exports.faireCommande = async(req, res) => {
     try {
@@ -68,6 +70,15 @@ exports.faireCommande = async(req, res) => {
             payment_status: "en_attente",
             restaurent: restaurentId
         });
+
+        // Notification au restaurateur
+        await sendNotification({
+            userId: restaurentId,
+            titre: 'Nouvelle commande',
+            contenu: `Vous avez reçu une nouvelle commande (${order_number}) de ${customer_name} !`,
+            type: 'commande'
+        });
+
         return res.status(201).json({
             message: 'Commande enregistré avec succès',
             commande
