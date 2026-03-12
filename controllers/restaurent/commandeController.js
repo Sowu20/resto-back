@@ -3,6 +3,7 @@ const Commande = require('../../models/Commande');
 const Repas = require('../../models/Repas');
 const User = require('../../models/User');
 const sendNotification = require('../../utils/sendNotification');
+const Table = require('../../models/Table');
 
 exports.faireCommande = async(req, res) => {
     try {
@@ -54,7 +55,19 @@ exports.faireCommande = async(req, res) => {
 
         let tableValue = null;
         if (source === "sur_place") {
-            tableValue = table || null;
+            if (!table) {
+                return res.status(400).json({
+                    message: "La table est obligatoire pour une commande sur place"
+                });
+            };
+            const tableData = await Table.findById(table);
+            if (!tableData) {
+                return res.status(404).json({
+                    message: "Table introuvable"
+                });  
+            };
+
+            tableValue = tableData._id;
         }
 
         const commande = await Commande.create({
