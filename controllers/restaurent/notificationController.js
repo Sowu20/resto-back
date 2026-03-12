@@ -22,7 +22,7 @@ exports.detailNotification = async (req, res) => {
             });
         }
 
-        res.status(200).json(notification);
+        res.status(200).json({ notification });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
