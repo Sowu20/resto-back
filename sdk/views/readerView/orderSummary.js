@@ -13,7 +13,7 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         .addStat('Plat', mealName)
         .addStat('Prix', price)
         .addAction('Procéder au paiement', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/payment`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${orderId}/preview/payment`
         })
         .addAction('Annuler', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`

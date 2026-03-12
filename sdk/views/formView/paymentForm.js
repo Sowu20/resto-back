@@ -15,14 +15,14 @@ const createPaymentView = (order, restaurantId) => {
     return new CardView(`payment-${order._id}`, 'Finaliser le paiement')
         .setSubtitle(`Commande N° ${order.order_number}`)
         .setDescription('Confirmez votre paiement pour valider la commande.')
-        .addStat('💰 Montant total', `${order.total_amount} FCFA`)
-        .addStat('💳 Méthode', paymentMethodLabel[order.payment_method] || order.payment_method)
-        .addStat('👤 Client', order.customer_name)
-        .addStat('📞 Téléphone', order.customer_phone)
-        .addAction('✅ Confirmer le paiement', 'POST', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${order._id}/confirm-payment`
+        .addStat('Montant total', `${order.total_amount} FCFA`)
+        .addStat('Méthode', paymentMethodLabel[order.payment_method] || order.payment_method)
+        .addStat('Client', order.customer_name)
+        .addStat('Téléphone', order.customer_phone)
+        .addAction('Confirmer le paiement', 'POST', {
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${order._id}/preview/payment/confirm-payment`
         })
-        .addAction('❌ Annuler', 'GET', {
+        .addAction('Annuler', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
         });
 };

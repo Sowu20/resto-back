@@ -33,7 +33,7 @@ router.post('/mobile/restaurents/repas/order/preview', previewOrder);
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder);
 
 // Routes pour le paiement
-router.get('/mobile/restaurents/:restaurantId/orders/:orderId/payment', getPaymentForm);
-router.post('/mobile/restaurents/:restaurantId/orders/:orderId/confirm-payment', confirmPayment);
+router.get('/mobile/restaurents/:restaurantId/orders/:orderId/preview/payment', getPaymentForm);
+router.post('/mobile/restaurents/:restaurantId/orders/:orderId/preview/payment/confirm-payment', confirmPayment);
 
 module.exports = router;
