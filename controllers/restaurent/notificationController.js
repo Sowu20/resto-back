@@ -1,4 +1,5 @@
 const Notification = require('../../models/Notification');
+const SettingNotification = require('../../models/SettingNotification');
 
 exports.createNotification = async(req, res) => {
     try {
@@ -41,6 +42,24 @@ exports.updateNotification = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.updateSettings = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+
+        const settings = await SettingNotification.findOneAndUpdate(
+            { restaurent: restaurentId },
+            req.body,
+            { new: true }
+        );
+
+        res.json(settings);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
 
 exports.deleteNotification = async (req, res) => {
     try {
@@ -149,3 +168,25 @@ exports.statsNotification = async(req, res) => {
         });
     }
 };
+
+exports.settings = async(req, res) => {
+    try {
+        const { restaurentId } = req.params;
+
+        let settings = await SettingNotification.findOne({
+            restaurent: restaurentId
+        });
+
+        if (!settings) {
+            settings = await SettingNotification.create({
+                restaurent: restaurentId
+            });
+        }
+
+        res.json(settings);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+}
