@@ -238,11 +238,12 @@ exports.getStats = async (req, res) => {
 exports.getRevenus = async(req, res) => {
     try {
         const { restaurentId } = req.params;
+        const rId = new mongoose.Types.ObjectId(restaurentId);
 
         const revenus = await Commande.aggregate([
         {
             $match: {
-                restaurent: restaurentId,
+                restaurent: rId,
                 payment_status: 'paye'
             }
         },
@@ -307,19 +308,25 @@ exports.getStatusCommande = async (req, res) => {
 exports.getMeilleuresVentes = async (req, res) => {
   try {
     const { restaurentId } = req.params;
+    const rId = new mongoose.Types.ObjectId(restaurentId);
 
     const ventes = await Commande.aggregate([
-      { $match: { restaurent: restaurentId } },
-      { $unwind: '$items' },
-      {
-        $group: {
-          _id: '$items.repas',
-          nom: { $first: '$items.nom_repas' },
-          quantite_vendue: { $sum: '$items.quantite' }
-        }
-      },
-      { $sort: { quantite_vendue: -1 } },
-      { $limit: 5 }
+        { $match: { 
+                restaurent: rId,
+                payment_status: "paye" 
+            } 
+        },
+        { $unwind: '$items' },
+        {
+            $group: {
+                _id: '$items.repas',
+                nom: { $first: '$items.name' },
+                quantite_vendue: { $sum: '$items.quantite' },
+                totalRevenue: { $sum: "$items.total" }
+            }
+        },
+        { $sort: { quantite_vendue: -1 } },
+        { $limit: 5 }
     ]);
 
     res.json(ventes);
