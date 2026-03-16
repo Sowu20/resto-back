@@ -269,8 +269,9 @@ exports.getRevenus = async(req, res) => {
 exports.getStatusCommande = async (req, res) => {
     try {
         const { restaurentId } = req.params;
+        const rId = new mongoose.Types.ObjectId(restaurentId);
 
-        if (!mongoose.Types.ObjectId.isValid(restaurentId)) {
+        if (!rId) {
             return res.status(400).json({
                 message: 'ID du restaurent invalide'
             });
@@ -279,7 +280,7 @@ exports.getStatusCommande = async (req, res) => {
         const stats = await Commande.aggregate([
             {
                 $match: {
-                    restaurent: new mongoose.Types.ObjectId(restaurentId)
+                    restaurent: rId
                 }
             },
             {
@@ -342,9 +343,18 @@ exports.getCommandesRecentes = async (req, res) => {
     const commandes = await Commande.find({ restaurent: restaurentId })
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('order_number customer_name total_amount status createdAt');
+      .select('order_number customer_name total_amount status items createdAt');
 
-    res.json(commandes);
+    const result = commandes.map(cmd => ({
+        order_number: cmd.order_number,
+        customer_name: cmd.customer_name,
+        total_amount: cmd.total_amount,
+        status: cmd.status,
+        items: cmd.items.length,
+        createdAt: cmd.createdAt
+    }));
+
+    res.json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
