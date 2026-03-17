@@ -9,7 +9,7 @@ const { FormView } = require('@numerum-tech/cmsdk');
  */
 const createOrderForm = (mealName, price, restaurantId, mealId, tableId) => {
     // formId renommé pour la cohérence : mobile/restaurents/order/preview
-    const formId = `https://resto-back-xazy.onrender.com/mobile/restaurents/table/repas/order/preview`;
+    const formId = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas/${mealId}/order/preview`;
 
     const title = `Commande de : ${mealName} à ${price}`;
 

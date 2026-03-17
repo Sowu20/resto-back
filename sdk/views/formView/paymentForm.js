@@ -23,7 +23,7 @@ const createPaymentView = (order, restaurantId) => {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${order._id}/preview/payment/confirm-payment`
         })
         .addAction('Annuler', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas`
         });
 };
 
