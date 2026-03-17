@@ -200,51 +200,131 @@ exports.deleteCommande = async(req, res) => {
 };
 
 exports.getStats = async (req, res) => {
-    try {
-        const { restaurentId } = req.params;
-        const rId = new mongoose.Types.ObjectId(restaurentId);
+  try {
+    const { restaurentId } = req.params;
+    const rId = new mongoose.Types.ObjectId(restaurentId);
+    const now = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(now.getDate() - 7);
+    const fourteenDaysAgo = new Date();
+    fourteenDaysAgo.setDate(now.getDate() - 14);
 
-        const stats = await Commande.aggregate([
-            { $match: { restaurent: rId, customer_phone: { $ne: null } } },
+    const stats = await Commande.aggregate([
+      {
+        $match: {
+          restaurent: rId,
+          customer_phone: { $ne: null }
+        }
+      },
+      {
+        $facet: {
+          current: [
+            { $match: { createdAt: { $gte: sevenDaysAgo } } },
             {
-                $group: {
-                    _id: null,
-                    total: { $sum: 1 },
-                    en_attente: { $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] } },
-                    livres: { $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] } },
-                    annules: { $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] } },
-                    totalCustomers: { $addToSet: "$customer_phone" },
-                    totalRevenue: { $sum: { $cond: [{ $eq: ["$payment_status", "paye"] }, "$total_amount", 0] } },
-                    order: { $sum: { $cond: [{ $eq: ["$payment_status", "paye"] }, 1, 0] } }   
+              $group: {
+                _id: null,
+                totalOrders: { $sum: 1 },
+                en_attente: {
+                  $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] }
+                },
+                livres: {
+                  $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] }
+                },
+                annules: {
+                  $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] }
+                },
+                totalRevenue: {
+                  $sum: {
+                    $cond: [
+                      { $eq: ["$payment_status", "paye"] },
+                      "$total_amount",
+                      0
+                    ]
+                  }
+                },
+                totalCustomers: { $addToSet: "$customer_phone" }
+              }
+            }
+          ],
+          previous: [
+            {
+              $match: {
+                createdAt: {
+                  $gte: fourteenDaysAgo,
+                  $lt: sevenDaysAgo
                 }
+              }
             },
             {
-                $project: {
-                    _id: 0,
-                    total: 1,
-                    en_attente: 1,
-                    livres: 1,
-                    annules: 1,
-                    totalRevenue: 1,
-                    totalCustomers: { $size: "$totalCustomers" },
-                    averageOrderValue: { $cond: [{ $eq: ["$order", 0] }, 0, { $divide: ["$totalRevenue", "$order"] }] }
-                }
+              $group: {
+                _id: null,
+                totalOrders: { $sum: 1 },
+                en_attente: {
+                  $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] }
+                },
+                livres: {
+                  $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] }
+                },
+                annules: {
+                  $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] }
+                },
+                totalRevenue: {
+                  $sum: {
+                    $cond: [
+                      { $eq: ["$payment_status", "paye"] },
+                      "$total_amount",
+                      0
+                    ]
+                  }
+                },
+                totalCustomers: { $addToSet: "$customer_phone" }
+              }
             }
-        ]);
+          ]
 
-        const result = stats[0] || { 
-            total: 0, 
-            en_attente: 0, 
-            livre: 0, 
-            annule: 0,
-            totalRevenue: 0,
-            averageOrderValue: 0, 
-            totalCustomers: 0 
-        };
-        res.json(result);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+        }
+      }
+    ]);
+
+    const current = stats[0].current[0] || {};
+    const previous = stats[0].previous[0] || {};
+    const growth = (current, previous) =>
+      previous === 0 ? 0 : ((current - previous) / previous) * 100;
+
+    // valeurs actuelles
+    const totalOrders = current.totalOrders || 0;
+    const totalRevenue = current.totalRevenue || 0;
+    const totalCustomers = current.totalCustomers?.length || 0;
+    const en_attente = current.en_attente || 0;
+    const livres = current.livres || 0;
+    const annules = current.annules || 0;
+    // valeurs précédentes
+    const prevOrders = previous.totalOrders || 0;
+    const prevRevenue = previous.totalRevenue || 0;
+    const prevCustomers = previous.totalCustomers?.length || 0;
+    // panier moyen
+    const averageOrderValue = totalOrders ? totalRevenue / totalOrders : 0;
+    const prevAverageOrderValue = prevOrders ? prevRevenue / prevOrders : 0;
+
+    res.json({
+      totalOrders,
+      growthOrders: growth(totalOrders, prevOrders),
+      totalRevenue,
+      growthRevenue: growth(totalRevenue, prevRevenue),
+      averageOrderValue,
+      growthBasket: growth(averageOrderValue, prevAverageOrderValue),
+      totalCustomers,
+      growthCustomers: growth(totalCustomers, prevCustomers),
+      en_attente,
+      livres,
+      annules
+    });
+
+  } catch (error) {
+    res.status(500).json({ 
+        message: error.message 
+    });
+  }
 };
 
 exports.getRevenus = async(req, res) => {
