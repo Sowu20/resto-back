@@ -32,6 +32,9 @@ router.get('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order
 // NOUVELLE Route pour la prévisualisation (Résumé) via formId simplifié
 router.post('/mobile/restaurents/table/repas/order/preview', previewOrder);
 router.post('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order/preview', previewOrder);
+// Le SDK city-mate poste vers l'URL de la page /order (avec slash final)
+router.post('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order', previewOrder);
+router.post('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order/', previewOrder);
 
 // Routes pour le paiement
 router.get('/mobile/restaurents/:restaurantId/table/:tableId/orders/:orderId/preview/payment', getPaymentForm);
