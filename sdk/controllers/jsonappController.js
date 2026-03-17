@@ -16,7 +16,9 @@ const mongoose = require('mongoose');
 
 // Helper pour obtenir l'URL de base dynamiquement
 const getBaseUrl = (req) => {
-    return req.protocol + '://' + req.get('host');
+    // On vérifie d'abord si on est en production via un header commun aux proxies (Render, Heroku, etc.)
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    return protocol + '://' + req.get('host');
 };
 
 const HomeScreen = (req, res) => {
