@@ -14,7 +14,7 @@ router.get('/mobile/about', getAboutView);
 
 // Route pour les Restaurants
 router.get('/mobile/restaurents', Restaurents);
-router.get('/mobile/restaurents/:id', RestaurentDetail);
+// router.get('/mobile/restaurents/:id', RestaurentDetail);
 router.get('/mobile/restaurents/:id/table/:tableId', RestaurentDetail);
 router.get('/mobile/restaurents/:id/table/:tableId/menu', Menu);
 // NOUVELLE route pour les détails d'un menu
