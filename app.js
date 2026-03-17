@@ -10,19 +10,10 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: [
-    'https://resto-back-xazy.onrender.com',
-    'https://zamora-app.netlify.app',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://192.168.1.112:3000',
-    'http://192.168.1.112:3000/user/dashboard',
-    'https://demo.city-mate.com',
-    'http://192.168.1.235:3000'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  origin: "*",
+  methods: "*",
+  // allowedHeaders: ['Content-Type', 'Authorization'],
+  // credentials: true
 }));
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
