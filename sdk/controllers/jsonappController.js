@@ -14,8 +14,13 @@ const { getMealData } = require('../views/readerView/repasReader');
 const { createAboutView } = require('../views/readerView/aboutReader');
 const mongoose = require('mongoose');
 
+// Helper pour obtenir l'URL de base dynamiquement
+const getBaseUrl = (req) => {
+    return req.protocol + '://' + req.get('host');
+};
+
 const HomeScreen = (req, res) => {
-    const baseUrl = req.protocol + '://' + req.get('host');
+    const baseUrl = getBaseUrl(req);
     const menu = createMainMenuView(baseUrl);
     res.json(menu.toJSON());
 };
@@ -25,14 +30,14 @@ const RegisterForm = (req, res) => {
 };
 
 const getReader = (req, res) => {
-    const baseUrl = req.protocol + '://' + req.get('host');
+    const baseUrl = getBaseUrl(req);
     const reader = createUserReaderView(baseUrl);
     res.json(reader.toJSON());
 };
 
 const Restaurents = async (req, res) => {
     try {
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const restaurants = await Restaurent.find();
         const reader = createRestaurantsList(restaurants, baseUrl);
         res.json(reader.toJSON());
@@ -58,7 +63,7 @@ const RestaurentDetail = async (req, res) => {
             return res.status(404).json({ error: 'Restaurant non trouvé' });
         }
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const reader = createRestaurantDetailReader(restaurant, tableId, baseUrl);
         res.json(reader.toJSON());
     } catch (error) {
@@ -78,7 +83,7 @@ const Menu = async (req, res) => {
             isActive: true
         });
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const reader = createMenusGrid(restaurantId, tableId, menus, baseUrl);
 
         if (!reader) {
@@ -118,7 +123,7 @@ const getMenuDetails = async (req, res) => {
                 primaryAction: {
                     label: 'Retour aux menus',
                     type: 'GET',
-                    href: `${req.protocol}://${req.get('host')}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}/menu`
+                    href: `${getBaseUrl(req)}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}/menu`
                 }
             });
         }
@@ -133,7 +138,7 @@ const getMenuDetails = async (req, res) => {
         console.log(`✅ Menu trouvé: ${menu.name}, Plats trouvés: ${dishes.length}`);
 
         // 3. Générer la vue via le Reader mis à jour
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const menuDetail = createMenuDetailView(menu, tableId, dishes, baseUrl);
 
         res.json(menuDetail);
@@ -157,7 +162,7 @@ const Repas = async (req, res) => {
             isAvaible: true
         });
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const reader = createRepasReader(restaurantId, tableId, repas, baseUrl);
 
         if (!reader) {
@@ -182,7 +187,7 @@ const getRepasDetails = async (req, res) => {
             return res.status(404).json({ error: 'Repas non trouvé' });
         }
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const reader = createRepasDetailReader(restaurantId, tableId, repas, baseUrl);
         return res.json(reader.toJSON());
     } catch (error) {
@@ -202,7 +207,7 @@ const getOrderForm = async (req, res) => {
             return res.status(404).json({ error: 'Repas non trouvé' });
         }
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const form = createOrderForm(
             repas.name,
             `${repas.price} FCFA`,
@@ -302,7 +307,7 @@ const previewOrder = async (req, res) => {
         console.log('✅ Commande créée:', newOrder._id);
 
         // Afficher le résumé avec bouton de paiement
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const summaryView = createOrderSummaryView(
             orderData.customer_name,
             orderData.customer_phone,
@@ -332,7 +337,7 @@ const getScanView = (req, res) => {
 };
 
 const getAboutView = (req, res) => {
-    const baseUrl = req.protocol + '://' + req.get('host');
+    const baseUrl = getBaseUrl(req);
     const about = createAboutView(baseUrl);
     res.json(about.toJSON());
 };
@@ -349,7 +354,7 @@ const getPaymentForm = async (req, res) => {
             return res.status(404).json({ error: 'Commande non trouvée' });
         }
 
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const { createPaymentView } = require('../views/formView/paymentForm');
         const paymentView = createPaymentView(order, restaurantId, tableId, baseUrl);
         res.json(paymentView.toJSON());
@@ -392,7 +397,7 @@ const confirmPayment = async (req, res) => {
         }
 
         // Afficher la confirmation
-        const baseUrl = req.protocol + '://' + req.get('host');
+        const baseUrl = getBaseUrl(req);
         const confirmationView = createOrderConfirmationView(
             order.customer_name,
             order.customer_phone,
