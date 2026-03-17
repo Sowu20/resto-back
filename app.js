@@ -12,7 +12,7 @@ app.enable('trust proxy');
 app.use(express.json());
 
 app.use(cors({
-  origin: "*",
+  origin: true,
   methods: "*",
   // allowedHeaders: ['Content-Type', 'Authorization'],
   // credentials: true
