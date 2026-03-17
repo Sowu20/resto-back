@@ -30,7 +30,7 @@ const cmdeSchema = new mongoose.Schema({
             },
             total: {
                 type: Number,
-            } 
+            }
         }
     ],
     status: {

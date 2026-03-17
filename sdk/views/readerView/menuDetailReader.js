@@ -7,7 +7,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {Array} dishes - La liste des Repas associés à ce menu
  * @returns {Object} JSON de la vue carrousel
  */
-const createMenuDetailView = (menu, dishes = []) => {
+const createMenuDetailView = (menu, tableId, dishes = []) => {
     if (!menu) {
         return {
             viewId: 'menu-not-found',
@@ -67,7 +67,7 @@ const createMenuDetailView = (menu, dishes = []) => {
                     '➕ Commander ce plat',
                     'GET', // On redirige vers le formulaire de commande du repas
                     {
-                        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${dish._id}/order`
+                        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas/${dish._id}/order`
                     }
                 );
             }
@@ -89,7 +89,7 @@ const createMenuDetailView = (menu, dishes = []) => {
             id: 'back-to-menus',
             label: 'Retour aux menus',
             type: 'GET',
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`,
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/menu`,
             variant: 'link'
         },
         {

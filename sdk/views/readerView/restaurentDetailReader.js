@@ -6,7 +6,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {Object} restaurant - Le document restaurant provenant de la base de données.
  * @returns {CardView|null} La vue formatée pour le SDK ou null si pas de données.
  */
-const createRestaurantDetailReader = (restaurant) => {
+const createRestaurantDetailReader = (restaurant, tableId) => {
     if (!restaurant) {
         return null;
     }
@@ -23,10 +23,10 @@ const createRestaurantDetailReader = (restaurant) => {
         .addStat('Statut', restaurant.status || 'Voir sur place')
         .setImage(getOptimizedImageUrl(restaurant.image, { width: 400 }))
         .addAction('Voir les menus', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/menu`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/menu`
         })
         .addAction('Voir les repas', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas`
         });
 
     return reader;

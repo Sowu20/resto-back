@@ -2,7 +2,7 @@ const { ActionGridView, CardView } = require('@numerum-tech/cmsdk');
 const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 
-const createRepasReader = (restaurantId, repas = []) => {
+const createRepasReader = (restaurantId, tableId, repas = []) => {
   if (!repas || repas.length === 0) {
     return null;
   }
@@ -21,7 +21,7 @@ const createRepasReader = (restaurantId, repas = []) => {
       plat.image ? getOptimizedImageUrl(plat.image, { width: 300 }) : undefined,
       {
         type: 'GET',
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${plat._id}`
+        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas/${plat._id}`
       }
     );
   });
@@ -29,7 +29,7 @@ const createRepasReader = (restaurantId, repas = []) => {
   return grid.toJSON();
 };
 
-const createRepasDetailReader = (restaurantId, repas) => {
+const createRepasDetailReader = (restaurantId, tableId, repas) => {
   if (!repas) return null;
 
   const card = new CardView(`repas-detail-${repas._id}`, repas.name)
@@ -43,7 +43,7 @@ const createRepasDetailReader = (restaurantId, repas) => {
   }
 
   card.addAction('Commander', 'GET', {
-    href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/repas/${repas._id}/order`,
+    href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas/${repas._id}/order`,
   });
 
   return card;
