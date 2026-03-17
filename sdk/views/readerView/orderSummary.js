@@ -4,7 +4,7 @@ const { CardView } = require('@numerum-tech/cmsdk');
  * Crée une vue récapitulative de la commande (CardView)
  * ...
  */
-const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId, tableInfo) => {
+const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId, tableInfo, baseUrl = 'https://resto-back-xazy.onrender.com') => {
     // Si tableInfo est un objet, on extrait le nom ET le numero, sinon on l'utilise tel quel
     let tableDisplay = tableInfo;
     if (typeof tableInfo === 'object') {
@@ -18,6 +18,7 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
     }
 
     const tableId = typeof tableInfo === 'object' ? tableInfo._id.toString() : tableInfo;
+    const tablePath = tableId ? `/table/${tableId}` : '';
 
     return new CardView(`summary-${orderId}`, 'Résumé de votre commande')
         .setSubtitle(mealName)
@@ -28,10 +29,10 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         .addStat('Plat', mealName)
         .addStat('Prix', price)
         .addAction('Procéder au paiement', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/orders/${orderId}/preview/payment`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/order/${orderId}/payment`
         })
         .addAction('Annuler', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas`
         });
 };
 

@@ -7,7 +7,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {Array} dishes - La liste des Repas associés à ce menu
  * @returns {Object} JSON de la vue carrousel
  */
-const createMenuDetailView = (menu, tableId, dishes = []) => {
+const createMenuDetailView = (menu, tableId, dishes = [], baseUrl = 'https://resto-back-xazy.onrender.com') => {
     if (!menu) {
         return {
             viewId: 'menu-not-found',
@@ -26,6 +26,7 @@ const createMenuDetailView = (menu, tableId, dishes = []) => {
 
     const menuId = menu._id.toString();
     const restaurantId = menu.restaurent.toString();
+    const tablePath = tableId ? `/table/${tableId}` : '';
 
     // Crée le carrousel
     const carousel = new CarouselView(`menu-carousel-${menuId}`, menu.name);
@@ -38,7 +39,7 @@ const createMenuDetailView = (menu, tableId, dishes = []) => {
                 'Aucun plat',
                 'Ce menu ne contient pas encore de plats.',
                 {
-                    imageUrl: getOptimizedImageUrl(menu.image || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d', { width: 500 })
+                    imageUrl: getOptimizedImageUrl(menu.image || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d', { width: 500 }, baseUrl)
                 }
             )
         );
@@ -54,7 +55,7 @@ const createMenuDetailView = (menu, tableId, dishes = []) => {
                     dish.name,
                     description,
                     {
-                        imageUrl: getOptimizedImageUrl(dish.image || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d', { width: 500 }),
+                        imageUrl: getOptimizedImageUrl(dish.image || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d', { width: 500 }, baseUrl),
                         badge: dish.isAvaible ? undefined : 'Indisponible' // Ex: afficher si dispo
                     }
                 )
@@ -67,7 +68,7 @@ const createMenuDetailView = (menu, tableId, dishes = []) => {
                     '➕ Commander ce plat',
                     'GET', // On redirige vers le formulaire de commande du repas
                     {
-                        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas/${dish._id}/order`
+                        href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas/${dish._id}/order`
                     }
                 );
             }
@@ -89,14 +90,14 @@ const createMenuDetailView = (menu, tableId, dishes = []) => {
             id: 'back-to-menus',
             label: 'Retour aux menus',
             type: 'GET',
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/menu`,
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/menu`,
             variant: 'link'
         },
         {
             id: 'back-to-restaurant',
             label: 'Voir le restaurant',
             type: 'GET',
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}`,
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath ? '' : ''}`, // Correcting to restaurant home
             variant: 'link'
         }
     ];

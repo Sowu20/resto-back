@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 const Restaurent = require('../../models/Restaurent');
 
-const secret_key ='0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03ed05';
+const secret_key = '0a01fcf7e3084f800565d0bd2d9a69de63b043d3c91274306a40b3df8c03ed05';
 
-exports.registerRestaurent = async(req, res) => {
+exports.registerRestaurent = async (req, res) => {
     try {
         const { name, address, phone, email, password } = req.body;
 
@@ -35,7 +35,7 @@ exports.registerRestaurent = async(req, res) => {
             address,
             phone,
             email,
-            password:hashedPass,
+            password: hashedPass,
             user: user._id,
             createdBy
         });
@@ -58,7 +58,7 @@ exports.registerRestaurent = async(req, res) => {
     }
 };
 
-exports.login = async(req, res) => {
+exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -81,17 +81,17 @@ exports.login = async(req, res) => {
 
         // Générer un token
         const token = jwt.sign(
-            { 
-                id: user._id, 
+            {
+                id: user._id,
                 role: user.role,
-                restaurentId: restaurent ? restaurent._id: null
+                restaurentId: restaurent ? restaurent._id : null
             },
             secret_key || 'default_secret',
-            { expiresIn: "2d" }  
+            { expiresIn: "2d" }
         );
 
         return res.status(200).json({
-            message: 'Connexion réussie !', 
+            message: 'Connexion réussie !',
             token,
             user: {
                 id: user._id,

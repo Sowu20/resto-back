@@ -6,7 +6,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {Object} restaurant - Le document restaurant provenant de la base de données.
  * @returns {CardView|null} La vue formatée pour le SDK ou null si pas de données.
  */
-const createRestaurantDetailReader = (restaurant, tableId) => {
+const createRestaurantDetailReader = (restaurant, tableId, baseUrl = 'https://resto-back-xazy.onrender.com') => {
     if (!restaurant) {
         return null;
     }
@@ -14,6 +14,7 @@ const createRestaurantDetailReader = (restaurant, tableId) => {
     const restaurantId = restaurant._id.toString();
     const name = restaurant.name || 'Restaurant sans nom';
     const address = restaurant.address || 'Adresse non spécifiée';
+    const tablePath = tableId ? `/table/${tableId}` : '';
 
     const reader = new CardView(restaurantId, name)
         .setSubtitle(address)
@@ -21,12 +22,12 @@ const createRestaurantDetailReader = (restaurant, tableId) => {
         .addStat('Adresse', address)
         .addStat('Téléphone', restaurant.phone ? restaurant.phone.toString() : 'Non spécifié')
         .addStat('Statut', restaurant.status || 'Voir sur place')
-        .setImage(getOptimizedImageUrl(restaurant.image, { width: 400 }))
+        .setImage(getOptimizedImageUrl(restaurant.image, { width: 400 }, baseUrl))
         .addAction('Voir les menus', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/menu`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/menu`
         })
         .addAction('Voir les repas', 'GET', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas`
         });
 
     return reader;
