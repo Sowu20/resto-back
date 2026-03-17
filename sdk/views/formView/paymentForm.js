@@ -5,7 +5,7 @@ const { CardView } = require('@numerum-tech/cmsdk');
  * @param {Object} order - Document de commande depuis MongoDB
  * @param {string} restaurantId - ID du restaurant pour la navigation
  */
-const createPaymentView = (order, restaurantId) => {
+const createPaymentView = (order, restaurantId, tableId) => {
     const paymentMethodLabel = {
         'tmoney': 'T-Money',
         'flooz': 'Flooz',
@@ -20,7 +20,7 @@ const createPaymentView = (order, restaurantId) => {
         .addStat('Client', order.customer_name)
         .addStat('Téléphone', order.customer_phone)
         .addAction('Confirmer le paiement', 'POST', {
-            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/orders/${order._id}/preview/payment/confirm-payment`
+            href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/orders/${order._id}/preview/payment/confirm-payment`
         })
         .addAction('Annuler', 'GET', {
             href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas`

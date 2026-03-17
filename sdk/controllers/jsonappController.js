@@ -334,7 +334,7 @@ const getAboutView = (req, res) => {
 // Fonction pour afficher l'interface de paiement
 const getPaymentForm = async (req, res) => {
     try {
-        const { restaurantId, orderId } = req.params;
+        const { restaurantId, tableId, orderId } = req.params;
         const CommandeModel = require('../../models/Commande');
 
         const order = await CommandeModel.findById(orderId);
@@ -344,7 +344,7 @@ const getPaymentForm = async (req, res) => {
         }
 
         const { createPaymentView } = require('../views/formView/paymentForm');
-        const paymentView = createPaymentView(order, restaurantId);
+        const paymentView = createPaymentView(order, restaurantId, tableId);
 
         res.json(paymentView.toJSON());
     } catch (error) {
