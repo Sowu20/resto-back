@@ -7,9 +7,7 @@ exports.createTable = async(req, res) => {
     try {
         const { restaurentId } = req.params;
         const { numero_table, nom_table, capacite } = req.body;
-        const backendUrl = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurentId}`;
-        const qrLink = `https://demo.city-mate.com/services/696e5f99ed00d4dfdc05a4a8/play?url=${encodeURIComponent(backendUrl)}&title=zamora`;
-
+        
         const qrCode = crypto.randomBytes(16).toString('hex'); 
 
         const table = await Table.create({
@@ -17,10 +15,14 @@ exports.createTable = async(req, res) => {
             nom_table,
             capacite,
             restaurent: restaurentId,
-            qrCode,
-            qrLink
+            qrCode
         });
 
+        const backendUrl = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurentId}?table=${table._id}`;
+        const qrLink = `https://demo.city-mate.com/services/696e5f99ed00d4dfdc05a4a8/play?url=${encodeURIComponent(backendUrl)}&title=zamora`;
+
+        table.qrLink = qrLink;
+        await table.save();
         return res.status(201).json({
             message: "Table créé avec succès !",
             table,

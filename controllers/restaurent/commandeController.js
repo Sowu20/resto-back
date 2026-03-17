@@ -1,6 +1,9 @@
 const { default: mongoose } = require('mongoose');
 const Commande = require('../../models/Commande');
 const Repas = require('../../models/Repas');
+const User = require('../../models/User');
+const sendNotification = require('../../utils/sendNotification');
+const Table = require('../../models/Table');
 
 exports.faireCommande = async(req, res) => {
     try {
@@ -48,11 +51,23 @@ exports.faireCommande = async(req, res) => {
         }
 
         // Générer numéro commande
-        const order_number = "CMD-" + Date.now();
+        const order_number = "CMD-" + Date.now().toString().slice(-4);
 
         let tableValue = null;
         if (source === "sur_place") {
-            tableValue = table || null;
+            if (!table) {
+                return res.status(400).json({
+                    message: "La table est obligatoire pour une commande sur place"
+                });
+            };
+            const tableData = await Table.findById(table);
+            if (!tableData) {
+                return res.status(404).json({
+                    message: "Table introuvable"
+                });  
+            };
+
+            tableValue = tableData._id;
         }
 
         const commande = await Commande.create({
@@ -68,6 +83,15 @@ exports.faireCommande = async(req, res) => {
             payment_status: "en_attente",
             restaurent: restaurentId
         });
+
+        // Notification au restaurateur
+        await sendNotification({
+            userId: restaurentId,
+            titre: 'Nouvelle commande',
+            contenu: `Vous avez reçu une nouvelle commande (${order_number}) de ${customer_name} !`,
+            type: 'commande'
+        });
+
         return res.status(201).json({
             message: 'Commande enregistré avec succès',
             commande
@@ -189,7 +213,9 @@ exports.getStats = async (req, res) => {
                     en_attente: { $sum: { $cond: [{ $eq: ["$status", "en_attente"] }, 1, 0] } },
                     livres: { $sum: { $cond: [{ $eq: ["$status", "livres"] }, 1, 0] } },
                     annules: { $sum: { $cond: [{ $eq: ["$status", "annules"] }, 1, 0] } },
-                    totalCustomers: { $addToSet: "$customer_phone" }
+                    totalCustomers: { $addToSet: "$customer_phone" },
+                    totalRevenue: { $sum: { $cond: [{ $eq: ["$payment_status", "paye"] }, "$total_amount", 0] } },
+                    order: { $sum: { $cond: [{ $eq: ["$payment_status", "paye"] }, 1, 0] } }   
                 }
             },
             {
@@ -199,12 +225,22 @@ exports.getStats = async (req, res) => {
                     en_attente: 1,
                     livres: 1,
                     annules: 1,
-                    totalCustomers: { $size: "$totalCustomers" }
+                    totalRevenue: 1,
+                    totalCustomers: { $size: "$totalCustomers" },
+                    averageOrderValue: { $cond: [{ $eq: ["$order", 0] }, 0, { $divide: ["$totalRevenue", "$order"] }] }
                 }
             }
         ]);
 
-        const result = stats[0] || { total: 0, en_attente: 0, livre: 0, annule: 0, totalCustomers: 0 };
+        const result = stats[0] || { 
+            total: 0, 
+            en_attente: 0, 
+            livre: 0, 
+            annule: 0,
+            totalRevenue: 0,
+            averageOrderValue: 0, 
+            totalCustomers: 0 
+        };
         res.json(result);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -214,11 +250,12 @@ exports.getStats = async (req, res) => {
 exports.getRevenus = async(req, res) => {
     try {
         const { restaurentId } = req.params;
+        const rId = new mongoose.Types.ObjectId(restaurentId);
 
         const revenus = await Commande.aggregate([
         {
             $match: {
-                restaurent: restaurentId,
+                restaurent: rId,
                 payment_status: 'paye'
             }
         },
@@ -227,7 +264,7 @@ exports.getRevenus = async(req, res) => {
             _id: {
                 $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
             },
-            total: { $sum: '$total_amount' }
+                total: { $sum: '$total_amount' }
             }
         },
         { $sort: { _id: 1 } }
@@ -244,8 +281,9 @@ exports.getRevenus = async(req, res) => {
 exports.getStatusCommande = async (req, res) => {
     try {
         const { restaurentId } = req.params;
+        const rId = new mongoose.Types.ObjectId(restaurentId);
 
-        if (!mongoose.Types.ObjectId.isValid(restaurentId)) {
+        if (!rId) {
             return res.status(400).json({
                 message: 'ID du restaurent invalide'
             });
@@ -254,7 +292,7 @@ exports.getStatusCommande = async (req, res) => {
         const stats = await Commande.aggregate([
             {
                 $match: {
-                    restaurent: new mongoose.Types.ObjectId(restaurentId)
+                    restaurent: rId
                 }
             },
             {
@@ -283,19 +321,25 @@ exports.getStatusCommande = async (req, res) => {
 exports.getMeilleuresVentes = async (req, res) => {
   try {
     const { restaurentId } = req.params;
+    const rId = new mongoose.Types.ObjectId(restaurentId);
 
     const ventes = await Commande.aggregate([
-      { $match: { restaurent: restaurentId } },
-      { $unwind: '$items' },
-      {
-        $group: {
-          _id: '$items.repas',
-          nom: { $first: '$items.nom_repas' },
-          quantite_vendue: { $sum: '$items.quantite' }
-        }
-      },
-      { $sort: { quantite_vendue: -1 } },
-      { $limit: 5 }
+        { $match: { 
+                restaurent: rId,
+                payment_status: "paye" 
+            } 
+        },
+        { $unwind: '$items' },
+        {
+            $group: {
+                _id: '$items.repas',
+                nom: { $first: '$items.name' },
+                quantite_vendue: { $sum: '$items.quantite' },
+                totalRevenue: { $sum: "$items.total" }
+            }
+        },
+        { $sort: { quantite_vendue: -1 } },
+        { $limit: 5 }
     ]);
 
     res.json(ventes);
@@ -311,9 +355,18 @@ exports.getCommandesRecentes = async (req, res) => {
     const commandes = await Commande.find({ restaurent: restaurentId })
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('order_number customer_name total_amount status createdAt');
+      .select('order_number customer_name total_amount status items createdAt');
 
-    res.json(commandes);
+    const result = commandes.map(cmd => ({
+        order_number: cmd.order_number,
+        customer_name: cmd.customer_name,
+        total_amount: cmd.total_amount,
+        status: cmd.status,
+        items: cmd.items.length,
+        createdAt: cmd.createdAt
+    }));
+
+    res.json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -17,9 +17,10 @@ app.use(cors({
     'http://localhost:3000',
     'http://192.168.1.112:3000',
     'http://192.168.1.112:3000/user/dashboard',
-    'https://demo.city-mate.com'
+    'https://demo.city-mate.com',
+    'http://192.168.1.235:3000'
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
@@ -48,6 +49,7 @@ const offreRoute = require('./routes/restaurent/offreRoute');
 const promotionRoute = require('./routes/restaurent/promotionRoute');
 const annonceRoute = require('./routes/restaurent/annonceRoute');
 const messageRoute = require('./routes/restaurent/messageRoute');
+const notificationRoute = require('./routes/restaurent/notificationRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
 const uploadRoute = require('./routes/uploadRoute');
 const imageController = require('./controllers/restaurent/imageController');
@@ -71,6 +73,7 @@ app.use('/api', offreRoute);
 app.use('/api', promotionRoute);
 app.use('/api', annonceRoute);
 app.use('/api', messageRoute);
+app.use('/api', notificationRoute);
 app.use(jsonappRoute);
 
 app.use('/doc-swagger', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
