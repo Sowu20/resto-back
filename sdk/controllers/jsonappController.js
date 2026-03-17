@@ -1,6 +1,6 @@
-const { mainMenu } = require('../views/menuView/mainMenu');
+const { createMainMenuView } = require('../views/menuView/mainMenu');
 const { registerForm } = require('../views/formView/registerForm');
-const { userReader } = require('../views/readerView/reader');
+const { createUserReaderView } = require('../views/readerView/reader');
 const { createRestaurantsList } = require('../views/readerView/listrestaurentReader');
 const { createRestaurantDetailReader } = require('../views/readerView/restaurentDetailReader');
 const Restaurent = require('../../models/Restaurent');
@@ -11,11 +11,13 @@ const { createOrderForm } = require('../views/formView/orderForm');
 const { createOrderConfirmationView } = require('../views/messageView/orderConfirmation');
 const { createOrderSummaryView } = require('../views/readerView/orderSummary');
 const { getMealData } = require('../views/readerView/repasReader');
-const { aboutView } = require('../views/readerView/aboutReader');
+const { createAboutView } = require('../views/readerView/aboutReader');
 const mongoose = require('mongoose');
 
 const HomeScreen = (req, res) => {
-    res.json(mainMenu.toJSON());
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const menu = createMainMenuView(baseUrl);
+    res.json(menu.toJSON());
 };
 
 const RegisterForm = (req, res) => {
@@ -23,13 +25,16 @@ const RegisterForm = (req, res) => {
 };
 
 const getReader = (req, res) => {
-    res.json(userReader.toJSON());
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const reader = createUserReaderView(baseUrl);
+    res.json(reader.toJSON());
 };
 
 const Restaurents = async (req, res) => {
     try {
+        const baseUrl = req.protocol + '://' + req.get('host');
         const restaurants = await Restaurent.find();
-        const reader = createRestaurantsList(restaurants);
+        const reader = createRestaurantsList(restaurants, baseUrl);
         res.json(reader.toJSON());
     } catch (error) {
         console.error('❌ Erreur Restaurents:', error);
@@ -44,16 +49,6 @@ const RestaurentDetail = async (req, res) => {
         // On supporte le tableId via l'URL (req.params) ou via query (?table=x)
         const tableId = req.params.tableId || req.query.table;
 
-        if (!tableId) {
-            return res.status(400).json({
-                viewId: 'scan-required',
-                viewTitle: 'Scan Requis',
-                viewType: 'message',
-                intro: 'Attention',
-                body: 'Veuillez scanner le QR code présent sur votre table pour accéder au menu et commander.',
-                severity: 'warning'
-            });
-        }
 
         console.log('🔍 Chercher restaurant ID:', restaurantId, '| Table:', tableId);
         const restaurant = await Restaurent.findById(restaurantId);
@@ -63,7 +58,8 @@ const RestaurentDetail = async (req, res) => {
             return res.status(404).json({ error: 'Restaurant non trouvé' });
         }
 
-        const reader = createRestaurantDetailReader(restaurant, tableId);
+        const baseUrl = req.protocol + '://' + req.get('host');
+        const reader = createRestaurantDetailReader(restaurant, tableId, baseUrl);
         res.json(reader.toJSON());
     } catch (error) {
         console.error('❌ Erreur RestaurentDetail:', error);
@@ -82,7 +78,8 @@ const Menu = async (req, res) => {
             isActive: true
         });
 
-        const reader = createMenusGrid(restaurantId, tableId, menus);
+        const baseUrl = req.protocol + '://' + req.get('host');
+        const reader = createMenusGrid(restaurantId, tableId, menus, baseUrl);
 
         if (!reader) {
             return res.status(404).json({ error: 'Aucun menu trouvé' });
@@ -121,7 +118,7 @@ const getMenuDetails = async (req, res) => {
                 primaryAction: {
                     label: 'Retour aux menus',
                     type: 'GET',
-                    href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/menu`
+                    href: `${req.protocol}://${req.get('host')}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}/menu`
                 }
             });
         }
@@ -136,7 +133,8 @@ const getMenuDetails = async (req, res) => {
         console.log(`✅ Menu trouvé: ${menu.name}, Plats trouvés: ${dishes.length}`);
 
         // 3. Générer la vue via le Reader mis à jour
-        const menuDetail = createMenuDetailView(menu, tableId, dishes);
+        const baseUrl = req.protocol + '://' + req.get('host');
+        const menuDetail = createMenuDetailView(menu, tableId, dishes, baseUrl);
 
         res.json(menuDetail);
     } catch (error) {
@@ -159,7 +157,8 @@ const Repas = async (req, res) => {
             isAvaible: true
         });
 
-        const reader = createRepasReader(restaurantId, tableId, repas);
+        const baseUrl = req.protocol + '://' + req.get('host');
+        const reader = createRepasReader(restaurantId, tableId, repas, baseUrl);
 
         if (!reader) {
             return res.status(404).json({ error: 'Aucun repas disponible' });
@@ -183,7 +182,8 @@ const getRepasDetails = async (req, res) => {
             return res.status(404).json({ error: 'Repas non trouvé' });
         }
 
-        const reader = createRepasDetailReader(restaurantId, tableId, repas);
+        const baseUrl = req.protocol + '://' + req.get('host');
+        const reader = createRepasDetailReader(restaurantId, tableId, repas, baseUrl);
         return res.json(reader.toJSON());
     } catch (error) {
         console.error('❌ Erreur getRepasDetails:', error);
@@ -202,12 +202,14 @@ const getOrderForm = async (req, res) => {
             return res.status(404).json({ error: 'Repas non trouvé' });
         }
 
+        const baseUrl = req.protocol + '://' + req.get('host');
         const form = createOrderForm(
             repas.name,
             `${repas.price} FCFA`,
             restaurantId,
             mealId,
-            tableId
+            tableId,
+            baseUrl
         );
         res.json(form.toJSON());
     } catch (error) {
@@ -294,12 +296,13 @@ const previewOrder = async (req, res) => {
             status: 'en_attente',
             payment_status: 'en_attente',
             restaurent: restaurantId,
-            table: new mongoose.Types.ObjectId(tableId) // Utilisation de l'ID dynamique de la table
+            table: tableId ? new mongoose.Types.ObjectId(tableId) : undefined // Conversion seulement si présent
         });
 
         console.log('✅ Commande créée:', newOrder._id);
 
         // Afficher le résumé avec bouton de paiement
+        const baseUrl = req.protocol + '://' + req.get('host');
         const summaryView = createOrderSummaryView(
             orderData.customer_name,
             orderData.customer_phone,
@@ -308,7 +311,8 @@ const previewOrder = async (req, res) => {
             restaurantId,
             mealId,
             newOrder._id.toString(),
-            tableInfo
+            tableInfo,
+            baseUrl
         );
 
         return res.json(summaryView.toJSON());
@@ -328,7 +332,9 @@ const getScanView = (req, res) => {
 };
 
 const getAboutView = (req, res) => {
-    res.json(aboutView.toJSON());
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const about = createAboutView(baseUrl);
+    res.json(about.toJSON());
 };
 
 // Fonction pour afficher l'interface de paiement
@@ -343,9 +349,9 @@ const getPaymentForm = async (req, res) => {
             return res.status(404).json({ error: 'Commande non trouvée' });
         }
 
+        const baseUrl = req.protocol + '://' + req.get('host');
         const { createPaymentView } = require('../views/formView/paymentForm');
-        const paymentView = createPaymentView(order, restaurantId, tableId);
-
+        const paymentView = createPaymentView(order, restaurantId, tableId, baseUrl);
         res.json(paymentView.toJSON());
     } catch (error) {
         console.error('❌ Erreur getPaymentForm:', error);
@@ -356,7 +362,7 @@ const getPaymentForm = async (req, res) => {
 // Fonction pour confirmer le paiement
 const confirmPayment = async (req, res) => {
     try {
-        const { restaurantId, orderId } = req.params;
+        const { restaurantId, tableId, orderId } = req.params;
         const CommandeModel = require('../../models/Commande');
         const TableModel = require('../../models/Table');
 
@@ -386,11 +392,13 @@ const confirmPayment = async (req, res) => {
         }
 
         // Afficher la confirmation
+        const baseUrl = req.protocol + '://' + req.get('host');
         const confirmationView = createOrderConfirmationView(
             order.customer_name,
             order.customer_phone,
             order.order_number,
-            tableInfo
+            tableInfo,
+            baseUrl
         );
 
         res.json(confirmationView.toJSON());

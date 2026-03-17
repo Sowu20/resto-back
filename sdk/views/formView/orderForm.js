@@ -7,9 +7,10 @@ const { FormView } = require('@numerum-tech/cmsdk');
  * @param {string} restaurantId - ID du restaurant (pour l'API de soumission)
  * @param {string} mealId - ID du plat (pour l'API de soumission)
  */
-const createOrderForm = (mealName, price, restaurantId, mealId, tableId) => {
+const createOrderForm = (mealName, price, restaurantId, mealId, tableId, baseUrl = 'https://resto-back-xazy.onrender.com') => {
     // formId renommé pour la cohérence : mobile/restaurents/order/preview
-    const formId = `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/repas/${mealId}/order/preview`;
+    const tablePath = tableId ? `/table/${tableId}` : '';
+    const formId = `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas/${mealId}/order/preview`;
 
     const title = `Commande de : ${mealName} à ${price}`;
 
@@ -25,7 +26,7 @@ const createOrderForm = (mealName, price, restaurantId, mealId, tableId) => {
         // Champs cachés pour transmettre les IDs au contrôleur
         .addHiddenField('restaurantId', 'restaurantId', restaurantId)
         .addHiddenField('mealId', 'mealId', mealId)
-        .addHiddenField('tableId', 'tableId', tableId)
+        .addHiddenField('tableId', 'tableId', tableId || '')
         // Pas de setNext ici : l'app mobile doit afficher directement la réponse JSON du POST
         .submitButton('Voir le résumé', 'POST');
 

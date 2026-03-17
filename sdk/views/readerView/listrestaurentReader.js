@@ -6,7 +6,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {Array} restaurants - Liste des restaurants provenant de la base de données.
  * @returns {ActionGridView} La vue formatée pour le SDK.
  */
-const createRestaurantsList = (restaurants) => {
+const createRestaurantsList = (restaurants, baseUrl = 'https://resto-back-xazy.onrender.com') => {
     const list = new ActionGridView('restaurent-list', 'Nos restaurants')
         .setColumns(3)
         .setSpacing(18);
@@ -17,7 +17,7 @@ const createRestaurantsList = (restaurants) => {
                 resto._id.toString(),
                 resto.name,
                 resto.address || 'Découvrez nos saveurs',
-                getOptimizedImageUrl(resto.image, { width: 300 })
+                getOptimizedImageUrl(resto.image, { width: 300 }, baseUrl)
             );
         });
     }

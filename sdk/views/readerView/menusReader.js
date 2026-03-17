@@ -3,10 +3,12 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 
 // Fonction pour créer la grille d'actions des menus
-const createMenusGrid = (restaurantId, tableId, menus = []) => {
+const createMenusGrid = (restaurantId, tableId, menus = [], baseUrl = 'https://resto-back-xazy.onrender.com') => {
   if (!menus || menus.length === 0) {
     return null;  // Aucun menu trouvé
   }
+
+  const tablePath = tableId ? `/table/${tableId}` : '';
 
   const grid = new ActionGridView(
     `menu-grid-${restaurantId}`,
@@ -22,10 +24,10 @@ const createMenusGrid = (restaurantId, tableId, menus = []) => {
       menu._id.toString(),
       menu.name,
       menu.description || 'Découvrez notre sélection',
-      menu.image ? getOptimizedImageUrl(menu.image, { width: 300 }) : undefined,
+      menu.image ? getOptimizedImageUrl(menu.image, { width: 300 }, baseUrl) : undefined,
       {
         type: 'GET',
-        href: `https://resto-back-xazy.onrender.com/mobile/restaurents/${restaurantId}/table/${tableId}/menu/${menu._id}`
+        href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/menu/${menu._id}`
       }
     );
   });

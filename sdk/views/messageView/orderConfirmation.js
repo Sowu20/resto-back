@@ -6,8 +6,8 @@ const { MessageView } = require('@numerum-tech/cmsdk');
  * @param {string} customerPhone - Numéro de téléphone du client
  * @param {string} orderNumber - Numéro de commande
  */
-const createOrderConfirmationView = (customerName, customerPhone, orderNumber, tableInfo) => {
-    const homeUrl = 'https://resto-back-xazy.onrender.com/mobile';
+const createOrderConfirmationView = (customerName, customerPhone, orderNumber, tableInfo, baseUrl = 'https://resto-back-xazy.onrender.com') => {
+    const homeUrl = `${baseUrl}/mobile`;
 
     // Si tableInfo est un objet, on extrait le nom ET le numero, sinon on gère le cas indéfini
     let tableDisplay = '';
