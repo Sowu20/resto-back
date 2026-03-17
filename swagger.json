@@ -1,0 +1,2856 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gestion Restaurent API",
+    "description": "API de gestion de restaurents, de commandes, d'utilisateur, de menus, de repas",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/annonce": {
+      "post": {
+        "tags": [
+          "Annonce"
+        ],
+        "summary": "Créer une annonce",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Annonce"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Annonce créée"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Annonce"
+        ],
+        "summary": "Liste des annonces",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des annonces"
+          }
+        }
+      }
+    },
+    "/api/annonce/{id}": {
+      "get": {
+        "tags": [
+          "Annonce"
+        ],
+        "summary": "Détail d'une annonce",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Annonce trouvée"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Annonce"
+        ],
+        "summary": "Modifier une annonce",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Annonce"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Annonce modifiée"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Annonce"
+        ],
+        "summary": "Supprimer une annonce",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Annonce supprimée"
+          }
+        }
+      }
+    },
+    "/api/register": {
+      "post": {
+        "tags": [
+          "Authentification"
+        ],
+        "summary": "Créer un compte Restaurent",
+        "description": "Crée un utilisateur avec le rôle \"restaurant\" et son restaurent associé",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "address",
+                  "phone",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "number"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Restaurent créé avec succès"
+          },
+          "400": {
+            "description": "Email déjà utilisé"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/api/admin/register": {
+      "post": {
+        "tags": [
+          "Authentification"
+        ],
+        "summary": "Créer un Restaurent par Admin",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Permet à un Admin de créer un restaurent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "address",
+                  "phone",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "number"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Restaurent créé avec succès"
+          },
+          "401": {
+            "description": "Non authentifié"
+          },
+          "403": {
+            "description": "Accès refusé"
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags": [
+          "Authentification"
+        ],
+        "summary": "Connexion utilisateur",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Mot de passe incorrect"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Liste des utilisateurs",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste récupérée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié"
+          },
+          "403": {
+            "description": "Accès refusé"
+          }
+        }
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Détails utilisateur",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilisateur trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Modifier utilisateur",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Modifié"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Supprimer utilisateur",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supprimé"
+          }
+        }
+      }
+    },
+    "/api/categorie": {
+      "post": {
+        "tags": [
+          "Categorie"
+        ],
+        "summary": "Créer une catégorie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Categorie"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Catégorie créée avec succès"
+          },
+          "400": {
+            "description": "Erreur de validation"
+          },
+          "401": {
+            "description": "Non authentifié"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Categorie"
+        ],
+        "summary": "Liste des catégories",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des catégories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Categorie"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié"
+          }
+        }
+      }
+    },
+    "/api/categorie/{id}": {
+      "get": {
+        "tags": [
+          "Categorie"
+        ],
+        "summary": "Détail d'une catégorie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Catégorie trouvée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Categorie"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Catégorie introuvable"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categorie"
+        ],
+        "summary": "Modifier une catégorie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Categorie"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Catégorie modifiée avec succès"
+          },
+          "404": {
+            "description": "Catégorie introuvable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categorie"
+        ],
+        "summary": "Supprimer une catégorie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Catégorie supprimée"
+          },
+          "400": {
+            "description": "ID invalide"
+          }
+        }
+      }
+    },
+    "/api/categorie/menu/{menuId}/repas": {
+      "get": {
+        "tags": [
+          "Categorie"
+        ],
+        "summary": "Liste des catégories par menu",
+        "description": "Récupère les catégories d’un menu pour le restaurent connecté",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "menuId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des catégories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Categorie"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié"
+          },
+          "403": {
+            "description": "Accès refusé"
+          }
+        }
+      }
+    },
+    "/api/commande": {
+      "post": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Créer une commande (utilisateur connecté)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Commande"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Commande créée"
+          },
+          "400": {
+            "description": "Erreur"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Liste des commandes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des commandes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commande"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/commande/{id}": {
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Détail d’une commande",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Commande trouvée"
+          },
+          "404": {
+            "description": "Non trouvée"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Modifier une commande",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Commande"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Modifiée"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Supprimer une commande",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supprimée"
+          }
+        }
+      }
+    },
+    "/api/commande/{restaurentId}/stats": {
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Statistiques générales du restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistiques"
+          }
+        }
+      }
+    },
+    "/api/commande/{restaurentId}/revenus": {
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Revenus par jour",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Revenus"
+          }
+        }
+      }
+    },
+    "/api/commande/{restaurentId}/status": {
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Nombre de commandes par status",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stats status"
+          }
+        }
+      }
+    },
+    "/api/commande/{restaurentId}/meilleurs_ventes": {
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "Top 5 repas vendus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Top ventes"
+          }
+        }
+      }
+    },
+    "/api/commande/{restaurentId}/commandes_recente": {
+      "get": {
+        "tags": [
+          "Commande"
+        ],
+        "summary": "5 dernières commandes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Commandes récentes"
+          }
+        }
+      }
+    },
+    "/api/commande/admin/status": {
+      "get": {
+        "tags": [
+          "Admin Commande"
+        ],
+        "summary": "Statistiques rapides",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stats"
+          }
+        }
+      }
+    },
+    "/api/commande/admin/statorder": {
+      "get": {
+        "tags": [
+          "Admin Commande"
+        ],
+        "summary": "Statistiques commandes complètes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/commande/admin/listcommande": {
+      "get": {
+        "tags": [
+          "Admin Commande"
+        ],
+        "summary": "Liste commandes avec filtres",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/commande/admin/revenuchart": {
+      "get": {
+        "tags": [
+          "Admin Commande"
+        ],
+        "summary": "Graphique revenus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/commande/admin/recent_order": {
+      "get": {
+        "tags": [
+          "Admin Commande"
+        ],
+        "summary": "Commandes récentes admin",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/commande/admin/top_sell": {
+      "get": {
+        "tags": [
+          "Admin Commande"
+        ],
+        "summary": "Repas les plus vendus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/menu": {
+      "post": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Créer un menu",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Menu"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Menu créé avec succès"
+          },
+          "400": {
+            "description": "Erreur"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Liste des menus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des menus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Menu"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/menu/{id}": {
+      "get": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Détail d’un menu",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Menu trouvé"
+          },
+          "404": {
+            "description": "Menu introuvable"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Modifier un menu",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Menu"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Menu modifié"
+          },
+          "404": {
+            "description": "Menu introuvable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Menu"
+        ],
+        "summary": "Supprimer un menu",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Menu supprimé"
+          },
+          "400": {
+            "description": "ID invalide"
+          }
+        }
+      }
+    },
+    "/api/message": {
+      "post": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Envoyer un message",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "receiver": {
+                    "type": "string",
+                    "example": "64d3f2b5a12d3b0012345678"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Nouvelle notification"
+                  },
+                  "content": {
+                    "type": "string",
+                    "example": "Votre commande a été livrée"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message envoyé avec succès"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Lister tous les messages",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des messages"
+          }
+        }
+      }
+    },
+    "/api/message/{id}": {
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Détail d'un message",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message trouvé"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Supprimer un message",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message supprimé avec succès"
+          }
+        }
+      }
+    },
+    "/api/message/{id}/read": {
+      "put": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Marquer un message comme lu",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message marqué comme lu"
+          }
+        }
+      }
+    },
+    "/api/offre": {
+      "post": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Créer une offre spéciale",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Offre"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Offre créée avec succès"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Liste des offres spéciales",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des offres"
+          }
+        }
+      }
+    },
+    "/api/offre/{id}": {
+      "get": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Détail d'une offre",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Offre trouvée"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Modifier une offre spéciale",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Offre"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Offre modifiée avec succès"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Supprimer une offre spéciale",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Offre supprimée"
+          }
+        }
+      }
+    },
+    "/api/offre/restaurent/{restaurentId}": {
+      "get": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Obtenir les offres d'un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des offres pour ce restaurent"
+          }
+        }
+      }
+    },
+    "/api/offre/repas/{repasId}": {
+      "get": {
+        "tags": [
+          "Offre"
+        ],
+        "summary": "Obtenir les offres pour un repas spécifique",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "repasId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des offres pour ce repas"
+          }
+        }
+      }
+    },
+    "/api/promotion": {
+      "post": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Créer une promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Promotion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Promotion créée avec succès"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Lister toutes les promotions",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des promotions"
+          }
+        }
+      }
+    },
+    "/api/promotion/actives": {
+      "get": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Obtenir les promotions actives",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des promotions actuellement valides"
+          }
+        }
+      }
+    },
+    "/api/promotion/expires": {
+      "get": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Obtenir les promotions expirées",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des promotions expirées"
+          }
+        }
+      }
+    },
+    "/api/promotion/{id}": {
+      "get": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Détail d'une promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotion trouvée"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Modifier une promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Promotion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Promotion modifiée avec succès"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Supprimer une promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotion supprimée avec succès"
+          }
+        }
+      }
+    },
+    "/api/promotion/restaurent/{restaurentId}": {
+      "get": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "Obtenir les promotions d'un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurentId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des promotions pour ce restaurent"
+          }
+        }
+      }
+    },
+    "/api/repas": {
+      "post": {
+        "tags": [
+          "Repas"
+        ],
+        "summary": "Créer un repas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Repas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Repas créé avec succès"
+          },
+          "400": {
+            "description": "Erreur"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Repas"
+        ],
+        "summary": "Liste des repas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des repas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Repas"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/repas/{id}": {
+      "get": {
+        "tags": [
+          "Repas"
+        ],
+        "summary": "Détail d’un repas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Repas trouvé"
+          },
+          "404": {
+            "description": "Repas introuvable"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Repas"
+        ],
+        "summary": "Modifier un repas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Repas"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Repas modifié"
+          },
+          "404": {
+            "description": "Repas introuvable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Repas"
+        ],
+        "summary": "Supprimer un repas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Repas supprimé"
+          },
+          "400": {
+            "description": "ID invalide"
+          }
+        }
+      }
+    },
+    "/api/repas/categorie/{categorieId}/repas": {
+      "get": {
+        "tags": [
+          "Repas"
+        ],
+        "summary": "Liste des repas par catégorie",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "categorieId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des repas"
+          }
+        }
+      }
+    },
+    "/api/restaurent": {
+      "post": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Créer un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Restaurent"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Restaurent créé avec succès"
+          },
+          "400": {
+            "description": "Erreur"
+          },
+          "403": {
+            "description": "Accès interdit"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Liste des restaurents",
+        "responses": {
+          "200": {
+            "description": "Liste des restaurents"
+          }
+        }
+      }
+    },
+    "/api/restaurent/{id}": {
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Détail d’un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restaurent trouvé"
+          },
+          "404": {
+            "description": "Restaurent introuvable"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Modifier un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Restaurent modifié"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Supprimer un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Restaurent supprimé"
+          }
+        }
+      }
+    },
+    "/api/restaurent/localisation": {
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Trouver les restaurents proches",
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "distance",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restaurents proches trouvés"
+          }
+        }
+      }
+    },
+    "/api/restaurent/stats": {
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Statistiques des restaurents",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistiques"
+          }
+        }
+      }
+    },
+    "/api/restaurent/search": {
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Rechercher un restaurent",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "restaurent",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Résultat de recherche"
+          }
+        }
+      }
+    },
+    "/api/restaurent/status_restaurent": {
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Restaurents par status",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "ouvert"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restaurents filtrés"
+          }
+        }
+      }
+    },
+    "/api/restaurent/liste": {
+      "get": {
+        "tags": [
+          "Restaurent"
+        ],
+        "summary": "Liste restaurents avec utilisateur",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste restaurents"
+          }
+        }
+      }
+    },
+    "/api/table": {
+      "post": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Créer une table",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Table"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Table créée"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Liste des tables",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des tables"
+          }
+        }
+      }
+    },
+    "/api/table/{id}": {
+      "get": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Détail d'une table",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Table trouvée"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Modifier une table",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Table modifiée"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Supprimer une table",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Table supprimée"
+          }
+        }
+      }
+    },
+    "/api/table/scan/{qrCode}": {
+      "get": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Scanner QR Code",
+        "parameters": [
+          {
+            "name": "qrCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Table trouvée via QR Code"
+          }
+        }
+      }
+    },
+    "/api/table/menu/{qrCode}": {
+      "get": {
+        "tags": [
+          "Table"
+        ],
+        "summary": "Obtenir menus et repas via QR Code",
+        "parameters": [
+          {
+            "name": "qrCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Menus et repas"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "phone",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "restaurant",
+              "Admin"
+            ]
+          },
+          "password": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Restaurent": {
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "email",
+          "password",
+          "user"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "number"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Ouvert",
+              "Fermé"
+            ]
+          },
+          "image": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Point"
+                ]
+              },
+              "coordonnes": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Menu": {
+        "type": "object",
+        "required": [
+          "name",
+          "startTime",
+          "endTime",
+          "validDays",
+          "restaurent"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "image": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validDays": {
+            "type": "string",
+            "enum": [
+              "lundi",
+              "mardi",
+              "mercredi",
+              "jeudi",
+              "vendredi",
+              "samedi",
+              "dimanche"
+            ]
+          },
+          "restaurent": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Categorie": {
+        "type": "object",
+        "required": [
+          "name",
+          "restaurent",
+          "menu",
+          "commande"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "restaurent": {
+            "type": "string"
+          },
+          "menu": {
+            "type": "string"
+          },
+          "commande": {
+            "type": "string"
+          }
+        }
+      },
+      "Repas": {
+        "type": "object",
+        "required": [
+          "name",
+          "price",
+          "isAvaible",
+          "menu",
+          "restaurent",
+          "categorie"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "isAvaible": {
+            "type": "boolean"
+          },
+          "image": {
+            "type": "string"
+          },
+          "menu": {
+            "type": "string"
+          },
+          "restaurent": {
+            "type": "string"
+          },
+          "categorie": {
+            "type": "string"
+          }
+        }
+      },
+      "Table": {
+        "type": "object",
+        "required": [
+          "numero_table",
+          "qrCode",
+          "restaurent"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "numero_table": {
+            "type": "number"
+          },
+          "qrCode": {
+            "type": "string"
+          },
+          "statut": {
+            "type": "string",
+            "enum": [
+              "libre",
+              "occupe"
+            ]
+          },
+          "restaurent": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "CommandeItem": {
+        "type": "object",
+        "required": [
+          "repas",
+          "nom_repas",
+          "prix_unitaire",
+          "quantite",
+          "total"
+        ],
+        "properties": {
+          "repas": {
+            "type": "string"
+          },
+          "nom_repas": {
+            "type": "string"
+          },
+          "prix_unitaire": {
+            "type": "number"
+          },
+          "quantite": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        }
+      },
+      "Commande": {
+        "type": "object",
+        "required": [
+          "items",
+          "restaurent",
+          "table"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "order_number": {
+            "type": "string"
+          },
+          "customer_name": {
+            "type": "string"
+          },
+          "customer_phone": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommandeItem"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "en_attente",
+              "livres",
+              "annules"
+            ]
+          },
+          "payment_status": {
+            "type": "string",
+            "enum": [
+              "en_attente",
+              "en_traitement",
+              "paye",
+              "non_paye"
+            ]
+          },
+          "payment_method": {
+            "type": "string",
+            "enum": [
+              "espece",
+              "virement"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "total_amount": {
+            "type": "number"
+          },
+          "restaurent": {
+            "type": "string"
+          },
+          "table": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "receiver": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "isRead": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "required": [
+          "user"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "titre": {
+            "type": "string"
+          },
+          "contenu": {
+            "type": "string"
+          },
+          "lue": {
+            "type": "boolean"
+          },
+          "user": {
+            "type": "string"
+          }
+        }
+      },
+      "Promotion": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "titre_promo": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "date_debut": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date_fin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "pourcentage_reduction": {
+            "type": "number"
+          },
+          "restaurent": {
+            "type": "string"
+          }
+        }
+      },
+      "OffreSpeciale": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "titre_offre": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "restaurent": {
+            "type": "string"
+          },
+          "repas": {
+            "type": "string"
+          }
+        }
+      },
+      "Payement": {
+        "type": "object",
+        "required": [
+          "commande"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "methode": {
+            "type": "string"
+          },
+          "statut": {
+            "type": "string",
+            "enum": [
+              "en_cours",
+              "en_attente",
+              "termine"
+            ]
+          },
+          "montant": {
+            "type": "number"
+          },
+          "commande": {
+            "type": "string"
+          }
+        }
+      },
+      "Annonce": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "titre": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Annonce",
+      "description": "Gestion des annonces"
+    },
+    {
+      "name": "Authentification",
+      "description": "Gestion de l’authentification"
+    },
+    {
+      "name": "User",
+      "description": "Gestion des utilisateurs"
+    },
+    {
+      "name": "Categorie",
+      "description": "Gestion des catégories de repas"
+    },
+    {
+      "name": "Commande",
+      "description": "Gestion des commandes"
+    },
+    {
+      "name": "Admin Commande",
+      "description": "Dashboard administrateur commandes"
+    },
+    {
+      "name": "Menu",
+      "description": "Gestion des menus"
+    },
+    {
+      "name": "Message",
+      "description": "Gestion des messages et notifications"
+    },
+    {
+      "name": "Offre",
+      "description": "Gestion des offres spéciales"
+    },
+    {
+      "name": "Promotion",
+      "description": "Gestion des promotions"
+    },
+    {
+      "name": "Repas",
+      "description": "Gestion des repas"
+    },
+    {
+      "name": "Restaurent",
+      "description": "Gestion des restaurents"
+    },
+    {
+      "name": "Table",
+      "description": "Gestion des tables et QR Code"
+    }
+  ]
+}
