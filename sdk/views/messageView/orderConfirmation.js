@@ -27,9 +27,9 @@ const createOrderConfirmationView = (customerName, customerPhone, orderNumber, t
 
     return new MessageView(`order-success-${Date.now()}`, 'Commande Réussie !')
         .setIntro('Paiement confirmé !')
-        .setBody(`Merci ${customerName || 'cher client'} ${tableDisplay}!\n\nVotre commande N° ${orderNumber} a été confirmée avec succès.\n\nNous vous contacterons au ${customerPhone || 'votre numéro'} pour la livraison.\n\nBon appétit ! 🍽️`)
+        .setBody(`Merci ${customerName || 'cher client'} ${tableDisplay || ''}!\n\nVotre commande N° ${orderNumber || '...'} a été confirmée avec succès.\n\nNous vous contacterons au ${customerPhone || 'votre numéro'} pour la livraison.\n\nBon appétit ! 🍽️`)
         .setSeverity('success')
-        .setPrimaryAction('Retour à l\'accueil', 'GET', homeUrl)
+        .setPrimaryAction('Retour à l\'accueil', 'GET', homeUrl || '#')
         .setDismissible(true);
 };
 

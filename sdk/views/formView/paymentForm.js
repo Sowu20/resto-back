@@ -13,12 +13,12 @@ const createPaymentView = (order, restaurantId, tableId, baseUrl = 'https://rest
     };
 
     return new CardView(`payment-${order._id}`, 'Finaliser le paiement')
-        .setSubtitle(`Commande N° ${order.order_number}`)
+        .setSubtitle(`Commande N° ${order.order_number || '...'}`)
         .setDescription('Confirmez votre paiement pour valider la commande.')
-        .addStat('Montant total', `${order.total_amount} FCFA`)
-        .addStat('Méthode', paymentMethodLabel[order.payment_method] || order.payment_method)
-        .addStat('Client', order.customer_name)
-        .addStat('Téléphone', order.customer_phone)
+        .addStat('Montant total', `${order.total_amount || 0} FCFA`)
+        .addStat('Méthode', paymentMethodLabel[order.payment_method] || order.payment_method || '-')
+        .addStat('Client', order.customer_name || 'Anonyme')
+        .addStat('Téléphone', order.customer_phone || '-')
         .addAction('Confirmer le paiement', 'POST', {
             href: `${baseUrl}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}/order/${order._id}/payment/confirm`
         })

@@ -17,19 +17,20 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         }
     }
 
-    const tableId = typeof tableInfo === 'object' ? tableInfo._id.toString() : tableInfo;
-    const tablePath = tableId ? `/table/${tableId}` : '';
+    const tableId = typeof tableInfo === 'object' ? tableInfo._id?.toString() : tableInfo;
+    const tablePath = (tableId && tableId !== 'undefined') ? `/table/${tableId}` : '';
+    const safeOrderId = orderId || `temp-${Date.now()}`;
 
-    return new CardView(`summary-${orderId}`, 'Résumé de votre commande')
-        .setSubtitle(mealName)
+    return new CardView(`summary-${safeOrderId}`, 'Résumé de votre commande')
+        .setSubtitle(mealName || 'Plat')
         .setDescription('Vérifiez les détails de votre commande avant de procéder au paiement.')
-        .addStat('Client', customerName)
-        .addStat('Téléphone', customerPhone)
-        .addStat('Table', tableDisplay)
-        .addStat('Plat', mealName)
-        .addStat('Prix', price)
+        .addStat('Client', customerName || 'Anonyme')
+        .addStat('Téléphone', customerPhone || '-')
+        .addStat('Table', tableDisplay || 'Hors table')
+        .addStat('Plat', mealName || 'Plat')
+        .addStat('Prix', price || '0 FCFA')
         .addAction('Procéder au paiement', 'GET', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/order/${orderId}/payment`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/order/${safeOrderId}/payment`
         })
         .addAction('Annuler', 'GET', {
             href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas`
