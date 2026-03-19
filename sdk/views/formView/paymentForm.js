@@ -1,4 +1,5 @@
 const { CardView } = require('@numerum-tech/cmsdk');
+const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 /**
  * Crée l'interface de paiement pour une commande
@@ -12,9 +13,16 @@ const createPaymentView = (order, restaurantId, tableId, baseUrl = 'https://rest
         'espece': 'Espèces'
     };
 
-    return new CardView(`payment-${order._id}`, 'Finaliser le paiement')
+    const card = new CardView(`payment-${order._id}`, 'Finaliser le paiement')
         .setSubtitle(`Commande N° ${order.order_number || '...'}`)
-        .setDescription('Confirmez votre paiement pour valider la commande.')
+        .setDescription('Confirmez votre paiement pour valider la commande.');
+
+    // Ajouter l'image du premier article si elle existe
+    if (order.items && order.items.length > 0 && order.items[0].image) {
+        card.setImage(getOptimizedImageUrl(order.items[0].image, { width: 600 }, baseUrl));
+    }
+
+    return card
         .addStat('Montant total', `${order.total_amount || 0} FCFA`)
         .addStat('Méthode', paymentMethodLabel[order.payment_method] || order.payment_method || '-')
         .addStat('Client', order.customer_name || 'Anonyme')

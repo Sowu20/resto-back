@@ -1,10 +1,15 @@
 const { CardView } = require('@numerum-tech/cmsdk');
+const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 /**
  * Crée une vue récapitulative de la commande (CardView)
- * ...
+ * @param {string} mealId - ID du repas
+ * @param {string} orderId - ID de la commande générée
+ * @param {Object|string} tableInfo - Informations sur la table
+ * @param {string} mealImage - URL de l'image du plat
+ * @param {string} baseUrl - URL de base de l'API
  */
-const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId, tableInfo, baseUrl = 'https://resto-back-xazy.onrender.com') => {
+const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId, tableInfo, mealImage, baseUrl = 'https://resto-back-xazy.onrender.com') => {
     // Si tableInfo est un objet, on extrait le nom ET le numero, sinon on l'utilise tel quel
     let tableDisplay = tableInfo;
     if (typeof tableInfo === 'object') {
@@ -21,9 +26,15 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
     const tablePath = (tableId && tableId !== 'undefined') ? `/table/${tableId}` : '';
     const safeOrderId = orderId || `temp-${Date.now()}`;
 
-    return new CardView(`summary-${safeOrderId}`, 'Résumé de votre commande')
+    const card = new CardView(`summary-${safeOrderId}`, 'Résumé de votre commande')
         .setSubtitle(mealName || 'Plat')
-        .setDescription('Vérifiez les détails de votre commande avant de procéder au paiement.')
+        .setDescription('Vérifiez les détails de votre commande avant de procéder au paiement.');
+
+    if (mealImage) {
+        card.setImage(getOptimizedImageUrl(mealImage, { width: 600 }, baseUrl));
+    }
+
+    return card
         .addStat('Client', customerName || 'Anonyme')
         .addStat('Téléphone', customerPhone || '-')
         .addStat('Table', tableDisplay || 'Hors table')

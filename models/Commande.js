@@ -24,6 +24,9 @@ const cmdeSchema = new mongoose.Schema({
             price: {
                 type: Number
             },
+            image: {
+                type: String
+            },
             quantite: {
                 type: Number,
                 required: true

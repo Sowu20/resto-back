@@ -297,6 +297,7 @@ const previewOrder = async (req, res) => {
                 repas: mealId,
                 name: repas.name,
                 price: repas.price,
+                image: repas.image || '',
                 quantite: 1,
                 total: repas.price
             }],
@@ -312,21 +313,21 @@ const previewOrder = async (req, res) => {
         // Afficher le résumé avec bouton de paiement
         const baseUrl = getBaseUrl(req);
         const summaryView = createOrderSummaryView(
-            orderData.customer_name,
-            orderData.customer_phone,
-            repas.name,
-            `${repas.price} FCFA`,
-            restaurantId,
-            mealId,
+            orderData.customer_name || 'Client',
+            orderData.customer_phone || '-',
+            repas.name || 'Plat',
+            `${repas.price || 0} FCFA`,
+            restaurantId || '',
+            mealId || '',
             newOrder._id.toString(),
             tableInfo,
+            repas.image || '',
             baseUrl
         );
 
         return res.json(summaryView.toJSON());
     } catch (error) {
-        console.error('❌ Erreur dans previewOrder:', error);
-        console.error(error.stack);
+        console.error('❌ Erreur CRITIQUE dans previewOrder:', error);
         return res.status(500).json({
             error: 'Erreur lors de la création de la commande',
             details: error.message
