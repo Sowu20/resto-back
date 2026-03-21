@@ -13,6 +13,7 @@ const { createOrderSummaryView } = require('../views/readerView/orderSummary');
 const { getMealData } = require('../views/readerView/repasReader');
 const { createAboutView } = require('../views/readerView/aboutReader');
 const mongoose = require('mongoose');
+const sendNotification = require('../../utils/sendNotification');
 
 // Helper pour obtenir l'URL de base dynamiquement
 const getBaseUrl = (req) => {
@@ -309,6 +310,20 @@ const previewOrder = async (req, res) => {
         });
 
         console.log('✅ Commande créée:', newOrder._id);
+
+        // Notification automatique au restaurateur
+        try {
+            await sendNotification({
+                userId: restaurantId,
+                titre: 'Nouvelle commande',
+                contenu: `Vous avez reçu une nouvelle commande (${orderNumber}) de ${orderData.customer_name || 'Client'} !`,
+                type: 'commande'
+            });
+            console.log('🔔 Notification envoyée au restaurateur');
+        } catch (notifError) {
+            console.error('⚠️ Erreur lors de l\'envoi de la notification:', notifError.message);
+            // On ne bloque pas la réponse client si la notification échoue
+        }
 
         // Afficher le résumé avec bouton de paiement
         const baseUrl = getBaseUrl(req);
