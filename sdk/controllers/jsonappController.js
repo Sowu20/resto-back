@@ -254,11 +254,11 @@ const getOrderForm = async (req, res) => {
 
 const previewOrder = async (req, res) => {
     try {
-        const { restaurantId: paramResId, mealId: paramMealId, tableId: paramTableId } = req.params;
+        const { restaurantId: paramResId, mealId: paramMealId, tableId: paramTableId, id: paramId } = req.params;
         const orderData = req.body;
         const { restaurantId: bodyResId, mealId: bodyMealId, tableId: bodyTableId } = orderData;
 
-        const restaurantId = bodyResId || paramResId;
+        const restaurantId = bodyResId || paramResId || paramId;
         const mealId = bodyMealId || paramMealId;
         const tableId = bodyTableId || paramTableId;
 
@@ -306,7 +306,7 @@ const previewOrder = async (req, res) => {
             status: 'en_attente',
             payment_status: 'en_attente',
             restaurent: restaurantId,
-            table: tableId ? new mongoose.Types.ObjectId(tableId) : undefined // Conversion seulement si présent
+            table: (tableId && mongoose.Types.ObjectId.isValid(tableId)) ? new mongoose.Types.ObjectId(tableId) : undefined // Conversion sécurisée
         });
 
         console.log('✅ Commande créée:', newOrder._id);
@@ -361,11 +361,12 @@ const getAboutView = (req, res) => {
     const about = createAboutView(baseUrl);
     res.json(about.toJSON());
 };
-
+//___________________________________________________________________
 // Fonction pour afficher l'interface de paiement
 const getPaymentForm = async (req, res) => {
     try {
-        const { restaurantId, tableId, orderId } = req.params;
+        const { restaurantId: paramResId, tableId, orderId, id: paramId } = req.params;
+        const restaurantId = paramResId || paramId;
         const CommandeModel = require('../../models/Commande');
 
         const order = await CommandeModel.findById(orderId);
@@ -387,7 +388,8 @@ const getPaymentForm = async (req, res) => {
 // Fonction pour confirmer le paiement
 const confirmPayment = async (req, res) => {
     try {
-        const { restaurantId, tableId, orderId } = req.params;
+        const { restaurantId: paramResId, tableId, orderId, id: paramId } = req.params;
+        const restaurantId = paramResId || paramId;
         const CommandeModel = require('../../models/Commande');
         const TableModel = require('../../models/Table');
 
@@ -425,6 +427,19 @@ const confirmPayment = async (req, res) => {
             tableInfo,
             baseUrl
         );
+
+        // // Notification automatique au restaurateur lors de la confirmation du paiement
+        // try {
+        //     await sendNotification({
+        //         userId: restaurantId,
+        //         titre: 'Commande payée',
+        //         contenu: `La commande (${order.order_number}) de ${order.customer_name} a été payée !`,
+        //         type: 'commande'
+        //     });
+        //     console.log('🔔 Notification de paiement envoyée au restaurateur');
+        // } catch (notifError) {
+        //     console.error('⚠️ Erreur notification paiement:', notifError.message);
+        // }
 
         res.json(confirmationView.toJSON());
     } catch (error) {
