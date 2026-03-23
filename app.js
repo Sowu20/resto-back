@@ -46,10 +46,12 @@ const messageRoute = require('./routes/restaurent/messageRoute');
 const notificationRoute = require('./routes/restaurent/notificationRoute');
 const jsonappRoute = require('./sdk/routes/jsonappRoute');
 const uploadRoute = require('./routes/uploadRoute');
+const pushRoute = require('./routes/pushRoute');
 const imageController = require('./controllers/restaurent/imageController');
 
 app.get('/api/images/:filename', imageController.getOptimizedImage);
 app.use(uploadRoute);
+app.use('/api/push', pushRoute);
 app.use('/api', dashboardRoute);
 app.use('/api', adminCommandeRoute);
 app.use('/api', categorieAdminRoute);

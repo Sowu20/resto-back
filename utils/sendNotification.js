@@ -1,5 +1,6 @@
 const Notification = require('../models/Notification');
 const pusher = require('../config/pusher');
+const pushNotification = require('./pushService');
 
 const sendNotification = async({ userId, titre, contenu, type = 'systeme' }) => {
     const notification = await Notification.create({
@@ -17,6 +18,15 @@ const sendNotification = async({ userId, titre, contenu, type = 'systeme' }) => 
         lue: notification.lue,
         createdAt: notification.createdAt
     });
+
+    try {
+        await pushNotification(userId, {
+            title: notification.titre,
+            body: notification.contenu
+        });
+    } catch(error) {
+        console.error('Erreur web pus: ', error.push);
+    }
 
     return notification
 };
