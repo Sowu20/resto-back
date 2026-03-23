@@ -1,6 +1,6 @@
 const Notification = require('../models/Notification');
 const pusher = require('../config/pusher');
-const pushNotification = require('./pushService');
+const sendPushNotification  = require('./pushService');
 
 const sendNotification = async({ userId, titre, contenu, type = 'systeme' }) => {
     const notification = await Notification.create({
@@ -20,7 +20,7 @@ const sendNotification = async({ userId, titre, contenu, type = 'systeme' }) => 
     });
 
     try {
-        await pushNotification(userId, {
+        await sendPushNotification(userId, {
             title: notification.titre,
             body: notification.contenu
         });

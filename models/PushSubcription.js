@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PushSubscriptionSchema = new mongoose.Schema({
+const pushSubscriptionSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -11,4 +11,4 @@ const PushSubscriptionSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('PushSubscription', PushSubscriptionSchema);
+module.exports = mongoose.model('PushSubscription', pushSubscriptionSchema);
