@@ -1,10 +1,10 @@
-const pushSubscription = require('../models/PushSubscription');
+const PushSubscription = require('../models/PushSubscription');
 
 exports.subscribe = async (req, res) => {
   try {
     const { subscription } = req.body;
 
-    const existing = await pushSubscription.findOne({
+    const existing = await PushSubscription.findOne({
       user: req.user.id
     });
 
@@ -12,7 +12,7 @@ exports.subscribe = async (req, res) => {
       existing.subscription = subscription;
       await existing.save();
     } else {
-      await pushSubscription.create({
+      await PushSubscription.create({
         user: req.user.id,
         subscription
       });
