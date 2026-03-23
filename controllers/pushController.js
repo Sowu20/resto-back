@@ -2,6 +2,10 @@ const PushSubscription = require('../models/PushSubscription');
 
 exports.subscribe = async (req, res) => {
   try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: "Utilisateur non authentifié" });
+    }
+
     const { subscription } = req.body;
 
     const existing = await PushSubscription.findOne({
@@ -20,6 +24,6 @@ exports.subscribe = async (req, res) => {
 
     res.status(201).json({ message: "Abonnement enregistré" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erreur web push: ', error.message);
   }
 };
