@@ -1,5 +1,7 @@
 const Notification = require('../models/Notification');
 const pusher = require('../config/pusher');
+const sendPushNotification  = require('./pushService');
+const emailNotification = require('./emailService');
 
 const sendNotification = async({ userId, titre, contenu, type = 'systeme' }) => {
     const notification = await Notification.create({
@@ -17,6 +19,22 @@ const sendNotification = async({ userId, titre, contenu, type = 'systeme' }) => 
         lue: notification.lue,
         createdAt: notification.createdAt
     });
+
+    try {
+        await sendPushNotification(userId, {
+            title: notification.titre,
+            body: notification.contenu
+        });
+    } catch(error) {
+        console.error('Erreur web pus: ', error.push);
+    }
+
+    if (type === 'commande') {
+        await emailNotification(userId, {
+            title: notification.titre,
+            body: notification.contenu
+        });
+    }
 
     return notification
 };

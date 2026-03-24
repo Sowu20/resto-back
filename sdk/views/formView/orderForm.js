@@ -28,7 +28,7 @@ const createOrderForm = (mealName, price, restaurantId, mealId, tableId, baseUrl
         .addHiddenField('mealId', 'mealId', mealId)
         .addHiddenField('tableId', 'tableId', tableId || '')
         // Pas de setNext ici : l'app mobile doit afficher directement la réponse JSON du POST
-        .submitButton('Voir le résumé', 'POST');
+        .submitButton('Confirmer la commande', 'POST');
 
     return form;
 };
