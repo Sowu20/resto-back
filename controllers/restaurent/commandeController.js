@@ -51,7 +51,15 @@ exports.faireCommande = async(req, res) => {
         }
 
         // Générer numéro commande
-        const order_number = "CMD-" + Date.now().toString().slice(-4);
+        function generateOrderNumber() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = Date.now().toString().slice(-4);
+
+            const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+
+            return `CMD-${numbers}${randomLetter}`;
+        }
+        const order_number = generateOrderNumber();
 
         let tableValue = null;
         if (source === "sur_place") {
