@@ -22,6 +22,18 @@ const getBaseUrl = (req) => {
     return protocol + '://' + req.get('host');
 };
 
+// Helper pour générer un numéro de commande court mais robuste
+const generateOrderNumber = () => {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = Date.now().toString().slice(-4);
+    
+    // On prend 2 lettres pour réduire drastiquement les risques de collision
+    const random1 = letters[Math.floor(Math.random() * letters.length)];
+    const random2 = letters[Math.floor(Math.random() * letters.length)];
+
+    return `CMD-${numbers}${random1}${random2}`;
+};
+
 const HomeScreen = (req, res) => {
     const baseUrl = getBaseUrl(req);
     const menu = createMainMenuView(baseUrl);
@@ -103,7 +115,7 @@ const Menu = async (req, res) => {
 //fonction pour les détails d'un menu
 const getMenuDetails = async (req, res) => {
     try {
-        // ⭐⭐⭐ LOGS DE DEBUG ⭐⭐⭐
+        // LOGS DE DEBUG 
         console.log('🔍 =========== DEBUG getMenuDetails ===========');
         console.log('📍 Params reçus:', req.params);
 
@@ -287,7 +299,9 @@ const previewOrder = async (req, res) => {
         // Générer un numéro de commande unique
 
         //const orderNumber = `CMD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`; Précédent
-        const orderNumber = `CMD-${Date.now().toString().slice(-4)}`; // Actuel
+        //const orderNumber = `CMD-${Date.now().toString().slice(-4)}`; // Actuel
+
+        const orderNumber = generateOrderNumber();
         // Créer la commande dans MongoDB
         const newOrder = await CommandeModel.create({
             order_number: orderNumber,
