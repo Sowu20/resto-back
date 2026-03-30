@@ -6,7 +6,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {Object} order - Document de commande depuis MongoDB
  * @param {string} restaurantId - ID du restaurant pour la navigation
  */
-const createPaymentView = (order, restaurantId, tableId, baseUrl = 'https://resto-back-xazy.onrender.com') => {
+const createPaymentView = (order, restaurantId, tableId, baseUrl = 'https://resto-back-xazy.onrender.com', categoryId) => {
     const paymentMethodLabel = {
         'tmoney': 'T-Money',
         'flooz': 'Flooz',
@@ -22,16 +22,18 @@ const createPaymentView = (order, restaurantId, tableId, baseUrl = 'https://rest
         card.setImage(getOptimizedImageUrl(order.items[0].image, { width: 600 }, baseUrl));
     }
 
-    return card
+        const categoryPath = categoryId ? `/categories/${categoryId}` : '';
+
+        return card
         .addStat('Montant total', `${order.total_amount || 0} FCFA`)
         .addStat('Méthode', paymentMethodLabel[order.payment_method] || order.payment_method || '-')
         .addStat('Client', order.customer_name || 'Anonyme')
         .addStat('Téléphone', order.customer_phone || '-')
         .addAction('Confirmer le paiement', 'POST', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}/order/${order._id}/payment/confirm`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}${categoryPath}/order/${order._id}/payment/confirm`
         })
         .addAction('Annuler', 'GET', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}/repas`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tableId ? `/table/${tableId}` : ''}${categoryPath}/repas`
         });
 };
 

@@ -7,6 +7,7 @@ const Restaurent = require('../../models/Restaurent');
 const { createMenusGrid } = require('../views/readerView/menusReader');
 const { createMenuDetailView } = require('../views/readerView/menuDetailReader');
 const { createRepasReader, createRepasDetailReader } = require('../views/readerView/repasReader');
+const { createCategoriesReader } = require('../views/readerView/categoriesReader');
 const { createOrderForm } = require('../views/formView/orderForm');
 const { createOrderConfirmationView } = require('../views/messageView/orderConfirmation');
 const { createOrderSummaryView } = require('../views/readerView/orderSummary');
@@ -191,9 +192,58 @@ const Repas = async (req, res) => {
     }
 };
 
+const Categories = async (req, res) => {
+    try {
+        const { id: restaurantId, tableId } = req.params;
+        const CategorieModel = require('../../models/CategorieRepas');
+
+        const categories = await CategorieModel.find({
+            restaurent: restaurantId,
+            isActive: true
+        });
+
+        const baseUrl = getBaseUrl(req);
+        const reader = createCategoriesReader(restaurantId, tableId, categories, baseUrl);
+
+        if (!reader) {
+            return res.status(404).json({ error: 'Aucune catégorie disponible' });
+        }
+
+        res.json(reader.toJSON());
+    } catch (error) {
+        console.error('❌ Erreur Categories:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des catégories' });
+    }
+};
+
+const RepasByCategory = async (req, res) => {
+    try {
+        const { id: restaurantId, tableId, categoryId } = req.params;
+        const RepasModel = require('../../models/Repas');
+
+        const repas = await RepasModel.find({
+            restaurent: restaurantId,
+            categorie: categoryId,
+            isAvaible: true
+        });
+
+        const baseUrl = getBaseUrl(req);
+        const reader = createRepasReader(restaurantId, tableId, repas, baseUrl, categoryId);
+
+        if (!reader) {
+            return res.status(404).json({ error: 'Aucun repas disponible dans cette catégorie' });
+        }
+
+        res.json(reader);
+    } catch (error) {
+        console.error('❌ Erreur RepasByCategory:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des repas par catégorie' });
+    }
+};
+
 const getRepasDetails = async (req, res) => {
     try {
-        const { restaurantId, tableId, mealId } = req.params;
+        const { restaurantId, tableId, mealId, categoryId } = req.params;
         const RepasModel = require('../../models/Repas');
 
         const repas = await RepasModel.findById(mealId);
@@ -203,7 +253,7 @@ const getRepasDetails = async (req, res) => {
         }
 
         const baseUrl = getBaseUrl(req);
-        const reader = createRepasDetailReader(restaurantId, tableId, repas, baseUrl);
+        const reader = createRepasDetailReader(restaurantId, tableId, repas, baseUrl, categoryId);
         return res.json(reader.toJSON());
     } catch (error) {
         console.error('❌ Erreur getRepasDetails:', error);
@@ -213,7 +263,7 @@ const getRepasDetails = async (req, res) => {
 
 const getOrderForm = async (req, res) => {
     try {
-        const { restaurantId, tableId, mealId } = req.params;
+        const { restaurantId, tableId, mealId, categoryId } = req.params;
         const RepasModel = require('../../models/Repas');
 
         const repas = await RepasModel.findById(mealId);
@@ -229,7 +279,8 @@ const getOrderForm = async (req, res) => {
             restaurantId,
             mealId,
             tableId,
-            baseUrl
+            baseUrl,
+            categoryId
         );
         res.json(form.toJSON());
     } catch (error) {
@@ -266,7 +317,7 @@ const getOrderForm = async (req, res) => {
 
 const previewOrder = async (req, res) => {
     try {
-        const { restaurantId: paramResId, mealId: paramMealId, tableId: paramTableId, id: paramId } = req.params;
+        const { restaurantId: paramResId, mealId: paramMealId, tableId: paramTableId, id: paramId, categoryId } = req.params;
         const orderData = req.body;
         const { restaurantId: bodyResId, mealId: bodyMealId, tableId: bodyTableId } = orderData;
 
@@ -351,7 +402,8 @@ const previewOrder = async (req, res) => {
             newOrder._id.toString(),
             tableInfo,
             repas.image || '',
-            baseUrl
+            baseUrl,
+            categoryId
         );
 
         return res.json(summaryView.toJSON());
@@ -379,7 +431,7 @@ const getAboutView = (req, res) => {
 // Fonction pour afficher l'interface de paiement
 const getPaymentForm = async (req, res) => {
     try {
-        const { restaurantId: paramResId, tableId, orderId, id: paramId } = req.params;
+        const { restaurantId: paramResId, tableId, orderId, id: paramId, categoryId } = req.params;
         const restaurantId = paramResId || paramId;
         const CommandeModel = require('../../models/Commande');
 
@@ -391,7 +443,7 @@ const getPaymentForm = async (req, res) => {
 
         const baseUrl = getBaseUrl(req);
         const { createPaymentView } = require('../views/formView/paymentForm');
-        const paymentView = createPaymentView(order, restaurantId, tableId, baseUrl);
+        const paymentView = createPaymentView(order, restaurantId, tableId, baseUrl, categoryId);
         res.json(paymentView.toJSON());
     } catch (error) {
         console.error('❌ Erreur getPaymentForm:', error);
@@ -402,7 +454,7 @@ const getPaymentForm = async (req, res) => {
 // Fonction pour confirmer le paiement
 const confirmPayment = async (req, res) => {
     try {
-        const { restaurantId: paramResId, tableId, orderId, id: paramId } = req.params;
+        const { restaurantId: paramResId, tableId, orderId, id: paramId, categoryId } = req.params;
         const restaurantId = paramResId || paramId;
         const CommandeModel = require('../../models/Commande');
         const TableModel = require('../../models/Table');
@@ -470,6 +522,8 @@ module.exports = {
     RestaurentDetail,
     Menu,
     Repas,
+    Categories,
+    RepasByCategory,
     getMenuDetails,
     getRepasDetails,
     getOrderForm,

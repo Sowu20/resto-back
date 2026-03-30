@@ -7,10 +7,11 @@ const { FormView } = require('@numerum-tech/cmsdk');
  * @param {string} restaurantId - ID du restaurant (pour l'API de soumission)
  * @param {string} mealId - ID du plat (pour l'API de soumission)
  */
-const createOrderForm = (mealName, price, restaurantId, mealId, tableId, baseUrl = 'https://resto-back-xazy.onrender.com') => {
+const createOrderForm = (mealName, price, restaurantId, mealId, tableId, baseUrl = 'https://resto-back-xazy.onrender.com', categoryId) => {
     // formId renommé pour la cohérence : mobile/restaurents/order/preview
     const tablePath = tableId ? `/table/${tableId}` : '';
-    const formId = `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas/${mealId}/order/preview`;
+    const categoryPath = categoryId ? `/categories/${categoryId}` : '';
+    const formId = `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/repas/${mealId}/order/preview`;
 
     const title = `Commande de : ${mealName} à ${price}`;
 

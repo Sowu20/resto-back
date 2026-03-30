@@ -9,7 +9,7 @@ const { getOptimizedImageUrl } = require('../../utils/imageUtils');
  * @param {string} mealImage - URL de l'image du plat
  * @param {string} baseUrl - URL de base de l'API
  */
-const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId, tableInfo, mealImage, baseUrl = 'https://resto-back-xazy.onrender.com') => {
+const createOrderSummaryView = (customerName, customerPhone, mealName, price, restaurantId, mealId, orderId, tableInfo, mealImage, baseUrl = 'https://resto-back-xazy.onrender.com', categoryId) => {
     // Si tableInfo est un objet, on extrait le nom ET le numero, sinon on l'utilise tel quel
     let tableDisplay = tableInfo;
     if (typeof tableInfo === 'object') {
@@ -34,6 +34,8 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         card.setImage(getOptimizedImageUrl(mealImage, { width: 600 }, baseUrl));
     }
 
+    const categoryPath = categoryId ? `/categories/${categoryId}` : '';
+
     return card
         .addStat('Client', customerName || 'Anonyme')
         .addStat('Téléphone', customerPhone || '-')
@@ -41,10 +43,10 @@ const createOrderSummaryView = (customerName, customerPhone, mealName, price, re
         .addStat('Plat', mealName || 'Plat')
         .addStat('Prix', price || '0 FCFA')
         .addAction('Procéder au paiement', 'GET', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/order/${safeOrderId}/payment`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/order/${safeOrderId}/payment`
         })
         .addAction('Annuler', 'GET', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas`
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/repas`
         });
 };
 

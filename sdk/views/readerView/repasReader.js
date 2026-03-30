@@ -2,7 +2,7 @@ const { ActionGridView, CardView } = require('@numerum-tech/cmsdk');
 const { getOptimizedImageUrl } = require('../../utils/imageUtils');
 
 
-const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https://resto-back-xazy.onrender.com') => {
+const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https://resto-back-xazy.onrender.com', categoryId) => {
   if (!repas || repas.length === 0) {
     return null;
   }
@@ -14,6 +14,7 @@ const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https:/
     .setColumns(3)
     .setSpacing(16);
 
+    const categoryPath = categoryId ? `/categories/${categoryId}` : '';
   // Ajouter chaque plat comme une action
   repas.forEach(plat => {
     grid.addAction(
@@ -23,7 +24,7 @@ const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https:/
       plat.image ? getOptimizedImageUrl(plat.image, { width: 300 }, baseUrl) : undefined,
       {
         type: 'GET',
-        href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas/${plat._id}`
+        href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/repas/${plat._id}`
       }
     );
   });
@@ -31,7 +32,7 @@ const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https:/
   return grid.toJSON();
 };
 
-const createRepasDetailReader = (restaurantId, tableId, repas, baseUrl = 'https://resto-back-xazy.onrender.com') => {
+const createRepasDetailReader = (restaurantId, tableId, repas, baseUrl = 'https://resto-back-xazy.onrender.com', categoryId) => {
   if (!repas) return null;
 
   const tablePath = tableId ? `/table/${tableId}` : '';
@@ -46,8 +47,10 @@ const createRepasDetailReader = (restaurantId, tableId, repas, baseUrl = 'https:
     card.setImage(getOptimizedImageUrl(repas.image, { width: 600 }, baseUrl));
   }
 
+  const categoryPath = categoryId ? `/categories/${categoryId}` : '';
+
   card.addAction('Commander', 'GET', {
-    href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas/${repas._id}/order`,
+    href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/repas/${repas._id}/order`,
   });
 
   return card;

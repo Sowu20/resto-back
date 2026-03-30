@@ -23,11 +23,11 @@ const createRestaurantDetailReader = (restaurant, tableId, baseUrl = 'https://re
         .addStat('Téléphone', restaurant.phone ? restaurant.phone.toString() : 'Non spécifié')
         .addStat('Statut', restaurant.status || 'Voir sur place')
         .setImage(getOptimizedImageUrl(restaurant.image, { width: 400 }, baseUrl))
-        .addAction('Voir les menus', 'GET', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/menu`
-        })
-        .addAction('Voir les repas', 'GET', {
-            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/repas`
+        // .addAction('Voir les menus', 'GET', {
+        //     href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/menu`
+        // })
+        .addAction('Voir les catégories de repas', 'GET', {
+            href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/categories`
         });
 
     return reader;
