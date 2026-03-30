@@ -27,6 +27,8 @@ router.get('/mobile/restaurents/:id/table/:tableId/categories', Categories);
 router.get('/mobile/restaurents/:id/categories', Categories); // Sans tableId
 
 // NOUVELLE route pour les plats par categorie 
+router.get('/mobile/restaurents/:id/table/:tableId/categories/:categoryId', RepasByCategory);
+router.get('/mobile/restaurents/:id/categories/:categoryId', RepasByCategory); // Sans tableId
 router.get('/mobile/restaurents/:id/table/:tableId/categories/:categoryId/repas', RepasByCategory);
 router.get('/mobile/restaurents/:id/categories/:categoryId/repas', RepasByCategory); // Sans tableId
 
