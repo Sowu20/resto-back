@@ -13,7 +13,7 @@ const createCategoriesReader = (restaurantId, tableId, categories = [], baseUrl 
             cat._id.toString(),
             cat.name,
             cat.description || 'Découvrez nos plats de cette catégorie',
-            `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/categories/${cat._id}`
+            `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}/categories/${cat._id}/repas`
         );
     });
 
