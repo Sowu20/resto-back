@@ -65,7 +65,7 @@ const Restaurents = async (req, res) => {
 
 const RestaurentDetail = async (req, res) => {
     try {
-        const restaurantId = req.params.id || req.params.restaurantId;
+        const restaurantId = req.params.restaurantId || req.params.id;
 
         // On supporte le tableId via l'URL (req.params) ou via query (?table=x)
         const tableId = req.params.tableId || req.query.table;
@@ -90,7 +90,7 @@ const RestaurentDetail = async (req, res) => {
 
 const Menu = async (req, res) => {
     try {
-        const { id: restaurantId, tableId } = req.params;
+        const { restaurantId, tableId } = req.params;
         const MenuModel = require('../../models/Menu');
 
         // Récupérer les menus actifs du restaurant depuis MongoDB
@@ -169,7 +169,7 @@ const getMenuDetails = async (req, res) => {
 
 const Repas = async (req, res) => {
     try {
-        const { id: restaurantId, tableId } = req.params;
+        const { restaurantId, tableId } = req.params;
         const RepasModel = require('../../models/Repas');
 
         // Récupérer les repas disponibles du restaurant depuis MongoDB
@@ -194,7 +194,7 @@ const Repas = async (req, res) => {
 
 const Categories = async (req, res) => {
     try {
-        const { id: restaurantId, tableId } = req.params;
+        const { restaurantId, tableId } = req.params;
         const CategorieModel = require('../../models/CategorieRepas');
 
         const categories = await CategorieModel.find({
@@ -218,7 +218,7 @@ const Categories = async (req, res) => {
 
 const RepasByCategory = async (req, res) => {
     try {
-        const { id: restaurantId, tableId, categoryId } = req.params;
+        const { restaurantId, tableId, categoryId } = req.params;
         const RepasModel = require('../../models/Repas');
 
         const repas = await RepasModel.find({

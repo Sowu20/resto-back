@@ -14,7 +14,7 @@ const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https:/
     .setColumns(3)
     .setSpacing(16);
 
-    const categoryPath = categoryId ? `/categories/${categoryId}` : '';
+  const categoryPath = categoryId ? `/categories/${categoryId}` : '';
   // Ajouter chaque plat comme une action
   repas.forEach(plat => {
     grid.addAction(
@@ -24,7 +24,7 @@ const createRepasReader = (restaurantId, tableId, repas = [], baseUrl = 'https:/
       plat.image ? getOptimizedImageUrl(plat.image, { width: 300 }, baseUrl) : undefined,
       {
         type: 'GET',
-        href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/repas/${plat._id}`
+        href: `${baseUrl}/mobile/restaurents/${restaurantId}${tablePath}${categoryPath}/repas/${plat._id}/details`
       }
     );
   });

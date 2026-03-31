@@ -14,29 +14,40 @@ router.get('/mobile/about', getAboutView);
 
 // Route pour les Restaurants
 router.get('/mobile/restaurents', Restaurents);
-router.get('/mobile/restaurents/:id', RestaurentDetail);
-router.get('/mobile/restaurents/:id/table/:tableId', RestaurentDetail);
-router.get('/mobile/restaurents/:id/table/:tableId/menu', Menu);
-router.get('/mobile/restaurents/:id/menu', Menu); // Sans tableId
+router.get('/mobile/restaurents/:restaurantId', RestaurentDetail);
+router.get('/mobile/restaurents/:restaurantId/table/:tableId', RestaurentDetail);
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/menu', Menu);
+router.get('/mobile/restaurents/:restaurantId/menu', Menu); // Sans tableId
 // NOUVELLE route pour les détails d'un menu
 router.get('/mobile/restaurents/:restaurantId/table/:tableId/menu/:menuId', getMenuDetails);
 router.get('/mobile/restaurents/:restaurantId/menu/:menuId', getMenuDetails); // Sans tableId
 
 // NOUVELLE route pour les categories
-router.get('/mobile/restaurents/:id/table/:tableId/categories', Categories);
-router.get('/mobile/restaurents/:id/categories', Categories); // Sans tableId
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/categories', Categories);
+router.get('/mobile/restaurents/:restaurantId/categories', Categories); // Sans tableId
 
 // NOUVELLE route pour les plats par categorie 
-router.get('/mobile/restaurents/:id/table/:tableId/categories/:categoryId', RepasByCategory);
-router.get('/mobile/restaurents/:id/categories/:categoryId', RepasByCategory); // Sans tableId
-router.get('/mobile/restaurents/:id/table/:tableId/categories/:categoryId/repas', RepasByCategory);
-router.get('/mobile/restaurents/:id/categories/:categoryId/repas', RepasByCategory); // Sans tableId
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId', RepasByCategory);
+router.get('/mobile/restaurents/:restaurantId/categories/:categoryId', RepasByCategory); // Sans tableId
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId/repas', RepasByCategory);
+router.get('/mobile/restaurents/:restaurantId/categories/:categoryId/repas', RepasByCategory); // Sans tableId
 
 // NOUVELLE route pour les plats
-router.get('/mobile/restaurents/:id/table/:tableId/repas', Repas);
-router.get('/mobile/restaurents/:id/repas', Repas); // Sans tableId
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/repas', Repas);
+router.get('/mobile/restaurents/:restaurantId/repas', Repas); // Sans tableId
 
 // NOUVELLE route pour les détails d'un plat (avec et sans catégorie)
+// 1. Routes de RÉSILIENCE (pour corriger l'erreur 404 en production : manque /repas/)
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId/:mealId', getRepasDetails);
+router.get('/mobile/restaurents/:restaurantId/categories/:categoryId/:mealId', getRepasDetails);
+
+// 2. Nouveau format avec /details (URL que vous venez d'ajouter)
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId/repas/:mealId/details', getRepasDetails);
+router.get('/mobile/restaurents/:restaurantId/categories/:categoryId/repas/:mealId/details', getRepasDetails);
+router.get('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/details', getRepasDetails);
+router.get('/mobile/restaurents/:restaurantId/repas/:mealId/details', getRepasDetails); // Sans tableId
+
+// 3. Format standard sans /details (pour la compatibilité descendante)
 router.get('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId/repas/:mealId', getRepasDetails);
 router.get('/mobile/restaurents/:restaurantId/categories/:categoryId/repas/:mealId', getRepasDetails);
 router.get('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId', getRepasDetails);
