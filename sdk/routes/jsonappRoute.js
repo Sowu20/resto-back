@@ -69,6 +69,11 @@ router.post('/mobile/restaurents/table/repas/order/preview', previewOrder);
 router.post('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order/preview', previewOrder);
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order/preview', previewOrder); // Sans tableId
 // Le SDK city-mate poste vers l'URL de la page /order (avec slash final)
+router.post('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId/repas/:mealId/order', previewOrder);
+router.post('/mobile/restaurents/:restaurantId/categories/:categoryId/repas/:mealId/order', previewOrder);
+router.post('/mobile/restaurents/:restaurantId/table/:tableId/categories/:categoryId/repas/:mealId/order/', previewOrder);
+router.post('/mobile/restaurents/:restaurantId/categories/:categoryId/repas/:mealId/order/', previewOrder);
+
 router.post('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order', previewOrder);
 router.post('/mobile/restaurents/:restaurantId/repas/:mealId/order', previewOrder); // Sans tableId
 router.post('/mobile/restaurents/:restaurantId/table/:tableId/repas/:mealId/order/', previewOrder);
